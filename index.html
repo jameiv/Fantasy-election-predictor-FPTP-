@@ -40,6 +40,56 @@
     margin: 8px 0;
   }
   .party-label { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+  .vote-input-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    padding: 4px;
+    margin: -2px 0 14px;
+    background: #eef0f3;
+    border-radius: 8px;
+  }
+  .vote-input-toggle button {
+    margin: 0;
+    padding: 8px 10px;
+    background: transparent;
+    color: #4b5058;
+    font-size: 13px;
+    font-weight: 650;
+  }
+  .vote-input-toggle button.active {
+    background: white;
+    color: #1d1f23;
+    box-shadow: 0 1px 4px rgba(0,0,0,.10);
+  }
+  .party-control {
+    min-width: 0;
+  }
+  .party-number-control {
+    display: block;
+  }
+  .party-slider-control {
+    display: none;
+    grid-template-columns: minmax(0, 1fr) 58px;
+    gap: 8px;
+    align-items: center;
+  }
+  .slider-mode .party-number-control {
+    display: none;
+  }
+  .slider-mode .party-slider-control {
+    display: grid;
+  }
+  .party-slider-control input[type="range"] {
+    min-width: 0;
+    accent-color: #555;
+  }
+  .slider-value {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    font-size: 13px;
+  }
   .swatch { width: 11px; height: 11px; border-radius: 2px; flex: none; }
   input[type="number"], input[type="text"] {
     width: 100%;
@@ -224,6 +274,12 @@
     <section>
       <div class="card">
         <h2>Input vote share</h2>
+
+        <div class="vote-input-toggle" role="group" aria-label="Vote share input style">
+          <button id="numberModeButton" type="button" class="active" aria-pressed="true">Number boxes</button>
+          <button id="sliderModeButton" type="button" aria-pressed="false">Sliders</button>
+        </div>
+
         <div id="partyInputs"></div>
         <div id="inputTotal" class="total-box"></div>
 
@@ -556,17 +612,65 @@ const prevOverall = previousOverall();
 function buildInputs() {
   const box = document.getElementById("partyInputs");
   const filter = document.getElementById("winnerFilter");
+
   partyCodes.forEach(code => {
     const row = document.createElement("div");
     row.className = "party-input";
     row.innerHTML = `
-      <label class="party-label">
+      <label class="party-label" for="input-${code}">
         <span class="swatch" style="background:${parties[code].colour}"></span>
         <span><b>${code}</b> — ${parties[code].name}</span>
       </label>
-      <input id="input-${code}" type="number" min="0" max="100" step="0.1" value="${prevOverall[code].toFixed(1)}">
+
+      <div class="party-control">
+        <div class="party-number-control">
+          <input
+            id="input-${code}"
+            type="number"
+            min="0"
+            max="100"
+            step="0.1"
+            value="${prevOverall[code].toFixed(1)}"
+            aria-label="${parties[code].name} vote share"
+          >
+        </div>
+
+        <div class="party-slider-control">
+          <input
+            id="slider-${code}"
+            type="range"
+            min="0"
+            max="100"
+            step="0.1"
+            value="${prevOverall[code].toFixed(1)}"
+            aria-label="${parties[code].name} vote share slider"
+          >
+          <span id="slider-value-${code}" class="slider-value">${prevOverall[code].toFixed(1)}%</span>
+        </div>
+      </div>
     `;
     box.appendChild(row);
+
+    const numberInput = row.querySelector(`#input-${code}`);
+    const sliderInput = row.querySelector(`#slider-${code}`);
+    const sliderValue = row.querySelector(`#slider-value-${code}`);
+
+    // Number box -> slider.
+    numberInput.addEventListener("input", () => {
+      const value = Math.max(0, Math.min(100, Number(numberInput.value) || 0));
+      sliderInput.value = value;
+      sliderValue.textContent = `${value.toFixed(1)}%`;
+      updateInputTotal();
+    });
+
+    // Slider -> number box. The existing model continues to read the number
+    // input, so this does not disturb any of the calculation/map code.
+    sliderInput.addEventListener("input", () => {
+      const value = Math.max(0, Math.min(100, Number(sliderInput.value) || 0));
+      numberInput.value = value.toFixed(1);
+      sliderValue.textContent = `${value.toFixed(1)}%`;
+      updateInputTotal();
+    });
 
     const opt = document.createElement("option");
     opt.value = code;
@@ -576,11 +680,42 @@ function buildInputs() {
 
   document.getElementById("loadedCount").textContent = `${TOTAL_SEATS} / ${TOTAL_SEATS}`;
   document.getElementById("totalSeatCount").textContent = TOTAL_SEATS;
+
   document.getElementById("modelStrength").addEventListener("input", e => {
     document.getElementById("strengthLabel").textContent = `${Number(e.target.value).toFixed(2)}×`;
   });
-  document.querySelectorAll('#partyInputs input').forEach(i => i.addEventListener("input", updateInputTotal));
+
+  document.getElementById("numberModeButton").addEventListener("click", () => setVoteInputMode("number"));
+  document.getElementById("sliderModeButton").addEventListener("click", () => setVoteInputMode("slider"));
+
   updateInputTotal();
+}
+
+function setVoteInputMode(mode) {
+  const sliderMode = mode === "slider";
+  const box = document.getElementById("partyInputs");
+  const numberButton = document.getElementById("numberModeButton");
+  const sliderButton = document.getElementById("sliderModeButton");
+
+  box.classList.toggle("slider-mode", sliderMode);
+
+  numberButton.classList.toggle("active", !sliderMode);
+  sliderButton.classList.toggle("active", sliderMode);
+
+  numberButton.setAttribute("aria-pressed", String(!sliderMode));
+  sliderButton.setAttribute("aria-pressed", String(sliderMode));
+}
+
+function syncVoteControls(code) {
+  const numberInput = document.getElementById(`input-${code}`);
+  const sliderInput = document.getElementById(`slider-${code}`);
+  const sliderValue = document.getElementById(`slider-value-${code}`);
+
+  if (!numberInput || !sliderInput || !sliderValue) return;
+
+  const value = Math.max(0, Math.min(100, Number(numberInput.value) || 0));
+  sliderInput.value = value;
+  sliderValue.textContent = `${value.toFixed(1)}%`;
 }
 
 function getInputShares() {
@@ -601,7 +736,10 @@ function updateInputTotal() {
 }
 
 function resetToPrevious() {
-  partyCodes.forEach(p => document.getElementById(`input-${p}`).value = prevOverall[p].toFixed(1));
+  partyCodes.forEach(p => {
+    document.getElementById(`input-${p}`).value = prevOverall[p].toFixed(1);
+    syncVoteControls(p);
+  });
   updateInputTotal();
   runModel();
 }
