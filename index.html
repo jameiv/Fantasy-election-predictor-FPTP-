@@ -307,11 +307,19 @@
           Export your Affinity map as <b>SVG</b>. For automatic filling, name each closed constituency Curve
           with its constituency code, e.g. <b>PAM1-1</b>, <b>PAM2-4</b>, or later <b>KAN-3-5</b>.
           The code may be on the SVG shape itself or on a parent group.
-          <b>Fill-only mode:</b> the projection changes only each constituency's <code>fill</code>.
-          It never changes <code>stroke</code> or border width, so black borders exported from Affinity remain black.
+          <b>Border protection:</b> some exporters draw a constituency's border as its own filled black
+          shape (no stroke at all) layered next to the white interior shape, rather than using an SVG
+          stroke. The simulator only paints child shapes that already declare an explicit fill; shapes
+          with no fill declared are treated as border/outline art and are never touched. Any shape that
+          does use a real stroke additionally has its exact original stroke snapshotted and restored
+          after filling, as a second layer of protection.
         </div>
 
         <div id="mapStatus" class="map-status">No SVG map loaded.</div>
+        <div class="small" style="margin-bottom:10px">
+          Fill targeting only ever writes to <code>fill</code>, never <code>stroke</code>, and skips any
+          shape with no fill declared so black outline art is never repainted.
+        </div>
 
         <div id="mapViewport" class="map-viewport">
           <div class="map-placeholder">
@@ -406,6 +414,7 @@ const constituencies = [
   {code:"PAM1-10", age:"medium", urban:"rural", income:"low", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","remote","declining"]},
   {code:"PAM1-11", age:"old", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","remote","stable"]},
   {code:"PAM1-12", age:"medium", urban:"rural", income:"low", education:"low", housing:"owned", deprivation:"medium", family:"low", tags:["agricultural","remote","declining"]},
+  {code:"PAM1-13", age:"medium", urban:"rural", income:"low", education:"low", housing:"owned", deprivation:"medium", family:"low", tags:["agricultural","remote","declining"]},
 
   {code:"PAM2-1", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"high", tags:["commuter","remote","stable"]},
   {code:"PAM2-2", age:"old", urban:"rural", income:"medium", education:"low", housing:"mixed", deprivation:"low", family:"low", tags:["tourist","stable","remote"]},
@@ -652,10 +661,19 @@ function candidateNames(el) {
 function findRegionElement(svg, code) {
   const target = normaliseMapName(code);
   const candidates = svg.querySelectorAll("[id], [data-name], [region], [name], [aria-label]");
+  const matches = [...candidates].filter(el => candidateNames(el).includes(target));
 
-  for (const el of candidates) {
-    if (candidateNames(el).includes(target)) return el;
+  if (matches.length > 1) {
+    // Duplicate-named shapes are a common cause of "wrong element got filled/stroked"
+    // bugs when Affinity layers are duplicated while building test artwork.
+    console.warn(
+      `Multiple SVG elements matched "${code}" — using the first match. ` +
+      `Check for duplicate names/IDs in the artwork.`,
+      matches
+    );
   }
+
+  if (matches.length) return matches[0];
 
   // Some SVG exporters place the object name in a <title>.
   for (const title of svg.querySelectorAll("title")) {
@@ -667,13 +685,73 @@ function findRegionElement(svg, code) {
   return null;
 }
 
+/*
+  Border protection: snapshot the exact original stroke state (attribute
+  value AND inline style value, whatever they actually are — including
+  "not set at all") for every shape, before any party fill is applied.
+  After filling, restore that exact snapshot. This never guesses at what
+  colour a border "should" be, so it can't silently miss near-black,
+  inherited, or class-based strokes on any Duchy's artwork.
+*/
+
+const STROKE_UNSET = "\u0000unset";
+
+function snapshotOriginalStrokes(svg) {
+  const shapes = svg.querySelectorAll("path, polygon, polyline, rect, circle, ellipse, line");
+
+  shapes.forEach(el => {
+    el.dataset.origStrokeAttr = el.hasAttribute("stroke")
+      ? el.getAttribute("stroke")
+      : STROKE_UNSET;
+
+    el.dataset.origStyleStroke = (el.style && el.style.stroke)
+      ? el.style.stroke
+      : STROKE_UNSET;
+  });
+}
+
+function restoreOriginalStrokes(svg) {
+  svg.querySelectorAll("[data-orig-stroke-attr]").forEach(el => {
+    const attrVal = el.dataset.origStrokeAttr;
+    const styleVal = el.dataset.origStyleStroke;
+
+    if (attrVal === STROKE_UNSET) el.removeAttribute("stroke");
+    else el.setAttribute("stroke", attrVal);
+
+    if (styleVal === STROKE_UNSET) el.style.removeProperty("stroke");
+    else el.style.setProperty("stroke", styleVal);
+  });
+}
+
+function hasExplicitFill(el) {
+  // True if this shape actually declares a fill (attribute or inline style),
+  // as opposed to relying on the SVG default (black). Some Affinity exports
+  // draw a constituency's border as a second path with NO fill declared at
+  // all (rendering black by default) sitting alongside a "fill:#fff" path
+  // for the interior. That border path must never be painted over.
+  if (el.hasAttribute("fill")) return true;
+  if (el.style && el.style.fill) return true;
+  const styleAttr = el.getAttribute("style");
+  if (styleAttr && /(^|;)\s*fill\s*:/i.test(styleAttr)) return true;
+  return false;
+}
+
 function paintableElements(region) {
   const tag = region.tagName.toLowerCase();
-  const paintableTags = new Set(["path", "polygon", "polyline", "rect", "circle", "ellipse"]);
+  const paintableTags = new Set(["path", "polygon", "rect", "circle", "ellipse"]);
 
+  // A directly-tagged shape is always paintable on its own.
   if (paintableTags.has(tag)) return [region];
 
-  const children = [...region.querySelectorAll("path, polygon, polyline, rect, circle, ellipse")];
+  const children = [...region.querySelectorAll("path, polygon, rect, circle, ellipse")];
+  const withExplicitFill = children.filter(hasExplicitFill);
+
+  // Prefer children that already declare a fill: that's the constituency's
+  // fillable interior. Children with no fill declared at all are treated as
+  // border/outline shapes (rendered black only via SVG's default) and are
+  // never painted, regardless of how many other children exist.
+  if (withExplicitFill.length) return withExplicitFill;
+
   return children.length ? children : [region];
 }
 
@@ -728,13 +806,17 @@ function fillMapFromResults() {
     if (!region) return;
 
     paintableElements(region).forEach(el => {
-      // FILL ONLY. Do not modify stroke/border properties.
+      // Only ever touch fill here.
       el.setAttribute("fill", parties[r.winner].colour);
-      el.style.fill = parties[r.winner].colour;
+      el.style.setProperty("fill", parties[r.winner].colour, "important");
       el.dataset.veridiaCode = r.code;
       el.setAttribute("aria-label", `${r.code}: ${r.winner} ${r.winnerShare.toFixed(1)}%`);
     });
   });
+
+  // Restore every shape's stroke to exactly what it was in the original
+  // uploaded SVG, regardless of what colour/format it actually was.
+  restoreOriginalStrokes(loadedMapSvg);
 }
 
 function selectMapRegion(code) {
@@ -803,6 +885,9 @@ function loadSvgMap(file) {
     document.getElementById("downloadMapButton").disabled = false;
     document.getElementById("clearMapButton").disabled = false;
 
+    // Snapshot every shape's exact original stroke state before any fills happen.
+    snapshotOriginalStrokes(loadedMapSvg);
+
     buildMapMatches();
     fillMapFromResults();
   };
@@ -840,6 +925,11 @@ function downloadFilledMap() {
   clone.querySelectorAll(".map-region, .is-selected").forEach(el => {
     el.classList.remove("map-region", "is-selected");
     el.removeAttribute("data-veridia-code");
+  });
+
+  clone.querySelectorAll("[data-orig-stroke-attr], [data-orig-style-stroke]").forEach(el => {
+    el.removeAttribute("data-orig-stroke-attr");
+    el.removeAttribute("data-orig-style-stroke");
   });
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n${new XMLSerializer().serializeToString(clone)}`;
