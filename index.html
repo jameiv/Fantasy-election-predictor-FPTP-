@@ -70,9 +70,15 @@
   }
   .party-slider-control {
     display: none;
-    grid-template-columns: minmax(0, 1fr) 58px;
-    gap: 8px;
+    grid-template-columns: minmax(0, 1fr) 64px;
+    gap: 10px;
     align-items: center;
+  }
+  .slider-mode .party-input {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    gap: 7px;
+    margin: 12px 0;
   }
   .slider-mode .party-number-control {
     display: none;
@@ -81,8 +87,12 @@
     display: grid;
   }
   .party-slider-control input[type="range"] {
-    min-width: 0;
+    width: 100%;
+    min-width: 180px;
+    height: 30px;
+    margin: 0;
     accent-color: #555;
+    cursor: pointer;
   }
   .slider-value {
     text-align: right;
@@ -281,6 +291,9 @@
         </div>
 
         <div id="partyInputs"></div>
+        <div class="small" style="margin-top:6px">
+          Number boxes and sliders are linked and keep the same values when you switch modes.
+        </div>
         <div id="inputTotal" class="total-box"></div>
 
         <h3>Demographic / tag strength</h3>
@@ -614,6 +627,8 @@ function buildInputs() {
   const filter = document.getElementById("winnerFilter");
 
   partyCodes.forEach(code => {
+    const initial = Number(prevOverall[code]) || 0;
+
     const row = document.createElement("div");
     row.className = "party-input";
     row.innerHTML = `
@@ -630,7 +645,7 @@ function buildInputs() {
             min="0"
             max="100"
             step="0.1"
-            value="${prevOverall[code].toFixed(1)}"
+            value="${initial.toFixed(1)}"
             aria-label="${parties[code].name} vote share"
           >
         </div>
@@ -642,31 +657,35 @@ function buildInputs() {
             min="0"
             max="100"
             step="0.1"
-            value="${prevOverall[code].toFixed(1)}"
             aria-label="${parties[code].name} vote share slider"
           >
-          <span id="slider-value-${code}" class="slider-value">${prevOverall[code].toFixed(1)}%</span>
+          <span id="slider-value-${code}" class="slider-value">${initial.toFixed(1)}%</span>
         </div>
       </div>
     `;
     box.appendChild(row);
 
-    const numberInput = row.querySelector(`#input-${code}`);
-    const sliderInput = row.querySelector(`#slider-${code}`);
-    const sliderValue = row.querySelector(`#slider-value-${code}`);
+    const numberInput = document.getElementById(`input-${code}`);
+    const sliderInput = document.getElementById(`slider-${code}`);
+    const sliderValue = document.getElementById(`slider-value-${code}`);
 
-    // Number box -> slider.
+    // Set range values only after the controls are in the DOM.
+    sliderInput.value = String(initial);
+    sliderValue.textContent = `${initial.toFixed(1)}%`;
+
     numberInput.addEventListener("input", () => {
-      const value = Math.max(0, Math.min(100, Number(numberInput.value) || 0));
-      sliderInput.value = value;
+      const raw = numberInput.valueAsNumber;
+      const value = Number.isFinite(raw) ? Math.max(0, Math.min(100, raw)) : 0;
+
+      sliderInput.value = String(value);
       sliderValue.textContent = `${value.toFixed(1)}%`;
       updateInputTotal();
     });
 
-    // Slider -> number box. The existing model continues to read the number
-    // input, so this does not disturb any of the calculation/map code.
     sliderInput.addEventListener("input", () => {
-      const value = Math.max(0, Math.min(100, Number(sliderInput.value) || 0));
+      const raw = sliderInput.valueAsNumber;
+      const value = Number.isFinite(raw) ? Math.max(0, Math.min(100, raw)) : 0;
+
       numberInput.value = value.toFixed(1);
       sliderValue.textContent = `${value.toFixed(1)}%`;
       updateInputTotal();
@@ -697,6 +716,10 @@ function setVoteInputMode(mode) {
   const numberButton = document.getElementById("numberModeButton");
   const sliderButton = document.getElementById("sliderModeButton");
 
+  if (sliderMode) {
+    partyCodes.forEach(syncVoteControls);
+  }
+
   box.classList.toggle("slider-mode", sliderMode);
 
   numberButton.classList.toggle("active", !sliderMode);
@@ -713,8 +736,10 @@ function syncVoteControls(code) {
 
   if (!numberInput || !sliderInput || !sliderValue) return;
 
-  const value = Math.max(0, Math.min(100, Number(numberInput.value) || 0));
-  sliderInput.value = value;
+  const raw = numberInput.valueAsNumber;
+  const value = Number.isFinite(raw) ? Math.max(0, Math.min(100, raw)) : 0;
+
+  sliderInput.value = String(value);
   sliderValue.textContent = `${value.toFixed(1)}%`;
 }
 
