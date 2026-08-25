@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pamialukia Election Testbed</title>
+<title>Veridia Election Testbed</title>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -292,15 +292,15 @@
 </head>
 <body>
 <header>
-  <h1>Pamialukia Election Simulator — Provisional Testbed</h1>
-  <p>Duchy historical baseline + constituency demographics/tags + inputtable party vote shares</p>
+  <h1>Veridian Election Simulator — Provisional Testbed</h1>
+  <p>Multi-region test: Duchy historical baseline + constituency demographics/tags + national vote-share inputs</p>
 </header>
 
 <div class="wrap">
   <div class="grid">
     <section>
       <div class="card">
-        <h2>Input vote share</h2>
+        <h2>National vote share</h2>
 
         <div class="vote-input-toggle" role="group" aria-label="Vote share input style">
           <button id="numberModeButton" type="button" class="active" aria-pressed="true">Number boxes</button>
@@ -329,17 +329,16 @@
       <div class="card">
         <h2>Test data status</h2>
         <div class="small">
-          Intended Pamialukia total: <b><span id="totalSeatCount">—</span> seats</b><br>
+          Loaded test chamber: <b><span id="totalSeatCount">—</span> seats</b><br>
           Constituencies loaded: <b id="loadedCount"></b><br>
-          All Pamialukian seat IDs present in the loaded data are used automatically. PAM4-12 to PAM4-19 use neutral
-          placeholders until their final demographic rows are supplied.
+          The chamber size is taken directly from the constituency dataset. Current test regions include Pamialukia, Vreaelia and Rubinvente.
         </div>
       </div>
 
       <div class="card">
         <h2>Previous election — Duchy baselines</h2>
         <div class="small" style="margin-bottom:8px">
-          These are the Duchy-level previous-election results currently used by the model.
+          These are the Duchy-level previous-election results currently loaded. RBN2–RBN6 baselines are included now even though their constituency rows are not yet in this test.
         </div>
         <div style="overflow:auto">
           <table>
@@ -352,10 +351,23 @@
               <tr><td><b>PAM1</b></td><td>27</td><td>16</td><td>8</td><td>11</td><td>11</td><td>14</td><td>13</td></tr>
               <tr><td><b>PAM2</b></td><td>23</td><td>10</td><td>5</td><td>14</td><td>14</td><td>13</td><td>21</td></tr>
               <tr><td><b>PAM3</b></td><td>24</td><td>14</td><td>6</td><td>9</td><td>12</td><td>20</td><td>15</td></tr>
-              <tr><td><b>PAM4</b></td><td>24</td><td>14</td><td>6</td><td>9</td><td>12</td><td>20</td><td>15</td></tr>
-              <tr><td><b>PAM5</b></td><td>24</td><td>14</td><td>6</td><td>9</td><td>12</td><td>20</td><td>15</td></tr>
-              <tr><td><b>PAM6</b></td><td>24</td><td>14</td><td>6</td><td>9</td><td>12</td><td>20</td><td>15</td></tr>
-            </tbody>
+              <tr><td><b>PAM4</b></td><td>23</td><td>10</td><td>5</td><td>6</td><td>14</td><td>23</td><td>19</td></tr>
+              <tr><td><b>PAM5</b></td><td>23</td><td>14</td><td>9</td><td>8</td><td>11</td><td>21</td><td>14</td></tr>
+              <tr><td><b>PAM6</b></td><td>25</td><td>19</td><td>13</td><td>9</td><td>8</td><td>15</td><td>11</td></tr>
+
+              <tr><td><b>VRL1</b></td><td>31</td><td>26</td><td>16</td><td>11</td><td>5</td><td>11</td><td>0</td></tr>
+              <tr><td><b>VRL2</b></td><td>25</td><td>27</td><td>25</td><td>6</td><td>4</td><td>13</td><td>0</td></tr>
+              <tr><td><b>VRL3</b></td><td>25</td><td>30</td><td>24</td><td>7</td><td>2</td><td>12</td><td>0</td></tr>
+              <tr><td><b>VRL4</b></td><td>23</td><td>25</td><td>26</td><td>6</td><td>4</td><td>16</td><td>0</td></tr>
+              <tr><td><b>VRL5</b></td><td>21</td><td>32</td><td>27</td><td>4</td><td>2</td><td>14</td><td>0</td></tr>
+
+              <tr><td><b>RBN1</b></td><td>25</td><td>27</td><td>25</td><td>6</td><td>4</td><td>13</td><td>0</td></tr>
+              <tr><td><b>RBN2</b></td><td>31</td><td>26</td><td>16</td><td>11</td><td>5</td><td>11</td><td>0</td></tr>
+              <tr><td><b>RBN3</b></td><td>25</td><td>27</td><td>25</td><td>6</td><td>4</td><td>13</td><td>0</td></tr>
+              <tr><td><b>RBN4</b></td><td>25</td><td>27</td><td>25</td><td>6</td><td>4</td><td>13</td><td>0</td></tr>
+              <tr><td><b>RBN5</b></td><td>22</td><td>26</td><td>26</td><td>6</td><td>4</td><td>16</td><td>0</td></tr>
+              <tr><td><b>RBN6</b></td><td>31</td><td>26</td><td>16</td><td>11</td><td>5</td><td>11</td><td>0</td></tr>
+</tbody>
           </table>
         </div>
       </div>
@@ -363,11 +375,11 @@
       <div class="card">
         <h2>How this model works</h2>
         <div class="small">
-          1. Your input percentages are the target Pamialukia-wide vote shares.<br>
-          2. The supplied PAM1–PAM6 previous-election results create the Duchy-level political baseline.<br>
+          1. Your input percentages are the target vote shares across the full loaded test area.<br>
+          2. The supplied Duchy previous-election results create the regional political baseline.<br>
           3. Age, urbanisation, income, education, housing, deprivation, family and tags alter each seat locally.<br>
           4. The model then re-balances all constituency estimates so the aggregate vote closely matches your input.<br><br>
-          This means stronger demographic effects change <i>where</i> a party wins without simply inflating its national vote.<br><br>
+          This means stronger demographic effects change <i>where</i> a party wins without simply inflating its national vote.<br><br>          <b>Candidate eligibility:</b> Pamialukia First (PLF) only stands in PAM constituencies. Its score is forced to 0 outside Pamialukia, so it cannot win VRL or RBN seats.<br><br>
           Majority labels are based on the largest party's seat total relative to the majority threshold:
           within 20% below = <b>No working majority</b>; more than 20% below = <b>Hung</b>;
           0–10% above = <b>Slim majority</b>; 10–50% above = <b>Working majority</b>;
@@ -395,7 +407,7 @@
 
         <div class="small">
           Export your Affinity map as <b>SVG</b>. For automatic filling, name each closed constituency Curve
-          with its constituency code, e.g. <b>PAM1-1</b>, <b>PAM2-4</b>, or later <b>KAN-3-5</b>.
+          with its constituency code, e.g. <b>PAM1-1</b>, <b>VRL2-4</b>, <b>RBN1-3</b>, or later <b>KAN-3-5</b>.
           The code may be on the SVG shape itself or on a parent group.
           <b>Border protection:</b> some exporters draw a constituency's border as its own filled black
           shape (no stroke at all) layered next to the white interior shape, rather than using an SVG
@@ -422,7 +434,7 @@
       <div class="card">
         <h2>Constituencies</h2>
         <div class="controls">
-          <input id="search" type="text" placeholder="Search PAM1-1, PAM2, university, rural..." oninput="renderTable()">
+          <input id="search" type="text" placeholder="Search PAM1-1, VRL2-4, RBN1, university, rural..." oninput="renderTable()">
           <select id="winnerFilter" onchange="renderTable()">
             <option value="">All winners</option>
           </select>
@@ -433,6 +445,7 @@
             <thead>
               <tr>
                 <th>Code</th>
+                <th>Region</th>
                 <th>Duchy</th>
                 <th>Winner</th>
                 <th>Winner %</th>
@@ -476,13 +489,25 @@ const partyCodes = Object.keys(parties);
    ========================================================= */
 
 const duchyPrevious = {
-  // Previous election results supplied by the user (Duchy level).
-  PAM1: { SDV:27, IMP:16, TPP:8, ENV:11, VRK:11, SKV:14, PLF:13 },
-  PAM2: { SDV:23, IMP:10, TPP:5, ENV:14, VRK:14, SKV:13, PLF:21 },
-  PAM3: { SDV:24, IMP:14, TPP:6, ENV:9,  VRK:12, SKV:20, PLF:15 },
-  PAM4: { SDV:24, IMP:14, TPP:6, ENV:9,  VRK:12, SKV:20, PLF:15 },
-  PAM5: { SDV:24, IMP:14, TPP:6, ENV:9,  VRK:12, SKV:20, PLF:15 },
-  PAM6: { SDV:24, IMP:14, TPP:6, ENV:9,  VRK:12, SKV:20, PLF:15 }
+  PAM1: { SDV:27, IMP:16, TPP:8,  ENV:11, VRK:11, SKV:14, PLF:13 },
+  PAM2: { SDV:23, IMP:10, TPP:5,  ENV:14, VRK:14, SKV:13, PLF:21 },
+  PAM3: { SDV:24, IMP:14, TPP:6,  ENV:9,  VRK:12, SKV:20, PLF:15 },
+  PAM4: { SDV:23, IMP:10, TPP:5,  ENV:6,  VRK:14, SKV:23, PLF:19 },
+  PAM5: { SDV:23, IMP:14, TPP:9,  ENV:8,  VRK:11, SKV:21, PLF:14 },
+  PAM6: { SDV:25, IMP:19, TPP:13, ENV:9,  VRK:8,  SKV:15, PLF:11 },
+
+  VRL1: { SDV:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 },
+  VRL2: { SDV:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
+  VRL3: { SDV:25, IMP:30, TPP:24, ENV:7,  VRK:2, SKV:12, PLF:0 },
+  VRL4: { SDV:23, IMP:25, TPP:26, ENV:6,  VRK:4, SKV:16, PLF:0 },
+  VRL5: { SDV:21, IMP:32, TPP:27, ENV:4,  VRK:2, SKV:14, PLF:0 },
+
+  RBN1: { SDV:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
+  RBN2: { SDV:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 },
+  RBN3: { SDV:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
+  RBN4: { SDV:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
+  RBN5: { SDV:22, IMP:26, TPP:26, ENV:6,  VRK:4, SKV:16, PLF:0 },
+  RBN6: { SDV:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 }
 };
 
 /* =========================================================
@@ -551,12 +576,90 @@ const constituencies = [
   {code:"PAM6-5", age:"old", urban:"rural", income:"low", education:"medium", housing:"owned", deprivation:"medium", family:"medium", tags:["remote","rural","stable"]},
   {code:"PAM6-6", age:"young", urban:"urban", income:"high", education:"high", housing:"rent", deprivation:"low", family:"low", tags:["financial","industrial","port"]},
   {code:"PAM6-7", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"high", tags:["financial","commuter","high-growth"]}
+  ,
+
+  /* =========================
+     VREAELIA
+     ========================= */
+
+  {code:"VRL1-1", age:"medium", urban:"urban", income:"high", education:"high", housing:"mixed", deprivation:"low", family:"high", tags:["financial","commuter","high-growth"]},
+  {code:"VRL1-2", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"medium", tags:["industrial","commuter","high-growth"]},
+  {code:"VRL1-3", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["industrial","commuter","high-growth"]},
+  {code:"VRL1-4", age:"medium", urban:"urban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["public-sector","stable","industrial"]},
+  {code:"VRL1-5", age:"young", urban:"urban", income:"high", education:"high", housing:"rent", deprivation:"low", family:"low", tags:["university","high-growth","financial"]},
+  {code:"VRL1-6", age:"young", urban:"urban", income:"medium", education:"high", housing:"rent", deprivation:"low", family:"low", tags:["university","public-sector","high-growth"]},
+  {code:"VRL1-7", age:"medium", urban:"urban", income:"medium", education:"high", housing:"mixed", deprivation:"low", family:"medium", tags:["financial","high-growth","commuter"]},
+  {code:"VRL1-8", age:"medium", urban:"urban", income:"medium", education:"medium", housing:"mixed", deprivation:"low", family:"low", tags:["port","stable","tourist"]},
+  {code:"VRL1-9", age:"medium", urban:"urban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"low", tags:["port","stable","industrial"]},
+  {code:"VRL1-10", age:"medium", urban:"urban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"low", tags:["public-sector","stable","industrial"]},
+  {code:"VRL1-11", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["financial","commuter","high-growth"]},
+  {code:"VRL1-12", age:"old", urban:"suburban", income:"high", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["tourist","commuter","high-growth"]},
+  {code:"VRL1-13", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"medium", tags:["tourist","commuter","high-growth"]},
+  {code:"VRL1-14", age:"old", urban:"suburban", income:"high", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["tourist","commuter","high-growth"]},
+  {code:"VRL1-15", age:"old", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["agricultural","commuter","stable"]},
+  {code:"VRL1-16", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"high", tags:["stable","commuter","public-sector"]},
+
+  {code:"VRL2-1", age:"old", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","commuter","remote"]},
+  {code:"VRL2-2", age:"medium", urban:"suburban", income:"high", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["tourist","commuter","high-growth"]},
+  {code:"VRL2-3", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"medium", tags:["industrial","commuter","public-sector"]},
+  {code:"VRL2-4", age:"old", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"low", tags:["tourist","stable","commuter"]},
+  {code:"VRL2-5", age:"young", urban:"urban", income:"medium", education:"high", housing:"rent", deprivation:"low", family:"low", tags:["tourist","port","stable"]},
+  {code:"VRL2-6", age:"medium", urban:"urban", income:"medium", education:"low", housing:"mixed", deprivation:"medium", family:"medium", tags:["public-sector","declining","industrial"]},
+  {code:"VRL2-7", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["stable","tourist","high-growth"]},
+
+  {code:"VRL3-1", age:"old", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","commuter","remote"]},
+  {code:"VRL3-2", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"medium", tags:["tourist","commuter","high-growth"]},
+  {code:"VRL3-3", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["agricultural","high-growth","tourist"]},
+  {code:"VRL3-4", age:"medium", urban:"rural", income:"medium", education:"high", housing:"owned", deprivation:"low", family:"low", tags:["agricultural","high-growth","tourist"]},
+  {code:"VRL3-5", age:"medium", urban:"suburban", income:"high", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["tourist","commuter","high-growth"]},
+  {code:"VRL3-6", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["agricultural","high-growth","tourist"]},
+  {code:"VRL3-7", age:"medium", urban:"urban", income:"high", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["tourist","port","high-growth"]},
+  {code:"VRL3-8", age:"old", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["tourist","stable","commuter"]},
+
+  {code:"VRL4-1", age:"old", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","commuter","remote"]},
+  {code:"VRL4-2", age:"medium", urban:"suburban", income:"low", education:"medium", housing:"mixed", deprivation:"medium", family:"high", tags:["declining","post-industrial","commuter"]},
+  {code:"VRL4-3", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["agricultural","stable","tourist"]},
+  {code:"VRL4-4", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
+  {code:"VRL4-5", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"low", family:"medium", tags:["agricultural","stable","remote"]},
+  {code:"VRL4-6", age:"old", urban:"rural", income:"low", education:"low", housing:"owned", deprivation:"low", family:"medium", tags:["agricultural","stable","tourist"]},
+  {code:"VRL4-7", age:"old", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["agricultural","stable","tourist"]},
+  {code:"VRL4-8", age:"old", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["agricultural","stable","commuter"]},
+
+  {code:"VRL5-1", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["commuter","stable","public-sector"]},
+  {code:"VRL5-2", age:"medium", urban:"rural", income:"low", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","declining","remote"]},
+  {code:"VRL5-3", age:"old", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["agricultural","remote","stable"]},
+
+  /* =========================
+     RUBINVENTE
+     ========================= */
+
+  {code:"RBN1-1", age:"old", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"low", tags:["remote","commuter","stable"]},
+  {code:"RBN1-2", age:"medium", urban:"rural", income:"high", education:"high", housing:"owned", deprivation:"low", family:"medium", tags:["remote","financial","stable"]},
+  {code:"RBN1-3", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"medium", tags:["remote","agricultural","stable"]},
+  {code:"RBN1-4", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","remote","stable"]},
+  {code:"RBN1-5", age:"medium", urban:"urban", income:"low", education:"low", housing:"rent", deprivation:"high", family:"medium", tags:["remote","post-industrial","declining"]},
+  {code:"RBN1-6", age:"medium", urban:"rural", income:"high", education:"high", housing:"owned", deprivation:"low", family:"medium", tags:["remote","financial","stable"]}
+
 ];
 
 const TOTAL_SEATS = constituencies.length;
 const MAJORITY_SEATS = Math.floor(TOTAL_SEATS / 2) + 1;
 
 function duchyOf(code) { return code.split("-")[0]; }
+
+function partyCanStand(party, duchy) {
+  if (party === "PLF") return duchy.startsWith("PAM");
+  return true;
+}
+
+
+function regionNameOf(code) {
+  if (code.startsWith("PAM")) return "Pamialukia";
+  if (code.startsWith("VRL")) return "Vreaelia";
+  if (code.startsWith("RBN")) return "Rubinvente";
+  return "Other";
+}
+
 
 /* =========================================================
    DEMOGRAPHIC EFFECTS
@@ -1155,10 +1258,16 @@ function rawBaseScores(targetShares, strength) {
     const duchy = duchyOf(c.code);
     const row = {};
     partyCodes.forEach(p => {
+      if (!partyCanStand(p, duchy)) {
+        row[p] = 0;
+        return;
+      }
+
       if (targetShares[p] <= 0.000001) {
         row[p] = 1e-12;
         return;
       }
+
       const regionalFactor = duchyPrevious[duchy][p] / Math.max(prevOverall[p], 0.01);
       const demographicFactor = Math.exp(effectSumForSeat(c, p) * strength);
       // Regional history is intentionally strong, but not absolute.
@@ -1191,8 +1300,12 @@ function calibrateToTarget(bases, targetShares) {
 
     partyCodes.forEach(p => {
       const target = targetShares[p];
-      if (target < 1e-8) scale[p] = 1e-12;
-      else if (agg[p] > 1e-8) scale[p] *= target / agg[p];
+      if (target < 1e-8) {
+        scale[p] = 1e-12;
+      } else if (agg[p] > 1e-8) {
+        const next = scale[p] * (target / agg[p]);
+        scale[p] = Math.max(1e-12, Math.min(1e12, next));
+      }
     });
   }
   return seatShares;
@@ -1242,7 +1355,7 @@ function renderSeatResults(target) {
     <div><span class="small">Largest party</span><strong>${largest}</strong></div>
     <div><span class="small">Seats won</span><strong>${largestSeats}</strong></div>
     <div><span class="small">Total seats</span><strong>${TOTAL_SEATS}</strong></div>
-    <div><span class="small">Req. for majority</span><strong>${MAJORITY_SEATS}</strong></div>
+    <div><span class="small">Majority</span><strong>${MAJORITY_SEATS}</strong></div>
   `;
 
   const box = document.getElementById("seatResults");
@@ -1313,7 +1426,7 @@ function renderTable() {
 
   const rows = latestResults.filter(r => {
     const haystack = [
-      r.code, r.duchy, r.age, r.urban, r.income, r.education,
+      r.code, regionNameOf(r.code), r.duchy, r.age, r.urban, r.income, r.education,
       r.housing, r.deprivation, r.family, ...r.tags
     ].join(" ").toLowerCase();
     return (!q || haystack.includes(q)) && (!filter || r.winner === filter);
@@ -1327,6 +1440,7 @@ function renderTable() {
     tr.onclick = () => showDetails(r.code);
     tr.innerHTML = `
       <td><b>${r.code}</b></td>
+      <td>${regionNameOf(r.code)}</td>
       <td>${r.duchy}</td>
       <td class="winner" style="color:${parties[r.winner].colour}">${r.winner}</td>
       <td>${r.winnerShare.toFixed(1)}%</td>
