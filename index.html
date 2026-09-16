@@ -163,6 +163,151 @@
     color: #5f646b;
     line-height: 1.45;
   }
+
+  .coalition-card {
+    padding: 14px 16px;
+  }
+  .coalition-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .coalition-head h2 {
+    margin: 0;
+  }
+  .coalition-total {
+    font-size: 13px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+  .coalition-layout {
+    display: grid;
+    grid-template-columns: minmax(250px, .9fr) minmax(300px, 1.1fr);
+    gap: 14px;
+    align-items: center;
+  }
+  .coalition-controls {
+    min-width: 0;
+  }
+  .coalition-party-buttons {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .coalition-party {
+    width: auto;
+    margin: 0;
+    min-height: 31px;
+    padding: 6px 9px;
+    border: 1px solid #d8dce1;
+    background: #f7f8fa;
+    color: #24272c;
+    font-size: 11.5px;
+    font-weight: 750;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .coalition-party:hover {
+    background: #eef0f3;
+  }
+  .coalition-party.selected {
+    border-color: transparent;
+  }
+  .coalition-party:disabled {
+    opacity: .42;
+    cursor: not-allowed;
+  }
+  .coalition-party-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 2px;
+    flex: none;
+  }
+  .coalition-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 7px;
+  }
+  .coalition-status-text {
+    font-size: 12.5px;
+    font-weight: 750;
+  }
+  .coalition-clear {
+    width: auto;
+    margin: 0;
+    min-height: 30px;
+    padding: 6px 10px;
+    font-size: 11.5px;
+  }
+  .parliament-wrap {
+    min-width: 0;
+    min-height: 176px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+  }
+  #coalitionParliament {
+    width: 560px;
+    max-width: 100%;
+    height: 170px;
+    display: block;
+    overflow: visible;
+    flex: 0 0 auto;
+  }
+  .bench-caption {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .035em;
+    fill: #555b63;
+  }
+  .bench-frame {
+    fill: none;
+    stroke: #c9cdd2;
+    stroke-width: 1;
+    rx: 4;
+  }
+  .government-frame {
+    stroke: #8c929a;
+  }
+  .opposition-frame {
+    stroke: #a9aeb5;
+  }
+  .dispatch-line {
+    stroke: #b9bec5;
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+  }
+  .commons-bench-label {
+    fill: #747980;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: .04em;
+  }
+  .coalition-seat {
+    stroke: rgba(0,0,0,.14);
+    stroke-width: .55;
+  }
+  .coalition-aisle {
+    stroke: #c9cdd2;
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+  }
+  @media (max-width: 950px) {
+    .coalition-layout {
+      grid-template-columns: 1fr;
+    }
+    #coalitionParliament {
+      height: 170px;
+    }
+  }
   table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
   th, td { padding: 8px 7px; border-bottom: 1px solid #e6e8eb; text-align: left; white-space: nowrap; }
   th { position: sticky; top: 0; background: #f3f4f6; z-index: 2; }
@@ -378,7 +523,8 @@
           1. Your input percentages are the target vote shares across the full loaded test area.<br>
           2. The supplied Duchy previous-election results create the regional political baseline.<br>
           3. Age, urbanisation, income, education, housing, deprivation, family and tags alter each seat locally.<br>
-          4. The model then re-balances all constituency estimates so the aggregate vote closely matches your input.<br><br>
+          4. <b>Interaction effects</b> apply when characteristics occur together — for example, an older, high-income agricultural seat receives an extra moderate centre-right IMP effect beyond the three individual factors.<br>
+          5. The model then re-balances all constituency estimates so the aggregate vote closely matches your input.<br><br>
           This means stronger demographic effects change <i>where</i> a party wins without simply inflating its national vote.<br><br>          <b>Candidate eligibility:</b> Pamialukia Prata (PLF) only stands in PAM constituencies. Its score is forced to 0 outside Pamialukia, so it cannot win VRL, RBN or EBN seats.<br><br>
           Majority labels are based on the largest party's seat total relative to the majority threshold:
           within 20% below = <b>No working majority</b>; more than 20% below = <b>Hung</b>;
@@ -393,6 +539,34 @@
         <h2>Projected seats</h2>
         <div id="summary" class="summaryline"></div>
         <div id="seatResults"></div>
+      </div>
+
+
+      <div class="card coalition-card">
+        <div class="coalition-head">
+          <h2>Coalition builder</h2>
+          <div id="coalitionTotal" class="coalition-total">0 / —</div>
+        </div>
+
+        <div class="coalition-layout">
+          <div class="coalition-controls">
+            <div id="coalitionPartyButtons" class="coalition-party-buttons"></div>
+
+            <div class="coalition-status">
+              <div id="coalitionStatus" class="coalition-status-text">Select parties to form a government.</div>
+              <button id="coalitionClear" type="button" class="secondary coalition-clear">Clear</button>
+            </div>
+          </div>
+
+          <div class="parliament-wrap">
+            <svg
+              id="coalitionParliament"
+              viewBox="0 0 560 170"
+              role="img"
+              aria-label="Westminster-style projected parliament chart"
+            ></svg>
+          </div>
+        </div>
       </div>
 
 
@@ -775,7 +949,7 @@ const effects = {
 
 const tagEffects = {
   "university":      {SDV:.16, IMP:.07, TPP:-.12,ENV:.27, VRK:.00, SKV:-.20,PLF:-.30},
-  "financial":       {SDV:-.03,IMP:.24, TPP:.09, ENV:.04, VRK:-.20,SKV:-.09,PLF:-.11},
+  "financial":       {SDV:.05, IMP:.24, TPP:.09, ENV:.04, VRK:-.20,SKV:-.09,PLF:-.11},
   "industrial":      {SDV:.08, IMP:-.06,TPP:.04, ENV:-.10,VRK:.17, SKV:.07, PLF:.08},
   "post-industrial": {SDV:.03, IMP:-.14,TPP:-.03,ENV:-.10,VRK:.13, SKV:.17, PLF:.22},
   "agricultural":    {SDV:-.08,IMP:.00, TPP:.16, ENV:-.11,VRK:-.02,SKV:.10, PLF:.20},
@@ -1308,6 +1482,133 @@ function downloadFilledMap() {
    MODEL
    ========================================================= */
 
+
+/*
+  INTERACTION EFFECTS
+  -------------------
+  These apply only when several characteristics occur together.
+
+  Because the model exponentiates the final effect score, an interaction
+  coefficient acts as a multiplicative local boost/penalty rather than a
+  direct percentage-point swing.
+
+  Keep these smaller than the combined base effects so combinations matter
+  without completely overriding Duchy history or the national input.
+*/
+
+function interactionEffectSumForSeat(c, party) {
+  let s = 0;
+  const has = tag => c.tags.map(t => t.toLowerCase()).includes(tag);
+
+  // Older + agricultural + high-income:
+  // affluent/rural older voters lean toward moderate centre-right IMP,
+  // rather than automatically flowing to more populist/conservative options.
+  if (
+    c.age === "old" &&
+    c.income === "high" &&
+    has("agricultural")
+  ) {
+    const effect = {
+      SDV:-.05, IMP:.26, TPP:.08, ENV:-.09, VRK:-.12, SKV:-.04, PLF:-.04
+    };
+    s += effect[party] || 0;
+  }
+
+  // Older + rural + owner-occupied:
+  // conventional property-owning rural electorate.
+  if (
+    c.age === "old" &&
+    c.urban === "rural" &&
+    c.housing === "owned"
+  ) {
+    const effect = {
+      SDV:-.07, IMP:.12, TPP:.15, ENV:-.10, VRK:-.08, SKV:.05, PLF:.06
+    };
+    s += effect[party] || 0;
+  }
+
+  // Young + university + renting:
+  // metropolitan/student-heavy progressive electorate.
+  if (
+    c.age === "young" &&
+    c.housing === "rent" &&
+    has("university")
+  ) {
+    const effect = {
+      SDV:.15, IMP:-.04, TPP:-.16, ENV:.24, VRK:.05, SKV:-.18, PLF:-.22
+    };
+    s += effect[party] || 0;
+  }
+
+  // High education + financial + high income:
+  // professional/managerial financial districts; IMP strongest, but SDV
+  // gets a meaningful moderate-professional boost too.
+  if (
+    c.education === "high" &&
+    c.income === "high" &&
+    has("financial")
+  ) {
+    const effect = {
+      SDV:.11, IMP:.18, TPP:.00, ENV:.03, VRK:-.14, SKV:-.10, PLF:-.12
+    };
+    s += effect[party] || 0;
+  }
+
+  // Low income + post-industrial + declining:
+  // sharper anti-establishment / labour-populist competition.
+  if (
+    c.income === "low" &&
+    has("post-industrial") &&
+    has("declining")
+  ) {
+    const effect = {
+      SDV:.03, IMP:-.18, TPP:-.07, ENV:-.12, VRK:.20, SKV:.18, PLF:.18
+    };
+    s += effect[party] || 0;
+  }
+
+  // Public-sector + highly educated + urban:
+  // professional public-service electorate.
+  if (
+    c.education === "high" &&
+    c.urban === "urban" &&
+    has("public-sector")
+  ) {
+    const effect = {
+      SDV:.18, IMP:.02, TPP:-.14, ENV:.12, VRK:.04, SKV:-.12, PLF:-.14
+    };
+    s += effect[party] || 0;
+  }
+
+  // Agricultural + remote + low education:
+  // culturally conservative/peripheral rural electorate.
+  if (
+    c.education === "low" &&
+    has("agricultural") &&
+    has("remote")
+  ) {
+    const effect = {
+      SDV:-.10, IMP:.03, TPP:.17, ENV:-.13, VRK:-.02, SKV:.14, PLF:.16
+    };
+    s += effect[party] || 0;
+  }
+
+  // Commuter + high-growth + high income:
+  // prosperous growth-belt seats, with moderate centre/centre-right pull.
+  if (
+    c.income === "high" &&
+    has("commuter") &&
+    has("high-growth")
+  ) {
+    const effect = {
+      SDV:.07, IMP:.17, TPP:.03, ENV:.02, VRK:-.12, SKV:-.10, PLF:-.11
+    };
+    s += effect[party] || 0;
+  }
+
+  return s;
+}
+
 function effectSumForSeat(c, party) {
   let s = 0;
   const keys = ["age","urban","income","education","housing","deprivation","family"];
@@ -1319,6 +1620,10 @@ function effectSumForSeat(c, party) {
     const clean = tag.toLowerCase();
     if (tagEffects[clean]?.[party] != null) s += tagEffects[clean][party];
   });
+
+  // Apply multi-category interaction effects after the individual effects.
+  s += interactionEffectSumForSeat(c, party);
+
   return s;
 }
 
@@ -1407,8 +1712,255 @@ function runModel() {
   });
 
   renderSeatResults(target);
+  renderCoalitionBuilder();
   renderTable();
   fillMapFromResults();
+}
+
+
+/* =========================================================
+   COALITION BUILDER
+   Click parties to combine their projected seats.
+   The Westminster-style chart uses two opposing banks with
+   a central aisle. Selected parties stay in colour; the rest
+   of the chamber is muted.
+   ========================================================= */
+
+const coalitionSelection = new Set();
+
+function projectedSeatCounts() {
+  const counts = Object.fromEntries(partyCodes.map(p => [p, 0]));
+  latestResults.forEach(r => counts[r.winner]++);
+  return counts;
+}
+
+function contrastText(hex) {
+  const clean = String(hex || "").replace("#", "");
+  if (clean.length !== 6) return "#ffffff";
+
+  const r = parseInt(clean.slice(0,2), 16);
+  const g = parseInt(clean.slice(2,4), 16);
+  const b = parseInt(clean.slice(4,6), 16);
+  const luminance = (0.299*r + 0.587*g + 0.114*b) / 255;
+
+  return luminance > 0.62 ? "#1c1e22" : "#ffffff";
+}
+
+function coalitionSeatList(counts) {
+  // Keep party blocks together in the configured party order.
+  const seats = [];
+  partyCodes.forEach(p => {
+    for (let i = 0; i < (counts[p] || 0); i++) seats.push(p);
+  });
+  return seats;
+}
+
+function renderWestminsterParliament(counts) {
+  const svg = document.getElementById("coalitionParliament");
+  if (!svg) return;
+
+  const governmentParties = partyCodes.filter(p => coalitionSelection.has(p));
+  const oppositionParties = partyCodes.filter(p => !coalitionSelection.has(p));
+
+  const governmentSeats = governmentParties.reduce((sum, p) => sum + (counts[p] || 0), 0);
+  const oppositionSeats = oppositionParties.reduce((sum, p) => sum + (counts[p] || 0), 0);
+
+  if (!coalitionSelection.size) {
+    svg.innerHTML = `
+      <text x="280" y="72" text-anchor="middle" class="bench-caption">NO GOVERNMENT SELECTED</text>
+      <text x="280" y="91" text-anchor="middle" class="commons-bench-label">Choose one or more parties to form a government</text>
+    `;
+    return;
+  }
+
+  function seatsByParty(partyList) {
+    const result = [];
+    partyList.forEach(p => {
+      for (let i = 0; i < (counts[p] || 0); i++) result.push(p);
+    });
+    return result;
+  }
+
+  const govSeatList = seatsByParty(governmentParties);
+  const oppSeatList = seatsByParty(oppositionParties);
+
+  const canvasWidth = 560;
+  const centreX = canvasWidth / 2;
+
+  // Fixed vertical zones prevent labels, frames and seat rows from colliding.
+  const oppositionZone = { top: 26, bottom: 70 };
+  const governmentZone = { top: 100, bottom: 144 };
+  const aisleY = 85;
+
+  // Keep the chart geometry visually stable between coalition choices:
+  // - both benches always have the same fixed width
+  // - seat icons always have the same fixed size
+  // - only the number of rows/columns changes
+  const fixedBenchWidth = 470;
+  const fixedSeatSize = 6.7;
+  const fixedGapX = 2.2;
+  const fixedGapY = 2.4;
+  const horizontalPadding = 18;
+
+  function benchGeometry(seatCount, zone) {
+    if (seatCount <= 0) {
+      return {
+        rows: 0,
+        cols: 0,
+        seatSize: fixedSeatSize,
+        gapX: fixedGapX,
+        gapY: fixedGapY,
+        width: fixedBenchWidth,
+        height: 22
+      };
+    }
+
+    const usableWidth = fixedBenchWidth - horizontalPadding;
+    const maxCols = Math.max(
+      1,
+      Math.floor((usableWidth + fixedGapX) / (fixedSeatSize + fixedGapX))
+    );
+
+    // Use as many columns as the fixed frame permits, then add rows.
+    // This keeps every seat icon exactly the same size at all times.
+    const cols = Math.min(maxCols, seatCount);
+    const rows = Math.ceil(seatCount / cols);
+
+    const height = Math.max(
+      22,
+      rows * fixedSeatSize + (rows - 1) * fixedGapY + 14
+    );
+
+    return {
+      rows,
+      cols,
+      seatSize: fixedSeatSize,
+      gapX: fixedGapX,
+      gapY: fixedGapY,
+      width: fixedBenchWidth,
+      height
+    };
+  }
+
+  const oppGeom = benchGeometry(oppositionSeats, oppositionZone);
+  const govGeom = benchGeometry(governmentSeats, governmentZone);
+
+  const sharedBenchWidth = fixedBenchWidth;
+  const oppX = centreX - fixedBenchWidth / 2;
+  const govX = centreX - fixedBenchWidth / 2;
+
+  const oppY = oppositionZone.top + (oppositionZone.bottom - oppositionZone.top - oppGeom.height) / 2;
+  const govY = governmentZone.top + (governmentZone.bottom - governmentZone.top - govGeom.height) / 2;
+
+  const pieces = [
+    `<text x="${centreX}" y="16" text-anchor="middle" class="bench-caption">OPPOSITION — ${oppositionSeats} SEATS</text>`,
+    `<rect x="${oppX.toFixed(1)}" y="${oppY.toFixed(1)}" width="${oppGeom.width.toFixed(1)}" height="${oppGeom.height.toFixed(1)}" class="bench-frame opposition-frame"/>`,
+
+    `<line x1="72" y1="${aisleY}" x2="488" y2="${aisleY}" class="dispatch-line"/>`,
+
+    `<rect x="${govX.toFixed(1)}" y="${govY.toFixed(1)}" width="${govGeom.width.toFixed(1)}" height="${govGeom.height.toFixed(1)}" class="bench-frame government-frame"/>`,
+    `<text x="${centreX}" y="162" text-anchor="middle" class="bench-caption">GOVERNMENT — ${governmentSeats} SEATS</text>`
+  ];
+
+  function drawBench(seats, geom, x, y, opacity) {
+    if (!seats.length || !geom.cols) return;
+
+    const contentWidth =
+      geom.cols * geom.seatSize + (geom.cols - 1) * geom.gapX;
+    const contentHeight =
+      geom.rows * geom.seatSize + (geom.rows - 1) * geom.gapY;
+
+    const startX = x + (geom.width - contentWidth) / 2;
+    const startY = y + (geom.height - contentHeight) / 2;
+
+    seats.forEach((party, index) => {
+      const row = Math.floor(index / geom.cols);
+      const col = index % geom.cols;
+
+      const seatX = startX + col * (geom.seatSize + geom.gapX);
+      const seatY = startY + row * (geom.seatSize + geom.gapY);
+
+      pieces.push(
+        `<rect class="coalition-seat" x="${seatX.toFixed(2)}" y="${seatY.toFixed(2)}" ` +
+        `width="${geom.seatSize.toFixed(2)}" height="${geom.seatSize.toFixed(2)}" rx="1.1" ` +
+        `fill="${parties[party].colour}" opacity="${opacity}" data-party="${party}"/>`
+      );
+    });
+  }
+
+  drawBench(oppSeatList, oppGeom, oppX, oppY, 0.82);
+  drawBench(govSeatList, govGeom, govX, govY, 1);
+
+  svg.innerHTML = pieces.join("");
+}
+
+function renderCoalitionBuilder() {
+  const buttons = document.getElementById("coalitionPartyButtons");
+  const totalEl = document.getElementById("coalitionTotal");
+  const statusEl = document.getElementById("coalitionStatus");
+
+  if (!buttons || !totalEl || !statusEl) return;
+
+  const counts = projectedSeatCounts();
+  const ordered = [...partyCodes].sort((a,b) => counts[b] - counts[a]);
+
+  buttons.innerHTML = "";
+
+  ordered.forEach(code => {
+    const seats = counts[code] || 0;
+    const selected = coalitionSelection.has(code);
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `coalition-party${selected ? " selected" : ""}`;
+    button.disabled = seats === 0;
+    button.setAttribute("aria-pressed", String(selected));
+    button.title = `${parties[code].name}: ${seats} projected seat${seats === 1 ? "" : "s"}`;
+
+    if (selected) {
+      button.style.background = parties[code].colour;
+      button.style.color = contrastText(parties[code].colour);
+    }
+
+    button.innerHTML = `
+      <span class="coalition-party-dot" style="background:${parties[code].colour}"></span>
+      <span>${code} (${seats})</span>
+    `;
+
+    button.addEventListener("click", () => {
+      if (coalitionSelection.has(code)) coalitionSelection.delete(code);
+      else coalitionSelection.add(code);
+
+      renderCoalitionBuilder();
+    });
+
+    buttons.appendChild(button);
+  });
+
+  const selectedSeats = [...coalitionSelection]
+    .reduce((sum, p) => sum + (counts[p] || 0), 0);
+
+  totalEl.textContent = `${selectedSeats} / ${MAJORITY_SEATS}`;
+
+  const oppositionSeats = TOTAL_SEATS - selectedSeats;
+
+  if (!coalitionSelection.size) {
+    statusEl.textContent = "Select parties to form a government.";
+  } else if (selectedSeats < MAJORITY_SEATS) {
+    const short = MAJORITY_SEATS - selectedSeats;
+    statusEl.textContent =
+      `Government: ${selectedSeats} · Opposition: ${oppositionSeats} · ` +
+      `${short} seat${short === 1 ? "" : "s"} short`;
+  } else {
+    const over = selectedSeats - MAJORITY_SEATS;
+    statusEl.textContent =
+      `Government: ${selectedSeats} · Opposition: ${oppositionSeats} · ` +
+      (over === 0
+        ? "majority threshold reached"
+        : `majority by ${over} seat${over === 1 ? "" : "s"}`);
+  }
+
+  renderWestminsterParliament(counts);
 }
 
 /* =========================================================
@@ -1567,9 +2119,9 @@ function showDetails(code) {
         <div class="mini-bg"><div class="mini-bar" style="width:${r.shares[p]}%;background:${parties[p].colour}"></div></div>
       </div>`).join("")}
 
-    <h3>Raw demographic/tag lean before national calibration</h3>
+    <h3>Raw demographic/tag + interaction lean before national calibration</h3>
     <div class="small">
-      Positive numbers favour the party locally; negative numbers hurt it. These are model coefficients, not percentage points.
+      Positive numbers favour the party locally; negative numbers hurt it. These include multi-category interaction effects and are model coefficients, not percentage points.
     </div>
     ${influenceRows.map(([p,s]) => `<span class="pill"><b>${p}</b> ${s >= 0 ? "+" : ""}${s.toFixed(2)}</span>`).join("")}
   `;
@@ -1581,6 +2133,11 @@ document.getElementById("mapFile").addEventListener("change", event => {
 
 document.getElementById("clearMapButton").addEventListener("click", clearMap);
 document.getElementById("downloadMapButton").addEventListener("click", downloadFilledMap);
+
+document.getElementById("coalitionClear").addEventListener("click", () => {
+  coalitionSelection.clear();
+  renderCoalitionBuilder();
+});
 
 buildInputs();
 runModel();
