@@ -331,14 +331,14 @@
         <div class="small">
           Loaded test chamber: <b><span id="totalSeatCount">—</span> seats</b><br>
           Constituencies loaded: <b id="loadedCount"></b><br>
-          The chamber size is taken directly from the constituency dataset. Current test regions include Pamialukia, Vreaelia and Rubinvente.
+          The chamber size is taken directly from the constituency dataset. Current test regions include Pamialukia, Vreaelia and Rubinvente. Rubinvente now includes RBN1–RBN3 constituency data.
         </div>
       </div>
 
       <div class="card">
         <h2>Previous election — Duchy baselines</h2>
         <div class="small" style="margin-bottom:8px">
-          These are the Duchy-level previous-election results currently loaded. RBN2–RBN6 baselines are included now even though their constituency rows are not yet in this test.
+          These are the Duchy-level previous-election results currently loaded. RBN1–RBN3 now have constituency rows; RBN4–RBN6 currently have historical baselines only.
         </div>
         <div style="overflow:auto">
           <table>
@@ -639,6 +639,26 @@ const constituencies = [
   {code:"RBN1-4", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","remote","stable"]},
   {code:"RBN1-5", age:"medium", urban:"urban", income:"low", education:"low", housing:"rent", deprivation:"high", family:"medium", tags:["remote","post-industrial","declining"]},
   {code:"RBN1-6", age:"medium", urban:"rural", income:"high", education:"high", housing:"owned", deprivation:"low", family:"medium", tags:["remote","financial","stable"]}
+  ,
+  {code:"RBN2-1", age:"old", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["remote","stable","financial"]},
+  {code:"RBN2-2", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["financial","high-growth","commuter"]},
+  {code:"RBN2-3", age:"young", urban:"urban", income:"medium", education:"high", housing:"rent", deprivation:"medium", family:"low", tags:["university","stable","public-sector"]},
+  {code:"RBN2-4", age:"medium", urban:"urban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["industrial","stable","port"]},
+  {code:"RBN2-5", age:"medium", urban:"urban", income:"high", education:"high", housing:"mixed", deprivation:"low", family:"low", tags:["financial","high-growth","public-sector"]},
+  {code:"RBN2-6", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"high", tags:["public-sector","stable","commuter"]},
+  {code:"RBN2-7", age:"old", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["stable","commuter","financial"]},
+  {code:"RBN2-8", age:"old", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["stable","commuter","financial"]},
+  {code:"RBN2-9", age:"medium", urban:"urban", income:"low", education:"low", housing:"mixed", deprivation:"high", family:"medium", tags:["declining","post-industrial","port"]},
+  {code:"RBN2-10", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"medium", tags:["stable","post-industrial","commuter"]},
+
+  {code:"RBN3-1", age:"old", urban:"suburban", income:"high", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["remote","high-growth","tourist"]},
+  {code:"RBN3-2", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["financial","high-growth","commuter"]},
+  {code:"RBN3-3", age:"old", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["remote","agricultural","tourist"]},
+  {code:"RBN3-4", age:"old", urban:"rural", income:"low", education:"medium", housing:"owned", deprivation:"medium", family:"low", tags:["remote","agricultural","stable"]},
+  {code:"RBN3-5", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["remote","agricultural","stable"]},
+  {code:"RBN3-6", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["financial","stable","commuter"]},
+  {code:"RBN3-7", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["tourist","high-growth","commuter"]},
+  {code:"RBN3-8", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"medium", tags:["stable","agricultural","commuter"]}
 
 ];
 
