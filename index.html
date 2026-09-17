@@ -354,7 +354,7 @@
   }
   .parliament-wrap {
     min-width: 0;
-    width: 100%;
+    min-height: 176px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -363,10 +363,9 @@
   #coalitionParliament {
     width: 560px;
     max-width: 100%;
-    aspect-ratio: 16 / 9;
-    height: auto;
+    height: 170px;
     display: block;
-    overflow: hidden;
+    overflow: visible;
     flex: 0 0 auto;
   }
   .bench-caption {
@@ -412,7 +411,7 @@
       grid-template-columns: 1fr;
     }
     #coalitionParliament {
-      height: auto;
+      height: 170px;
     }
   }
   table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
@@ -540,534 +539,12 @@
     .details-grid { grid-template-columns: repeat(2, 1fr); }
     .map-upload-row { grid-template-columns: 1fr; }
   }
-
-
-
-/* =========================================================
-   RETAINED FEATURES — clean rebuild on the PRE-REDESIGN UI
-   ========================================================= */
-
-/* Typography only */
-html,
-body,
-button,
-input,
-select,
-textarea {
-  font-family:
-    "Neue Haas Grotesk Text Pro",
-    "Neue Haas Grotesk",
-    "Helvetica Neue",
-    Helvetica,
-    Arial,
-    sans-serif !important;
-}
-
-/* Minimal header toggle; preserve original header styling/layout otherwise. */
-.original-header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-}
-
-.original-header-row > div {
-  min-width: 0;
-}
-
-.theme-toggle-original {
-  width: auto;
-  flex: 0 0 auto;
-  margin: 0;
-  padding: 7px 10px;
-  border: 1px solid rgba(255,255,255,.22);
-  border-radius: 5px;
-  background: rgba(255,255,255,.10);
-  color: white;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-/* Original light UI remains the default. Dark mode gets the requested
-   darker command-centre treatment without changing component geometry. */
-html[data-theme="dark"] {
-  color-scheme: dark;
-}
-
-html[data-theme="dark"] body {
-  background: #101512;
-  color: #e9eeeb;
-}
-
-html[data-theme="dark"] header {
-  background: #111713;
-  border-bottom-color: #303a34;
-}
-
-html[data-theme="dark"] .card {
-  background: #171d19;
-  border-color: #303a34;
-  color: #e9eeeb;
-  box-shadow: 0 2px 8px rgba(0,0,0,.18);
-}
-
-html[data-theme="dark"] h2,
-html[data-theme="dark"] h3 {
-  color: #f0f4f1;
-}
-
-html[data-theme="dark"] .small,
-html[data-theme="dark"] .comparison-source {
-  color: #aab4ae;
-}
-
-html[data-theme="dark"] input[type="number"],
-html[data-theme="dark"] input[type="text"],
-html[data-theme="dark"] textarea,
-html[data-theme="dark"] select,
-html[data-theme="dark"] input[type="file"] {
-  background: #101512;
-  color: #e9eeeb;
-  border-color: #465149;
-}
-
-html[data-theme="dark"] button.secondary {
-  background: #29312c;
-  color: #edf2ef;
-}
-
-html[data-theme="dark"] table {
-  color: #e9eeeb;
-}
-
-html[data-theme="dark"] th {
-  background: #232b26;
-}
-
-html[data-theme="dark"] td,
-html[data-theme="dark"] th {
-  border-bottom-color: #303a34;
-}
-
-html[data-theme="dark"] .bar-bg,
-html[data-theme="dark"] .mini-bg {
-  background: #29312c;
-}
-
-html[data-theme="dark"] .details,
-html[data-theme="dark"] .comparison-panel,
-html[data-theme="dark"] .import-dropdown,
-html[data-theme="dark"] .constituency-detail-row > td {
-  background: #202722;
-  border-color: #303a34;
-}
-
-/* Solid status colour boxes + fades. COLOURED ELEMENTS HAVE NO BORDER. */
-:root {
-  --indicator-orange: #ff6d2b;
-  --indicator-red: #d0342C;
-  --indicator-green: #32A431;
-}
-
-.total-box,
-.previous-import-message,
-.majority-status {
-  transition:
-    background-color .28s ease,
-    color .28s ease,
-    opacity .22s ease;
-}
-
-@keyframes statusFadeIn {
-  from { opacity: .70; }
-  to { opacity: 1; }
-}
-
-.total-box.warning,
-.previous-import-message.warning,
-.majority-status.status-warning {
-  background: var(--indicator-orange) !important;
-  color: #21120b !important;
-  border: 0 !important;
-  animation: statusFadeIn .28s ease both;
-}
-
-.total-box.ok,
-.previous-import-message.ok {
-  background: var(--indicator-green) !important;
-  color: #fff !important;
-  border: 0 !important;
-  animation: statusFadeIn .28s ease both;
-}
-
-.previous-import-message.status-error,
-.majority-status.status-error {
-  background: var(--indicator-red) !important;
-  color: #fff !important;
-  border: 0 !important;
-  animation: statusFadeIn .28s ease both;
-}
-
-.majority-status.status-majority {
-  background: var(--majority-colour) !important;
-  border: 0 !important;
-  animation: statusFadeIn .28s ease both;
-}
-
-.total-box.warning *,
-.total-box.ok *,
-.previous-import-message.warning *,
-.previous-import-message.ok *,
-.previous-import-message.status-error *,
-.majority-status.status-warning *,
-.majority-status.status-error *,
-.majority-status.status-majority * {
-  color: inherit !important;
-}
-
-/* Margin-only highlight; again, no border. */
-.margin-chip {
-  display: inline-flex;
-  min-width: 46px;
-  justify-content: center;
-  padding: 2px 5px;
-  border-radius: 4px;
-  font-variant-numeric: tabular-nums;
-}
-
-.margin-chip.marginal {
-  background: var(--indicator-orange);
-  color: #21120b;
-  border: 0;
-  font-weight: 750;
-}
-
-/* Filters add function, not a redesign. */
-.constituency-filter-tools {
-  display: grid;
-  grid-template-columns: minmax(180px, 1.5fr) repeat(4, minmax(110px, 1fr));
-  gap: 6px;
-  margin-bottom: 10px;
-}
-
-.constituency-filter-tools > * {
-  min-width: 0;
-  margin: 0;
-}
-
-/* Collapsible previous-election import. */
-.import-dropdown {
-  margin-top: 8px;
-}
-
-.import-dropdown > summary {
-  cursor: pointer;
-  font-weight: 750;
-  color: inherit;
-}
-
-/* Clean, simple file chooser; no glass, no new design language. */
-input[type="file"] {
-  width: 100%;
-  font-size: 11.5px;
-}
-
-input[type="file"]::file-selector-button {
-  padding: 6px 9px;
-  margin-right: 8px;
-  border: 1px solid #c8ccd2;
-  border-radius: 5px;
-  background: #e8eaed;
-  color: #222;
-  font: inherit;
-  font-weight: 650;
-  cursor: pointer;
-}
-
-html[data-theme="dark"] input[type="file"]::file-selector-button {
-  background: #29312c;
-  border-color: #465149;
-  color: #edf2ef;
-}
-
-/* Inline constituency details. */
-.constituency-detail-row > td {
-  padding: 0 !important;
-  background: #f5f6f7;
-}
-
-.inline-constituency-details {
-  margin: 0 !important;
-  padding: 12px 14px 14px;
-  border: 0 !important;
-  border-radius: 0 !important;
-}
-
-/* Subtle national-average marker. */
-.mini-bg {
-  position: relative;
-  overflow: visible;
-}
-
-.national-average-key {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin: 3px 0 6px;
-  color: #6a6f75;
-  font-size: 10px;
-}
-
-.national-average-key-line {
-  width: 1px;
-  height: 9px;
-  background: currentColor;
-}
-
-.national-average-marker {
-  position: absolute;
-  top: -1px;
-  bottom: -1px;
-  width: 1px;
-  transform: translateX(-.5px);
-  background: #5f646b;
-  opacity: .62;
-  z-index: 2;
-}
-
-html[data-theme="dark"] .national-average-key,
-html[data-theme="dark"] .national-average-marker {
-  color: #aab4ae;
-  background-color: #aab4ae;
-}
-
-/* Selected coalition buttons are coloured elements: no border. */
-.coalition-party.selected {
-  border: 0 !important;
-}
-
-/* Responsive filters only; original page layout remains untouched. */
-@media (max-width: 1100px) {
-  .constituency-filter-tools {
-    grid-template-columns: repeat(3, minmax(120px, 1fr));
-  }
-}
-
-@media (max-width: 700px) {
-  .original-header-row {
-    align-items: flex-start;
-  }
-
-  .constituency-filter-tools {
-    grid-template-columns: 1fr;
-  }
-}
-
-
-/* =========================================================
-   SIZING RESTORE — match the 16:9 parliament build
-   ========================================================= */
-
-.wrap {
-  max-width: 1500px !important;
-  margin: 22px auto !important;
-  padding: 0 18px !important;
-}
-
-.grid {
-  display: grid !important;
-  grid-template-columns: 370px minmax(0, 1fr) !important;
-  gap: 18px !important;
-  align-items: start !important;
-}
-
-.grid > section,
-.grid > main {
-  min-width: 0;
-}
-
-.card {
-  padding: 18px !important;
-  margin-bottom: 18px !important;
-  border-radius: 10px !important;
-  min-width: 0;
-}
-
-.coalition-card {
-  padding: 14px 16px !important;
-}
-
-.coalition-layout {
-  display: grid !important;
-  grid-template-columns: minmax(250px, .9fr) minmax(300px, 1.1fr) !important;
-  gap: 14px !important;
-  align-items: center !important;
-}
-
-.parliament-wrap {
-  min-width: 0 !important;
-  width: 100% !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  align-self: center !important;
-}
-
-#coalitionParliament {
-  width: 560px !important;
-  max-width: 100% !important;
-  aspect-ratio: 16 / 9 !important;
-  height: auto !important;
-  display: block !important;
-  overflow: hidden !important;
-  flex: 0 0 auto !important;
-}
-
-/* Filters must never force the main column wider than the viewport. */
-.constituency-filter-tools {
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  width: 100%;
-}
-
-.constituency-filter-tools > * {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-}
-
-/* Compact simple input-mode switch: no change to the card footprint. */
-.input-mode-row {
-  min-height: 32px;
-  margin: -2px 0 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.input-mode-title {
-  font-size: 12px;
-  font-weight: 700;
-  color: #4b5058;
-}
-
-.input-mode-switch {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.input-mode-switch input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.input-mode-option {
-  font-size: 11.5px;
-  font-weight: 650;
-  color: #7b8087;
-}
-
-.input-mode-row[data-mode="number"] .number-option,
-.input-mode-row[data-mode="slider"] .slider-option {
-  color: #24272c;
-}
-
-.input-mode-track {
-  position: relative;
-  width: 34px;
-  height: 18px;
-  flex: 0 0 34px;
-  border-radius: 9px;
-  background: #d5d8dc;
-  border: 1px solid #bfc3c8;
-}
-
-.input-mode-thumb {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #fff;
-  border: 1px solid #777d84;
-  transition: transform .18s ease;
-}
-
-.input-mode-switch input:checked + .input-mode-track .input-mode-thumb {
-  transform: translateX(16px);
-}
-
-html[data-theme="dark"] .input-mode-title {
-  color: #aab4ae;
-}
-
-html[data-theme="dark"] .input-mode-option {
-  color: #7f8a83;
-}
-
-html[data-theme="dark"] .input-mode-row[data-mode="number"] .number-option,
-html[data-theme="dark"] .input-mode-row[data-mode="slider"] .slider-option {
-  color: #eef3f0;
-}
-
-html[data-theme="dark"] .input-mode-track {
-  background: #364039;
-  border-color: #526058;
-}
-
-html[data-theme="dark"] .input-mode-thumb {
-  background: #edf2ef;
-  border-color: #17201b;
-}
-
-@media (max-width: 950px) {
-  .grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .coalition-layout {
-    grid-template-columns: 1fr !important;
-  }
-
-  .constituency-filter-tools {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-}
-
-@media (max-width: 560px) {
-  .wrap {
-    margin: 14px auto !important;
-    padding: 0 10px !important;
-  }
-
-  .card {
-    padding: 14px !important;
-    margin-bottom: 14px !important;
-  }
-
-  .constituency-filter-tools {
-    grid-template-columns: 1fr !important;
-  }
-}
-
 </style>
 </head>
 <body>
 <header>
-  <div class="original-header-row">
-    <div>
-      <h1>Veridian Election Simulator — Provisional Testbed</h1>
-      <p>Multi-region test: Duchy historical baseline + constituency demographics/tags + national vote-share inputs</p>
-    </div>
-    <button id="themeToggleButton" type="button" class="theme-toggle-original" aria-pressed="false">
-      <span id="themeToggleLabel">Dark mode</span>
-    </button>
-  </div>
+  <h1>Veridian Election Simulator — Provisional Testbed</h1>
+  <p>Multi-region test: Duchy historical baseline + constituency demographics/tags + national vote-share inputs</p>
 </header>
 
 <div class="wrap">
@@ -1076,14 +553,9 @@ html[data-theme="dark"] .input-mode-thumb {
       <div class="card">
         <h2>National vote share</h2>
 
-        <div class="input-mode-row">
-          <span class="input-mode-title">Input style</span>
-          <label class="input-mode-switch">
-            <span class="input-mode-option number-option">Numbers</span>
-            <input id="inputModeSwitch" type="checkbox" role="switch" aria-label="Use sliders instead of number boxes">
-            <span class="input-mode-track" aria-hidden="true"><span class="input-mode-thumb"></span></span>
-            <span class="input-mode-option slider-option">Sliders</span>
-          </label>
+        <div class="vote-input-toggle" role="group" aria-label="Vote share input style">
+          <button id="numberModeButton" type="button" class="active" aria-pressed="true">Number boxes</button>
+          <button id="sliderModeButton" type="button" aria-pressed="false">Sliders</button>
         </div>
 
         <div id="partyInputs"></div>
@@ -1124,8 +596,8 @@ html[data-theme="dark"] .input-mode-thumb {
             <b>Duchy, SDA, IMP, TPP, ENV, VRK, SKV, PLF</b>. You can import that same workbook here in a future election.
           </div>
 
-          <details class="previous-import import-dropdown">
-            <summary>Import previous election results</summary>
+          <div class="previous-import">
+            <div style="font-weight:800; margin-bottom:7px">Import previous election results</div>
             <div class="previous-import-body">
               <div class="small">
                 Import a workbook previously exported by this simulator, or a CSV/TSV with columns:
@@ -1149,9 +621,8 @@ html[data-theme="dark"] .input-mode-thumb {
               </div>
 
               <div id="previousImportMessage" class="previous-import-message"></div>
-              <div id="previousComparisonPanel" class="comparison-panel" hidden>
+              <div id="previousComparisonPanel" class="comparison-panel" hidden></div>
             </div>
-          </details>
           </div>
         </div>
       </div>
@@ -1159,7 +630,7 @@ html[data-theme="dark"] .input-mode-thumb {
       <div class="card">
         <h2>Model baseline — Duchy results</h2>
         <div class="small" style="margin-bottom:8px">
-          These are the Duchy-level historical results currently used by the prediction model. RBN1–RBN6 now have constituency rows. Ebonvud constituency data now extends through EBN14; no Ebonvud previous-election Duchy baseline has been supplied yet.
+          These are the Duchy-level historical results currently used by the prediction model. RBN1–RBN6 now have constituency rows. Ebonvud has constituency data but no supplied previous-election baseline yet.
         </div>
         <div style="overflow:auto">
           <table>
@@ -1237,7 +708,7 @@ html[data-theme="dark"] .input-mode-thumb {
           <div class="parliament-wrap">
             <svg
               id="coalitionParliament"
-              viewBox="0 0 560 315"
+              viewBox="0 0 560 170"
               role="img"
               aria-label="Westminster-style projected parliament chart"
             ></svg>
@@ -1283,64 +754,11 @@ html[data-theme="dark"] .input-mode-thumb {
 
       <div class="card">
         <h2>Constituencies</h2>
-        <div class="controls constituency-filter-tools">
-          <input id="search" type="text" placeholder="Search constituency, Duchy, tag..." oninput="renderTable()">
-
+        <div class="controls">
+          <input id="search" type="text" placeholder="Search PAM1-1, VRL2-4, RBN6-2, EBN4-1, university, rural..." oninput="renderTable()">
           <select id="winnerFilter" onchange="renderTable()">
             <option value="">All winners</option>
           </select>
-
-          <select id="urbanFilter" onchange="renderTable()">
-            <option value="">All urbanisation</option>
-            <option value="urban">Urban</option>
-            <option value="suburban">Suburban</option>
-            <option value="rural">Rural</option>
-          </select>
-
-          <select id="educationFilter" onchange="renderTable()">
-            <option value="">All education</option>
-            <option value="low">Low education</option>
-            <option value="medium">Medium education</option>
-            <option value="high">High education</option>
-          </select>
-
-          <select id="deprivationFilter" onchange="renderTable()">
-            <option value="">All deprivation</option>
-            <option value="low">Low deprivation</option>
-            <option value="medium">Medium deprivation</option>
-            <option value="high">High deprivation</option>
-          </select>
-
-          <select id="ageFilter" onchange="renderTable()">
-            <option value="">All ages</option>
-            <option value="young">Young</option>
-            <option value="medium">Medium</option>
-            <option value="old">Old</option>
-          </select>
-
-          <select id="incomeFilter" onchange="renderTable()">
-            <option value="">All incomes</option>
-            <option value="low">Low income</option>
-            <option value="medium">Medium income</option>
-            <option value="high">High income</option>
-          </select>
-
-          <select id="housingFilter" onchange="renderTable()">
-            <option value="">All housing</option>
-            <option value="rent">Rent</option>
-            <option value="mixed">Mixed</option>
-            <option value="owned">Owned</option>
-          </select>
-
-          <select id="marginFilter" onchange="renderTable()">
-            <option value="">All margins</option>
-            <option value="under5">Under 5%</option>
-            <option value="under10">Under 10%</option>
-            <option value="10to20">10–20%</option>
-            <option value="20plus">20%+</option>
-          </select>
-
-          <button type="button" class="secondary" onclick="clearConstituencyFilters()">Clear filters</button>
         </div>
 
         <div class="table-wrap">
@@ -1365,6 +783,7 @@ html[data-theme="dark"] .input-mode-thumb {
           </table>
         </div>
 
+        <div id="details" class="details"></div>
       </div>
     </main>
   </div>
@@ -1560,19 +979,21 @@ const constituencies = [
   {code:"RBN3-5", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["remote","agricultural","stable"]},
   {code:"RBN3-6", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["financial","stable","commuter"]},
   {code:"RBN3-7", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["tourist","high-growth","commuter"]},
-  {code:"RBN3-8", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"medium", tags:["stable","agricultural","commuter"]},
-
-  /* UPDATED DATA — rows 121 onward */
-  {code:"RBN4-1", age:"medium", urban:"urban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["public-sector","stable","industrial"]},
+  {code:"RBN3-8", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"medium", tags:["stable","agricultural","commuter"]}
+  ,
   {code:"RBN4-2", age:"medium", urban:"urban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["public-sector","stable","industrial"]},
   {code:"RBN4-3", age:"old", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["remote","stable","agricultural"]},
   {code:"RBN4-4", age:"medium", urban:"urban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["public-sector","stable","industrial"]},
   {code:"RBN4-5", age:"old", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["remote","stable","agricultural"]},
   {code:"RBN4-6", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
+  {code:"RBN4-7", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["stable"], provisional:true},
+  {code:"RBN4-8", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["stable"], provisional:true},
+
   {code:"RBN5-1", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
   {code:"RBN5-2", age:"old", urban:"rural", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"low", tags:["agricultural","declining","remote"]},
   {code:"RBN5-3", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["stable","agricultural","high-growth"]},
   {code:"RBN5-4", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
+
   {code:"RBN6-1", age:"young", urban:"urban", income:"high", education:"high", housing:"rent", deprivation:"low", family:"low", tags:["university","high-growth","financial"]},
   {code:"RBN6-2", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["commuter","high-growth","financial"]},
   {code:"RBN6-3", age:"medium", urban:"urban", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"medium", tags:["stable","post-industrial","port"]},
@@ -1580,62 +1001,29 @@ const constituencies = [
   {code:"RBN6-5", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"low", family:"medium", tags:["agricultural","stable","commuter"]},
   {code:"RBN6-6", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"low", tags:["agricultural","stable","remote"]},
   {code:"RBN6-7", age:"old", urban:"rural", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"low", tags:["agricultural","declining","remote"]},
+
   {code:"EBN1-1", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
   {code:"EBN1-2", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
-  {code:"EBN1-3", age:"old", urban:"rural", income:"low", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
+  {code:"EBN1-3", age:"old", urban:"rural", income:"low", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","commuter"]},
   {code:"EBN1-4", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["post-industrial","declining","commuter"]},
   {code:"EBN1-5", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["stable","remote","commuter"]},
   {code:"EBN1-6", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["stable","remote","high-growth"]},
   {code:"EBN1-7", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
+
   {code:"EBN2-1", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
   {code:"EBN2-2", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
-  {code:"EBN2-3", age:"old", urban:"rural", income:"high", education:"low", housing:"owned", deprivation:"low", family:"medium", tags:["agricultural","stable","remote"]},
+  {code:"EBN2-3", age:"old", urban:"rural", income:"high", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
+
   {code:"EBN3-1", age:"old", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"low", tags:["remote","commuter","stable"]},
   {code:"EBN3-2", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"low", tags:["public-sector","commuter","stable"]},
   {code:"EBN3-3", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"low", tags:["public-sector","commuter","stable"]},
+
   {code:"EBN4-1", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["commuter","high-growth","financial"]},
   {code:"EBN4-2", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"low", family:"high", tags:["commuter","high-growth","public-sector"]},
   {code:"EBN4-3", age:"old", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"low", tags:["remote","commuter","stable"]},
-  {code:"EBN5-1", age:"medium", urban:"rural", income:"high", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["agricultural","commuter","remote"]},
-  {code:"EBN5-2", age:"medium", urban:"suburban", income:"low", education:"low", housing:"mixed", deprivation:"high", family:"medium", tags:["industrial","declining","commuter"]},
-  {code:"EBN5-3", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
-  {code:"EBN6-1", age:"medium", urban:"suburban", income:"low", education:"low", housing:"mixed", deprivation:"high", family:"medium", tags:["post-industrial","port","declining"]},
-  {code:"EBN6-2", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"low", tags:["tourist","commuter","stable"]},
-  {code:"EBN7-1", age:"medium", urban:"suburban", income:"medium", education:"low", housing:"mixed", deprivation:"medium", family:"medium", tags:["public-sector","stable","commuter"]},
-  {code:"EBN7-2", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"high", tags:["public-sector","stable","industrial"]},
-  {code:"EBN8-1", age:"medium", urban:"urban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["financial","stable","commuter"]},
-  {code:"EBN8-2", age:"medium", urban:"urban", income:"high", education:"high", housing:"mixed", deprivation:"low", family:"low", tags:["financial","high-growth","university"]},
-  {code:"EBN8-3", age:"young", urban:"urban", income:"medium", education:"high", housing:"rent", deprivation:"medium", family:"low", tags:["public-sector","high-growth","university"]},
-  {code:"EBN8-4", age:"medium", urban:"urban", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"high", tags:["public-sector","stable","commuter"]},
-  {code:"EBN8-5", age:"medium", urban:"urban", income:"low", education:"low", housing:"rent", deprivation:"medium", family:"high", tags:["public-sector","declining","post-industrial"]},
-  {code:"EBN8-6", age:"medium", urban:"urban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["port","stable","industrial"]},
-  {code:"EBN8-7", age:"medium", urban:"urban", income:"low", education:"low", housing:"owned", deprivation:"medium", family:"high", tags:["public-sector","industrial","commuter"]},
-  {code:"EBN8-8", age:"medium", urban:"urban", income:"low", education:"low", housing:"owned", deprivation:"medium", family:"high", tags:["post-industrial","declining","commuter"]},
-  {code:"EBN9-1", age:"medium", urban:"suburban", income:"low", education:"medium", housing:"mixed", deprivation:"high", family:"medium", tags:["public-sector","declining","post-industrial"]},
-  {code:"EBN9-2", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["public-sector","stable","industrial"]},
-  {code:"EBN9-3", age:"old", urban:"urban", income:"high", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["tourist","financial","high-growth"]},
-  {code:"EBN9-4", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"high", tags:["public-sector","stable","commuter"]},
-  {code:"EBN9-5", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["commuter","high-growth","financial"]},
-  {code:"EBN9-6", age:"medium", urban:"suburban", income:"low", education:"medium", housing:"owned", deprivation:"medium", family:"high", tags:["industrial","stable","commuter"]},
-  {code:"EBN9-7", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"high", tags:["remote","stable","commuter"]},
-  {code:"EBN9-8", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"high", tags:["remote","stable","commuter"]},
-  {code:"EBN10-1", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"high", tags:["public-sector","stable","commuter"]},
-  {code:"EBN10-2", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"low", family:"medium", tags:["agricultural","stable","remote"]},
-  {code:"EBN10-3", age:"old", urban:"rural", income:"high", education:"low", housing:"owned", deprivation:"low", family:"low", tags:["agricultural","stable","remote"]},
-  {code:"EBN11-1", age:"old", urban:"suburban", income:"high", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["commuter","stable","remote"]},
-  {code:"EBN11-2", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["commuter","high-growth","financial"]},
-  {code:"EBN11-3", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"high", tags:["public-sector","stable","commuter"]},
-  {code:"EBN12-1", age:"young", urban:"urban", income:"high", education:"high", housing:"rent", deprivation:"low", family:"low", tags:["port","financial","high-growth"]},
-  {code:"EBN12-2", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["commuter","high-growth","financial"]},
-  {code:"EBN12-3", age:"medium", urban:"urban", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"high", tags:["public-sector","stable","commuter"]},
-  {code:"EBN12-4", age:"medium", urban:"suburban", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"medium", tags:["industrial","public-sector","commuter"]},
-  {code:"EBN12-5", age:"young", urban:"urban", income:"high", education:"high", housing:"rent", deprivation:"low", family:"low", tags:["university","high-growth","financial"]},
-  {code:"EBN13-1", age:"medium", urban:"suburban", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"medium", tags:["industrial","public-sector","commuter"]},
-  {code:"EBN13-2", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"high", tags:["public-sector","stable","commuter"]},
-  {code:"EBN13-3", age:"old", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"low", tags:["agricultural","stable","remote"]},
-  {code:"EBN14-1", age:"old", urban:"rural", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"low", tags:["agricultural","declining","remote"]},
-  {code:"EBN14-2", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
-  {code:"EBN14-3", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["stable","tourist","high-growth"]}
+
+  {code:"EBN5-1", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["stable"], provisional:true}
+
 ];
 
 const TOTAL_SEATS = constituencies.length;
@@ -2266,11 +1654,8 @@ function buildInputs() {
     document.getElementById("strengthLabel").textContent = `${Number(e.target.value).toFixed(2)}×`;
   });
 
-  document.getElementById("inputModeSwitch").addEventListener("change", event => {
-    setVoteInputMode(event.target.checked ? "slider" : "number");
-  });
-
-  setVoteInputMode("number");
+  document.getElementById("numberModeButton").addEventListener("click", () => setVoteInputMode("number"));
+  document.getElementById("sliderModeButton").addEventListener("click", () => setVoteInputMode("slider"));
 
   updateInputTotal();
 }
@@ -2278,8 +1663,8 @@ function buildInputs() {
 function setVoteInputMode(mode) {
   const sliderMode = mode === "slider";
   const box = document.getElementById("partyInputs");
-  const switchInput = document.getElementById("inputModeSwitch");
-  const modeRow = document.querySelector(".input-mode-row");
+  const numberButton = document.getElementById("numberModeButton");
+  const sliderButton = document.getElementById("sliderModeButton");
 
   if (sliderMode) {
     partyCodes.forEach(syncVoteControls);
@@ -2287,14 +1672,11 @@ function setVoteInputMode(mode) {
 
   box.classList.toggle("slider-mode", sliderMode);
 
-  if (switchInput) {
-    switchInput.checked = sliderMode;
-    switchInput.setAttribute("aria-checked", String(sliderMode));
-  }
+  numberButton.classList.toggle("active", !sliderMode);
+  sliderButton.classList.toggle("active", sliderMode);
 
-  if (modeRow) {
-    modeRow.dataset.mode = sliderMode ? "slider" : "number";
-  }
+  numberButton.setAttribute("aria-pressed", String(!sliderMode));
+  sliderButton.setAttribute("aria-pressed", String(sliderMode));
 }
 
 function syncVoteControls(code) {
@@ -2912,16 +2294,6 @@ function runModel() {
   });
 
   renderSeatResults(target);
-
-  const coalitionCounts = projectedSeatCounts();
-  const largestCoalitionParty = [...partyCodes]
-    .sort((a,b) => (coalitionCounts[b] || 0) - (coalitionCounts[a] || 0))[0];
-
-  coalitionSelection.clear();
-  if (largestCoalitionParty && (coalitionCounts[largestCoalitionParty] || 0) > 0) {
-    coalitionSelection.add(largestCoalitionParty);
-  }
-
   renderCoalitionBuilder();
   renderTable();
   fillMapFromResults();
@@ -2976,16 +2348,10 @@ function renderWestminsterParliament(counts) {
   const governmentSeats = governmentParties.reduce((sum, p) => sum + (counts[p] || 0), 0);
   const oppositionSeats = oppositionParties.reduce((sum, p) => sum + (counts[p] || 0), 0);
 
-  // The complete chart fits inside a fixed, invisible 560 × 315
-  // coordinate box: exactly 16:9.
-  const canvasWidth = 560;
-  const canvasHeight = 315;
-  const centreX = canvasWidth / 2;
-
   if (!coalitionSelection.size) {
     svg.innerHTML = `
-      <text x="${centreX}" y="148" text-anchor="middle" class="bench-caption">NO GOVERNMENT SELECTED</text>
-      <text x="${centreX}" y="169" text-anchor="middle" class="commons-bench-label">Choose one or more parties to form a government</text>
+      <text x="280" y="72" text-anchor="middle" class="bench-caption">NO GOVERNMENT SELECTED</text>
+      <text x="280" y="91" text-anchor="middle" class="commons-bench-label">Choose one or more parties to form a government</text>
     `;
     return;
   }
@@ -3001,30 +2367,25 @@ function renderWestminsterParliament(counts) {
   const govSeatList = seatsByParty(governmentParties);
   const oppSeatList = seatsByParty(oppositionParties);
 
-  // Equal-width opposing benches. Their vertical zones are mirrored
-  // around the central dividing line so the whole parliament remains
-  // visually centred inside the 16:9 box.
+  const canvasWidth = 560;
+  const centreX = canvasWidth / 2;
+
+  // Fixed vertical zones prevent labels, frames and seat rows from colliding.
+  const oppositionZone = { top: 26, bottom: 70 };
+  const governmentZone = { top: 100, bottom: 144 };
+  const aisleY = 85;
+
+  // Keep the chart geometry visually stable between coalition choices:
+  // - both benches always have the same fixed width
+  // - seat icons always have the same fixed size
+  // - only the number of rows/columns changes
   const fixedBenchWidth = 470;
   const fixedSeatSize = 6.7;
   const fixedGapX = 2.2;
   const fixedGapY = 2.4;
   const horizontalPadding = 18;
 
-  // Original Opposition/Government separation was 67 units.
-  // Reduced by 75%, leaving a 16.75-unit central gap.
-  const aisleY = canvasHeight / 2; // 157.5
-  const centralGap = 16.75;
-  const zoneHeight = 72;
-  const oppositionZone = {
-    top: aisleY - centralGap / 2 - zoneHeight,
-    bottom: aisleY - centralGap / 2
-  };
-  const governmentZone = {
-    top: aisleY + centralGap / 2,
-    bottom: aisleY + centralGap / 2 + zoneHeight
-  };
-
-  function benchGeometry(seatCount) {
+  function benchGeometry(seatCount, zone) {
     if (seatCount <= 0) {
       return {
         rows: 0,
@@ -3043,8 +2404,8 @@ function renderWestminsterParliament(counts) {
       Math.floor((usableWidth + fixedGapX) / (fixedSeatSize + fixedGapX))
     );
 
-    // Seat size and bench width never change. Larger sides simply use
-    // additional rows, preserving consistent icon scale.
+    // Use as many columns as the fixed frame permits, then add rows.
+    // This keeps every seat icon exactly the same size at all times.
     const cols = Math.min(maxCols, seatCount);
     const rows = Math.ceil(seatCount / cols);
 
@@ -3064,32 +2425,24 @@ function renderWestminsterParliament(counts) {
     };
   }
 
-  const oppGeom = benchGeometry(oppositionSeats);
-  const govGeom = benchGeometry(governmentSeats);
+  const oppGeom = benchGeometry(oppositionSeats, oppositionZone);
+  const govGeom = benchGeometry(governmentSeats, governmentZone);
 
-  const benchX = centreX - fixedBenchWidth / 2;
+  const sharedBenchWidth = fixedBenchWidth;
+  const oppX = centreX - fixedBenchWidth / 2;
+  const govX = centreX - fixedBenchWidth / 2;
 
-  const oppY =
-    oppositionZone.top +
-    (oppositionZone.bottom - oppositionZone.top - oppGeom.height) / 2;
-
-  const govY =
-    governmentZone.top +
-    (governmentZone.bottom - governmentZone.top - govGeom.height) / 2;
-
-  const lineX1 = benchX;
-  const lineX2 = benchX + fixedBenchWidth;
+  const oppY = oppositionZone.top + (oppositionZone.bottom - oppositionZone.top - oppGeom.height) / 2;
+  const govY = governmentZone.top + (governmentZone.bottom - governmentZone.top - govGeom.height) / 2;
 
   const pieces = [
-    `<text x="${centreX}" y="30" text-anchor="middle" class="bench-caption">OPPOSITION — ${oppositionSeats} SEATS</text>`,
+    `<text x="${centreX}" y="16" text-anchor="middle" class="bench-caption">OPPOSITION — ${oppositionSeats} SEATS</text>`,
+    `<rect x="${oppX.toFixed(1)}" y="${oppY.toFixed(1)}" width="${oppGeom.width.toFixed(1)}" height="${oppGeom.height.toFixed(1)}" class="bench-frame opposition-frame"/>`,
 
-    `<rect x="${benchX.toFixed(1)}" y="${oppY.toFixed(1)}" width="${fixedBenchWidth}" height="${oppGeom.height.toFixed(1)}" class="bench-frame opposition-frame"/>`,
+    `<line x1="72" y1="${aisleY}" x2="488" y2="${aisleY}" class="dispatch-line"/>`,
 
-    `<line x1="${lineX1.toFixed(1)}" y1="${aisleY}" x2="${lineX2.toFixed(1)}" y2="${aisleY}" class="dispatch-line"/>`,
-
-    `<rect x="${benchX.toFixed(1)}" y="${govY.toFixed(1)}" width="${fixedBenchWidth}" height="${govGeom.height.toFixed(1)}" class="bench-frame government-frame"/>`,
-
-    `<text x="${centreX}" y="292" text-anchor="middle" class="bench-caption">GOVERNMENT — ${governmentSeats} SEATS</text>`
+    `<rect x="${govX.toFixed(1)}" y="${govY.toFixed(1)}" width="${govGeom.width.toFixed(1)}" height="${govGeom.height.toFixed(1)}" class="bench-frame government-frame"/>`,
+    `<text x="${centreX}" y="162" text-anchor="middle" class="bench-caption">GOVERNMENT — ${governmentSeats} SEATS</text>`
   ];
 
   function drawBench(seats, geom, x, y, opacity) {
@@ -3118,8 +2471,8 @@ function renderWestminsterParliament(counts) {
     });
   }
 
-  drawBench(oppSeatList, oppGeom, benchX, oppY, 0.82);
-  drawBench(govSeatList, govGeom, benchX, govY, 1);
+  drawBench(oppSeatList, oppGeom, oppX, oppY, 0.82);
+  drawBench(govSeatList, govGeom, govX, govY, 1);
 
   svg.innerHTML = pieces.join("");
 }
@@ -3884,24 +3237,14 @@ function renderSeatResults(target) {
     const abovePct = seatsAbove / MAJORITY_SEATS * 100;
 
     if (abovePct <= 10) {
-      status = `Slim ${parties[largest].name} majority`;
+      status = "Slim majority";
     } else if (abovePct <= 50) {
-      status = `Working ${parties[largest].name} majority`;
+      status = "Working majority";
     } else {
-      status = `${parties[largest].name} supermajority`;
+      status = "Supermajority";
     }
 
     detail = `${parties[largest].name} is ${seatsAbove} seat${seatsAbove === 1 ? "" : "s"} above the majority threshold (${abovePct.toFixed(1)}% above majority).`;
-  }
-
-  if (largestSeats >= MAJORITY_SEATS) {
-    majorityBox.classList.add("status-majority");
-    majorityBox.style.setProperty("--majority-colour", parties[largest].colour);
-    majorityBox.style.color = contrastText(parties[largest].colour);
-  } else if (status === "Hung") {
-    majorityBox.classList.add("status-error");
-  } else {
-    majorityBox.classList.add("status-warning");
   }
 
   majorityBox.innerHTML = `
@@ -3917,67 +3260,24 @@ function renderSeatResults(target) {
   box.appendChild(note);
 }
 
-function marginMatchesFilter(margin, filter) {
-  if (!filter) return true;
-  if (filter === "under5") return margin < 5;
-  if (filter === "under10") return margin < 10;
-  if (filter === "10to20") return margin >= 10 && margin < 20;
-  if (filter === "20plus") return margin >= 20;
-  return true;
-}
-
-function clearConstituencyFilters() {
-  [
-    "search", "winnerFilter", "urbanFilter", "educationFilter",
-    "deprivationFilter", "ageFilter", "incomeFilter",
-    "housingFilter", "marginFilter"
-  ].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = "";
-  });
-  renderTable();
-}
-
 function renderTable() {
   const q = (document.getElementById("search").value || "").toLowerCase();
-  const winner = document.getElementById("winnerFilter").value;
-  const urban = document.getElementById("urbanFilter").value;
-  const education = document.getElementById("educationFilter").value;
-  const deprivation = document.getElementById("deprivationFilter").value;
-  const age = document.getElementById("ageFilter").value;
-  const income = document.getElementById("incomeFilter").value;
-  const housing = document.getElementById("housingFilter").value;
-  const marginFilter = document.getElementById("marginFilter").value;
+  const filter = document.getElementById("winnerFilter").value;
 
   const rows = latestResults.filter(r => {
     const haystack = [
       r.code, regionNameOf(r.code), r.duchy, r.age, r.urban, r.income, r.education,
       r.housing, r.deprivation, r.family, ...r.tags
     ].join(" ").toLowerCase();
-
-    return (
-      (!q || haystack.includes(q)) &&
-      (!winner || r.winner === winner) &&
-      (!urban || r.urban === urban) &&
-      (!education || r.education === education) &&
-      (!deprivation || r.deprivation === deprivation) &&
-      (!age || r.age === age) &&
-      (!income || r.income === income) &&
-      (!housing || r.housing === housing) &&
-      marginMatchesFilter(Number(r.margin), marginFilter)
-    );
+    return (!q || haystack.includes(q)) && (!filter || r.winner === filter);
   });
 
   const tbody = document.getElementById("seatTable");
   tbody.innerHTML = "";
-
   rows.forEach(r => {
     const tr = document.createElement("tr");
-    const marginal = Number.isFinite(Number(r.margin)) && Number(r.margin) < 10;
-
     tr.style.cursor = "pointer";
-    tr.onclick = () => showDetails(r.code, tr);
-
+    tr.onclick = () => showDetails(r.code);
     tr.innerHTML = `
       <td><b>${r.code}</b></td>
       <td>${regionNameOf(r.code)}</td>
@@ -3985,97 +3285,61 @@ function renderTable() {
       <td class="winner" style="color:${parties[r.winner].colour}">${r.winner}</td>
       <td>${r.winnerShare.toFixed(1)}%</td>
       <td>${r.second}</td>
-      <td><span class="margin-chip${marginal ? " marginal" : ""}">${r.margin.toFixed(1)}%</span></td>
+      <td>${r.margin.toFixed(1)}%</td>
       <td>${r.age}</td>
       <td>${r.urban}</td>
       <td>${r.education}</td>
       <td>${r.deprivation}</td>
       <td>${r.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</td>
     `;
-
     tbody.appendChild(tr);
   });
 }
 
-function showDetails(code, sourceRow = null) {
+function showDetails(code) {
   const r = latestResults.find(x => x.code === code);
   if (!r) return;
 
   selectMapRegion(code);
-
-  const existing = document.querySelector(".constituency-detail-row");
-  if (existing) {
-    const existingCode = existing.dataset.detailsFor;
-    existing.remove();
-    if (existingCode === code) return;
-  }
+  const box = document.getElementById("details");
+  box.style.display = "block";
 
   const ordered = [...partyCodes].sort((a,b)=>r.shares[b]-r.shares[a]);
   const strength = Number(document.getElementById("modelStrength").value);
-  const nationalAverage = averageShares(latestResults);
 
   const influenceRows = partyCodes.map(p => {
     const score = effectSumForSeat(r, p) * strength;
     return [p, score];
   }).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1])).slice(0,7);
 
-  const detailHtml = `
-    <div class="details inline-constituency-details">
-      <h3 style="margin-top:0">${r.code} — projected ${r.winner} win</h3>
+  box.innerHTML = `
+    <h3 style="margin-top:0">${r.code} — projected ${r.winner} win</h3>
 
-      <div class="details-grid">
-        <div><b>Age</b><br>${r.age}</div>
-        <div><b>Urbanisation</b><br>${r.urban}</div>
-        <div><b>Income</b><br>${r.income}</div>
-        <div><b>Education</b><br>${r.education}</div>
-        <div><b>Housing</b><br>${r.housing}</div>
-        <div><b>Deprivation</b><br>${r.deprivation}</div>
-        <div><b>Family</b><br>${r.family}</div>
-        <div><b>Tags</b><br>${r.tags.map(t=>`<span class="pill">${t}</span>`).join("")}</div>
-      </div>
-
-      <h3>Projected vote</h3>
-      <div class="national-average-key">
-        <span class="national-average-key-line"></span>
-        National projected average
-      </div>
-
-      ${ordered.map(p => {
-        const national = Math.max(0, Math.min(100, nationalAverage[p] || 0));
-        return `
-          <div class="vote-row">
-            <b style="color:${parties[p].colour}">${p}</b>
-            <span>${r.shares[p].toFixed(1)}%</span>
-            <div class="mini-bg">
-              <div class="mini-bar" style="width:${r.shares[p]}%;background:${parties[p].colour}"></div>
-              <span class="national-average-marker"
-                    style="left:${national}%"
-                    title="${p} national projected average: ${national.toFixed(1)}%"></span>
-            </div>
-          </div>`;
-      }).join("")}
-
-      <h3>Raw demographic/tag lean before national calibration</h3>
-      <div class="small">
-        Positive numbers favour the party locally; negative numbers hurt it. These are model coefficients, not percentage points.
-      </div>
-      ${influenceRows.map(([p,s]) => `<span class="pill"><b>${p}</b> ${s >= 0 ? "+" : ""}${s.toFixed(2)}</span>`).join("")}
+    <div class="details-grid">
+      <div><b>Age</b><br>${r.age}</div>
+      <div><b>Urbanisation</b><br>${r.urban}</div>
+      <div><b>Income</b><br>${r.income}</div>
+      <div><b>Education</b><br>${r.education}</div>
+      <div><b>Housing</b><br>${r.housing}</div>
+      <div><b>Deprivation</b><br>${r.deprivation}</div>
+      <div><b>Family</b><br>${r.family}</div>
+      <div><b>Tags</b><br>${r.tags.map(t=>`<span class="pill">${t}</span>`).join("")}</div>
     </div>
+
+    <h3>Projected vote</h3>
+    ${ordered.map(p => `
+      <div class="vote-row">
+        <b style="color:${parties[p].colour}">${p}</b>
+        <span>${r.shares[p].toFixed(1)}%</span>
+        <div class="mini-bg"><div class="mini-bar" style="width:${r.shares[p]}%;background:${parties[p].colour}"></div></div>
+      </div>`).join("")}
+
+    <h3>Raw demographic/tag lean before national calibration</h3>
+    <div class="small">
+      Positive numbers favour the party locally; negative numbers hurt it. These are model coefficients, not percentage points.
+    </div>
+    ${influenceRows.map(([p,s]) => `<span class="pill"><b>${p}</b> ${s >= 0 ? "+" : ""}${s.toFixed(2)}</span>`).join("")}
   `;
-
-  if (sourceRow && sourceRow.parentNode) {
-    const detailRow = document.createElement("tr");
-    detailRow.className = "constituency-detail-row";
-    detailRow.dataset.detailsFor = code;
-
-    const cell = document.createElement("td");
-    cell.colSpan = sourceRow.children.length || 12;
-    cell.innerHTML = detailHtml;
-
-    detailRow.appendChild(cell);
-    sourceRow.insertAdjacentElement("afterend", detailRow);
-    return;
-  }
 }
 
 document.getElementById("mapFile").addEventListener("change", event => {
@@ -4135,38 +3399,6 @@ document.getElementById("previousElectionFile").addEventListener("change", async
 
 buildInputs();
 runModel();
-
-function applyInterfaceTheme(theme, persist = true) {
-  const safeTheme = theme === "dark" ? "dark" : "light";
-  document.documentElement.dataset.theme = safeTheme;
-
-  const button = document.getElementById("themeToggleButton");
-  const label = document.getElementById("themeToggleLabel");
-
-  if (button) button.setAttribute("aria-pressed", String(safeTheme === "dark"));
-  if (label) label.textContent = safeTheme === "dark" ? "Light mode" : "Dark mode";
-
-  if (persist) {
-    try { localStorage.setItem("veridia-interface-theme", safeTheme); } catch (_) {}
-  }
-}
-
-(function initialiseInterfaceTheme() {
-  let stored = null;
-  try { stored = localStorage.getItem("veridia-interface-theme"); } catch (_) {}
-
-  const theme = stored === "dark" || stored === "light"
-    ? stored
-    : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-
-  applyInterfaceTheme(theme, false);
-})();
-
-document.getElementById("themeToggleButton").addEventListener("click", () => {
-  const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-  applyInterfaceTheme(next);
-});
-
 </script>
 </body>
 </html>
