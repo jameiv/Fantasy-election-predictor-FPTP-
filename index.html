@@ -582,61 +582,56 @@
         <div class="small">
           Loaded test chamber: <b><span id="totalSeatCount">—</span> seats</b><br>
           Constituencies loaded: <b id="loadedCount"></b><br>
-          The chamber size is taken directly from the constituency dataset. Current test regions include Pamialukia, Veraelia, Rubinvente and Ebonvud.
+          The chamber size is taken directly from the constituency dataset. Current test regions include Pamialukia, Vreaelia, Rubinvente and Ebonvud. Ebonvud currently has no supplied previous-election Duchy baseline, so its regional historical modifier is neutral.
         </div>
 
         <div class="status-tools">
           <div class="status-tool-buttons">
             <button id="exportResultsButton" type="button">Export results (.xlsx)</button>
-            <button id="downloadPreviousTemplateButton" type="button" class="secondary">Blank import template (.csv)</button>
+            <button id="downloadPreviousTemplateButton" type="button" class="secondary">Previous-result template</button>
           </div>
 
-          <div class="small" style="margin-bottom:8px">
-            The exported workbook now starts with an <b>Import Results</b> sheet containing only:
-            <b>Duchy, SDA, IMP, TPP, ENV, VRK, SKV, PLF</b>. You can import that same workbook here in a future election.
+          <label class="comparison-toggle">
+            <input id="comparePreviousToggle" type="checkbox">
+            <span>Compare with previous election</span>
+          </label>
+
+          <div id="comparisonSource" class="comparison-source">
+            Comparison source: built-in Duchy previous-election results.
           </div>
 
-          <div class="previous-import">
-            <div style="font-weight:800; margin-bottom:7px">Import previous election results</div>
+          <div id="previousComparisonPanel" class="comparison-panel" hidden></div>
+
+          <details class="previous-import">
+            <summary>Add a different previous election</summary>
             <div class="previous-import-body">
               <div class="small">
-                Import a workbook previously exported by this simulator, or a CSV/TSV with columns:
-                <b>Duchy, SDA, IMP, TPP, ENV, VRK, SKV, PLF</b>.
-                The comparison dataset is separate from the simulator's built-in historical model baseline.
+                Paste or load a CSV/TSV with columns:
+                <b>Duchy, SDV, IMP, TPP, ENV, VRK, SKV, PLF</b>.
+                This changes the comparison dataset only; it does not overwrite the simulator's historical baseline.
               </div>
-
-              <input id="previousElectionFile" type="file"
-                accept=".xlsx,.csv,.tsv,.txt,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,text/plain">
-
-              <textarea id="previousElectionPaste" spellcheck="false"
-                placeholder="Duchy,SDA,IMP,TPP,ENV,VRK,SKV,PLF&#10;PAM1,27,16,8,11,11,14,13"></textarea>
-
+              <input id="previousElectionFile" type="file" accept=".csv,.tsv,.txt,text/csv,text/plain">
+              <textarea id="previousElectionPaste" spellcheck="false" placeholder="Duchy,SDV,IMP,TPP,ENV,VRK,SKV,PLF&#10;PAM1,27,16,8,11,11,14,13"></textarea>
               <div class="previous-import-actions">
                 <button id="loadPreviousPasteButton" type="button">Load pasted results</button>
-                <button id="resetPreviousComparisonButton" type="button" class="secondary">Clear imported result</button>
+                <button id="resetPreviousComparisonButton" type="button" class="secondary">Use built-in results</button>
               </div>
-
-              <div id="comparisonSource" class="comparison-source">
-                No previous election imported.
-              </div>
-
               <div id="previousImportMessage" class="previous-import-message"></div>
-              <div id="previousComparisonPanel" class="comparison-panel" hidden></div>
             </div>
-          </div>
+          </details>
         </div>
       </div>
 
       <div class="card">
-        <h2>Model baseline — Duchy results</h2>
+        <h2>Previous election — Duchy baselines</h2>
         <div class="small" style="margin-bottom:8px">
-          These are the Duchy-level historical results currently used by the prediction model. RBN1–RBN6 now have constituency rows. Ebonvud has constituency data but no supplied previous-election baseline yet.
+          These are the Duchy-level previous-election results currently loaded. RBN1–RBN6 now have constituency rows. Ebonvud has constituency data but no supplied previous-election baseline yet.
         </div>
         <div style="overflow:auto">
           <table>
             <thead>
               <tr>
-                <th>Duchy</th><th>SDA</th><th>IMP</th><th>TPP</th><th>ENV</th><th>VRK</th><th>SKV</th><th>PLF</th>
+                <th>Duchy</th><th>SDV</th><th>IMP</th><th>TPP</th><th>ENV</th><th>VRK</th><th>SKV</th><th>PLF</th>
               </tr>
             </thead>
             <tbody>
@@ -670,7 +665,7 @@
           1. Your input percentages are the target vote shares across the full loaded test area.<br>
           2. The supplied Duchy previous-election results create the regional political baseline.<br>
           3. Age, urbanisation, income, education, housing, deprivation, family and tags alter each seat locally.<br>
-          4. Multi-category interactions are also applied — for example, old + agricultural + high-income is more favourable to IMP than any of those traits alone, while low-income + high-deprivation is more strongly favourable to mainstream SDA than fringe VRK.<br>
+          4. Multi-category interactions are also applied — for example, old + agricultural + high-income is more favourable to IMP than any of those traits alone, while low-income + high-deprivation is more strongly favourable to mainstream SDV than fringe VRK.<br>
           5. The model then re-balances all constituency estimates so the aggregate vote closely matches your input.<br><br>
           This means stronger demographic effects change <i>where</i> a party wins without simply inflating its national vote.<br><br>          <b>Candidate eligibility:</b> Pamialukia Prata (PLF) only stands in PAM constituencies. Its score is forced to 0 outside Pamialukia, so it cannot win VRL, RBN or EBN seats.<br><br>
           Majority labels are based on the largest party's seat total relative to the majority threshold:
@@ -795,7 +790,7 @@
    ========================================================= */
 
 const parties = {
-  SDA: { name: "Social Democrat Alliance", colour: "#7D2027" },
+  SDV: { name: "Social Democrat Alliance", colour: "#7D2027" },
   IMP: { name: "Imperial", colour: "#002E5D" },
   TPP: { name: "Traditionalist & Prosperity Party", colour: "#D69A2D" },
   ENV: { name: "Enviro", colour: "#64A70B" },
@@ -810,25 +805,25 @@ const partyCodes = Object.keys(parties);
    ========================================================= */
 
 const duchyPrevious = {
-  PAM1: { SDA:27, IMP:16, TPP:8,  ENV:11, VRK:11, SKV:14, PLF:13 },
-  PAM2: { SDA:23, IMP:10, TPP:5,  ENV:14, VRK:14, SKV:13, PLF:21 },
-  PAM3: { SDA:24, IMP:14, TPP:6,  ENV:9,  VRK:12, SKV:20, PLF:15 },
-  PAM4: { SDA:23, IMP:10, TPP:5,  ENV:6,  VRK:14, SKV:23, PLF:19 },
-  PAM5: { SDA:23, IMP:14, TPP:9,  ENV:8,  VRK:11, SKV:21, PLF:14 },
-  PAM6: { SDA:25, IMP:19, TPP:13, ENV:9,  VRK:8,  SKV:15, PLF:11 },
+  PAM1: { SDV:27, IMP:16, TPP:8,  ENV:11, VRK:11, SKV:14, PLF:13 },
+  PAM2: { SDV:23, IMP:10, TPP:5,  ENV:14, VRK:14, SKV:13, PLF:21 },
+  PAM3: { SDV:24, IMP:14, TPP:6,  ENV:9,  VRK:12, SKV:20, PLF:15 },
+  PAM4: { SDV:23, IMP:10, TPP:5,  ENV:6,  VRK:14, SKV:23, PLF:19 },
+  PAM5: { SDV:23, IMP:14, TPP:9,  ENV:8,  VRK:11, SKV:21, PLF:14 },
+  PAM6: { SDV:25, IMP:19, TPP:13, ENV:9,  VRK:8,  SKV:15, PLF:11 },
 
-  VRL1: { SDA:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 },
-  VRL2: { SDA:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
-  VRL3: { SDA:25, IMP:30, TPP:24, ENV:7,  VRK:2, SKV:12, PLF:0 },
-  VRL4: { SDA:23, IMP:25, TPP:26, ENV:6,  VRK:4, SKV:16, PLF:0 },
-  VRL5: { SDA:21, IMP:32, TPP:27, ENV:4,  VRK:2, SKV:14, PLF:0 },
+  VRL1: { SDV:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 },
+  VRL2: { SDV:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
+  VRL3: { SDV:25, IMP:30, TPP:24, ENV:7,  VRK:2, SKV:12, PLF:0 },
+  VRL4: { SDV:23, IMP:25, TPP:26, ENV:6,  VRK:4, SKV:16, PLF:0 },
+  VRL5: { SDV:21, IMP:32, TPP:27, ENV:4,  VRK:2, SKV:14, PLF:0 },
 
-  RBN1: { SDA:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
-  RBN2: { SDA:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 },
-  RBN3: { SDA:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
-  RBN4: { SDA:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
-  RBN5: { SDA:22, IMP:26, TPP:26, ENV:6,  VRK:4, SKV:16, PLF:0 },
-  RBN6: { SDA:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 }
+  RBN1: { SDV:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
+  RBN2: { SDV:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 },
+  RBN3: { SDV:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
+  RBN4: { SDV:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
+  RBN5: { SDV:22, IMP:26, TPP:26, ENV:6,  VRK:4, SKV:16, PLF:0 },
+  RBN6: { SDV:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 }
 };
 
 /* =========================================================
@@ -1039,7 +1034,7 @@ function partyCanStand(party, duchy) {
 
 function regionNameOf(code) {
   if (code.startsWith("PAM")) return "Pamialukia";
-  if (code.startsWith("VRL")) return "Veraelia";
+  if (code.startsWith("VRL")) return "Vreaelia";
   if (code.startsWith("RBN")) return "Rubinvente";
   if (code.startsWith("EBN")) return "Ebonvud";
   return "Other";
@@ -1058,57 +1053,57 @@ function regionNameOf(code) {
 
 const effects = {
   age: {
-    young:  {SDA:.14, IMP:.03, TPP:-.10, ENV:.24, VRK:.06, SKV:-.16, PLF:-.22},
-    medium: {SDA:.02, IMP:.02, TPP: .00, ENV:.00, VRK:.02, SKV: .00, PLF: .00},
-    old:    {SDA:-.10,IMP:.05, TPP: .16, ENV:-.24,VRK:-.06,SKV: .18, PLF: .28}
+    young:  {SDV:.14, IMP:.03, TPP:-.10, ENV:.24, VRK:.06, SKV:-.16, PLF:-.22},
+    medium: {SDV:.02, IMP:.02, TPP: .00, ENV:.00, VRK:.02, SKV: .00, PLF: .00},
+    old:    {SDV:-.10,IMP:.05, TPP: .16, ENV:-.24,VRK:-.06,SKV: .18, PLF: .28}
   },
   urban: {
-    urban:    {SDA:.12, IMP:.06, TPP:-.10, ENV:.16, VRK:.05, SKV:-.10, PLF:-.14},
-    suburban: {SDA:.00, IMP:.05, TPP: .05, ENV:-.02,VRK:-.03,SKV: .03, PLF: .03},
-    rural:    {SDA:-.09,IMP:.00, TPP: .15, ENV:-.14,VRK:.00, SKV: .12, PLF: .23}
+    urban:    {SDV:.12, IMP:.06, TPP:-.10, ENV:.16, VRK:.05, SKV:-.10, PLF:-.14},
+    suburban: {SDV:.00, IMP:.05, TPP: .05, ENV:-.02,VRK:-.03,SKV: .03, PLF: .03},
+    rural:    {SDV:-.09,IMP:.00, TPP: .15, ENV:-.14,VRK:.00, SKV: .12, PLF: .23}
   },
   income: {
-    low:    {SDA:.14, IMP:-.20,TPP:-.08,ENV:-.03,VRK:.10, SKV:.09, PLF:.10},
-    medium: {SDA:.00, IMP:.00, TPP:.02, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
-    high:   {SDA:.03, IMP:.22, TPP:.08, ENV:.06, VRK:-.18,SKV:-.10,PLF:-.14}
+    low:    {SDV:.14, IMP:-.20,TPP:-.08,ENV:-.03,VRK:.10, SKV:.09, PLF:.10},
+    medium: {SDV:.00, IMP:.00, TPP:.02, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
+    high:   {SDV:.03, IMP:.22, TPP:.08, ENV:.06, VRK:-.18,SKV:-.10,PLF:-.14}
   },
   education: {
-    low:    {SDA:-.01,IMP:-.12,TPP:.08, ENV:-.20,VRK:.05, SKV:.18, PLF:.24},
-    medium: {SDA:.00, IMP:.00, TPP:.02, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
-    high:   {SDA:.11, IMP:.12, TPP:-.08,ENV:.21, VRK:-.04,SKV:-.20,PLF:-.28}
+    low:    {SDV:-.01,IMP:-.12,TPP:.08, ENV:-.20,VRK:.05, SKV:.18, PLF:.24},
+    medium: {SDV:.00, IMP:.00, TPP:.02, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
+    high:   {SDV:.11, IMP:.12, TPP:-.08,ENV:.21, VRK:-.04,SKV:-.20,PLF:-.28}
   },
   housing: {
-    rent:   {SDA:.13, IMP:-.05,TPP:-.11,ENV:.10, VRK:.09, SKV:-.05,PLF:-.07},
-    mixed:  {SDA:.02, IMP:.00, TPP:.00, ENV:.02, VRK:.02, SKV:.00, PLF:.00},
-    owned:  {SDA:-.05,IMP:.08, TPP:.11, ENV:-.08,VRK:-.05,SKV:.06, PLF:.07}
+    rent:   {SDV:.13, IMP:-.05,TPP:-.11,ENV:.10, VRK:.09, SKV:-.05,PLF:-.07},
+    mixed:  {SDV:.02, IMP:.00, TPP:.00, ENV:.02, VRK:.02, SKV:.00, PLF:.00},
+    owned:  {SDV:-.05,IMP:.08, TPP:.11, ENV:-.08,VRK:-.05,SKV:.06, PLF:.07}
   },
   deprivation: {
-    low:    {SDA:.02, IMP:.08, TPP:.04, ENV:.05, VRK:-.06,SKV:-.08,PLF:-.10},
-    medium: {SDA:.00, IMP:.00, TPP:.00, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
-    high:   {SDA:.14, IMP:-.17,TPP:-.04,ENV:-.07,VRK:.08, SKV:.16, PLF:.22}
+    low:    {SDV:.02, IMP:.08, TPP:.04, ENV:.05, VRK:-.06,SKV:-.08,PLF:-.10},
+    medium: {SDV:.00, IMP:.00, TPP:.00, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
+    high:   {SDV:.14, IMP:-.17,TPP:-.04,ENV:-.07,VRK:.08, SKV:.16, PLF:.22}
   },
   family: {
-    low:    {SDA:.02, IMP:.00, TPP:-.04,ENV:.07, VRK:.02, SKV:-.03,PLF:-.03},
-    medium: {SDA:.00, IMP:.00, TPP:.00, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
-    high:   {SDA:.03, IMP:.04, TPP:.09, ENV:-.05,VRK:-.03,SKV:.04, PLF:.07}
+    low:    {SDV:.02, IMP:.00, TPP:-.04,ENV:.07, VRK:.02, SKV:-.03,PLF:-.03},
+    medium: {SDV:.00, IMP:.00, TPP:.00, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
+    high:   {SDV:.03, IMP:.04, TPP:.09, ENV:-.05,VRK:-.03,SKV:.04, PLF:.07}
   }
 };
 
 const tagEffects = {
-  "university":      {SDA:.16, IMP:.07, TPP:-.12,ENV:.27, VRK:.00, SKV:-.20,PLF:-.30},
-  "financial":       {SDA:.05, IMP:.24, TPP:.09, ENV:.04, VRK:-.20,SKV:-.09,PLF:-.11},
-  "industrial":      {SDA:.10, IMP:-.06,TPP:.04, ENV:-.10,VRK:.10, SKV:.07, PLF:.08},
-  "post-industrial": {SDA:.10, IMP:-.14,TPP:-.03,ENV:-.10,VRK:.07, SKV:.17, PLF:.22},
-  "agricultural":    {SDA:-.08,IMP:.00, TPP:.16, ENV:-.11,VRK:-.02,SKV:.10, PLF:.20},
-  "tourist":         {SDA:.00, IMP:.10, TPP:.02, ENV:.09, VRK:-.06,SKV:-.03,PLF:.06},
-  "port":            {SDA:.08, IMP:.00, TPP:.02, ENV:-.02,VRK:.13, SKV:.06, PLF:.10},
-  "commuter":        {SDA:.04, IMP:.14, TPP:.06, ENV:.02, VRK:-.10,SKV:-.04,PLF:-.06},
-  "high-growth":     {SDA:.06, IMP:.13, TPP:-.02,ENV:.10, VRK:-.04,SKV:-.10,PLF:-.11},
-  "stable":          {SDA:.00, IMP:.00, TPP:.00, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
-  "declining":       {SDA:.06, IMP:-.15,TPP:-.03,ENV:-.10,VRK:.08, SKV:.18, PLF:.22},
-  "public-sector":   {SDA:.18, IMP:-.05,TPP:-.11,ENV:.08, VRK:.05, SKV:-.03,PLF:-.05},
-  "remote":          {SDA:-.06,IMP:-.03,TPP:.11, ENV:-.11,VRK:-.02,SKV:.11, PLF:.23},
-  "coastal":         {SDA:.00, IMP:.03, TPP:.02, ENV:.06, VRK:.00, SKV:.03, PLF:.10}
+  "university":      {SDV:.16, IMP:.07, TPP:-.12,ENV:.27, VRK:.00, SKV:-.20,PLF:-.30},
+  "financial":       {SDV:.05, IMP:.24, TPP:.09, ENV:.04, VRK:-.20,SKV:-.09,PLF:-.11},
+  "industrial":      {SDV:.10, IMP:-.06,TPP:.04, ENV:-.10,VRK:.10, SKV:.07, PLF:.08},
+  "post-industrial": {SDV:.10, IMP:-.14,TPP:-.03,ENV:-.10,VRK:.07, SKV:.17, PLF:.22},
+  "agricultural":    {SDV:-.08,IMP:.00, TPP:.16, ENV:-.11,VRK:-.02,SKV:.10, PLF:.20},
+  "tourist":         {SDV:.00, IMP:.10, TPP:.02, ENV:.09, VRK:-.06,SKV:-.03,PLF:.06},
+  "port":            {SDV:.08, IMP:.00, TPP:.02, ENV:-.02,VRK:.13, SKV:.06, PLF:.10},
+  "commuter":        {SDV:.04, IMP:.14, TPP:.06, ENV:.02, VRK:-.10,SKV:-.04,PLF:-.06},
+  "high-growth":     {SDV:.06, IMP:.13, TPP:-.02,ENV:.10, VRK:-.04,SKV:-.10,PLF:-.11},
+  "stable":          {SDV:.00, IMP:.00, TPP:.00, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
+  "declining":       {SDV:.06, IMP:-.15,TPP:-.03,ENV:-.10,VRK:.08, SKV:.18, PLF:.22},
+  "public-sector":   {SDV:.18, IMP:-.05,TPP:-.11,ENV:.08, VRK:.05, SKV:-.03,PLF:-.05},
+  "remote":          {SDV:-.06,IMP:-.03,TPP:.11, ENV:-.11,VRK:-.02,SKV:.11, PLF:.23},
+  "coastal":         {SDV:.00, IMP:.03, TPP:.02, ENV:.06, VRK:.00, SKV:.03, PLF:.10}
 };
 
 /* =========================================================
@@ -1137,8 +1132,10 @@ function previousOverall() {
 
 const prevOverall = previousOverall();
 
-let comparisonHistory = {};
-let comparisonSourceName = "No previous election imported";
+let comparisonHistory = Object.fromEntries(
+  Object.entries(duchyPrevious).map(([duchy, result]) => [duchy, {...result}])
+);
+let comparisonSourceName = "Built-in Duchy previous-election results";
 
 function cloneHistory(history) {
   return Object.fromEntries(
@@ -1265,17 +1262,13 @@ function signedNumber(value, decimals = 1) {
 
 function renderPreviousComparison() {
   const panel = document.getElementById("previousComparisonPanel");
+  const toggle = document.getElementById("comparePreviousToggle");
   const source = document.getElementById("comparisonSource");
 
-  const hasImportedHistory = Object.keys(comparisonHistory).length > 0;
+  source.textContent = `Comparison source: ${comparisonSourceName}.`;
 
-  source.textContent = hasImportedHistory
-    ? `Comparison source: ${comparisonSourceName}.`
-    : "No previous election imported.";
-
-  if (!hasImportedHistory) {
+  if (!toggle.checked) {
     panel.hidden = true;
-    panel.innerHTML = "";
     return;
   }
 
@@ -1293,7 +1286,7 @@ function renderPreviousComparison() {
   panel.innerHTML = `
     <div class="small" style="margin-bottom:7px">
       Comparison coverage: <b>${coverage.seats}/${coverage.total} constituencies</b>.
-      Previous constituency seat figures are <b>modelled</b> from the imported Duchy results plus the current constituency profile model.
+      Previous constituency seat figures are <b>modelled</b> from the supplied Duchy results plus the current constituency profile model.
     </div>
     ${partyCodes.map(p => {
       const swing = currentShares[p] - previousShares[p];
@@ -1369,14 +1362,8 @@ function parsePreviousElectionText(rawText) {
   const partyIndexes = {};
   partyCodes.forEach(p => {
     partyIndexes[p] = headers.indexOf(p);
-
-    // Backwards compatibility with older test exports that used SDV.
-    if (p === "SDA" && partyIndexes[p] < 0) {
-      partyIndexes[p] = headers.indexOf("SDV");
-    }
-
     if (partyIndexes[p] < 0) {
-      throw new Error(`Missing ${p} column. Expected headers: Duchy, ${partyCodes.join(", ")}.`);
+      throw new Error(`Missing ${p} column.`);
     }
   });
 
@@ -1412,6 +1399,7 @@ function parsePreviousElectionText(rawText) {
 function setComparisonHistory(history, sourceName) {
   comparisonHistory = cloneHistory(history);
   comparisonSourceName = sourceName;
+  document.getElementById("comparePreviousToggle").checked = true;
   renderPreviousComparison();
 }
 
@@ -1429,136 +1417,13 @@ function loadPreviousElectionText(textValue, sourceName) {
   }
 }
 
-async function extractZipEntries(arrayBuffer) {
-  const bytes = new Uint8Array(arrayBuffer);
-  const view = new DataView(arrayBuffer);
-  const entries = {};
-  let offset = 0;
-
-  while (offset + 30 <= bytes.length) {
-    const signature = view.getUint32(offset, true);
-
-    if (signature !== 0x04034B50) break;
-
-    const flags = view.getUint16(offset + 6, true);
-    const method = view.getUint16(offset + 8, true);
-    const compressedSize = view.getUint32(offset + 18, true);
-    const uncompressedSize = view.getUint32(offset + 22, true);
-    const nameLength = view.getUint16(offset + 26, true);
-    const extraLength = view.getUint16(offset + 28, true);
-
-    if (flags & 0x0008) {
-      throw new Error("This XLSX uses a ZIP format this lightweight importer cannot read. Re-export it from this simulator, or save the Import Results sheet as CSV.");
-    }
-
-    const nameStart = offset + 30;
-    const dataStart = nameStart + nameLength + extraLength;
-    const name = new TextDecoder().decode(bytes.slice(nameStart, nameStart + nameLength));
-    const compressed = bytes.slice(dataStart, dataStart + compressedSize);
-
-    let data;
-
-    if (method === 0) {
-      data = compressed;
-    } else if (method === 8 && typeof DecompressionStream !== "undefined") {
-      const stream = new Blob([compressed]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
-      data = new Uint8Array(await new Response(stream).arrayBuffer());
-    } else {
-      throw new Error("Unsupported XLSX compression. Import a workbook exported by this simulator, or use CSV/TSV.");
-    }
-
-    if (uncompressedSize && data.length !== uncompressedSize) {
-      // Non-fatal: some producers don't provide perfectly matching local metadata.
-    }
-
-    entries[name] = data;
-    offset = dataStart + compressedSize;
-  }
-
-  return entries;
-}
-
-function worksheetRowsFromXml(xmlText) {
-  const doc = new DOMParser().parseFromString(xmlText, "application/xml");
-
-  if (doc.querySelector("parsererror")) {
-    throw new Error("Could not parse the spreadsheet worksheet.");
-  }
-
-  const rows = [];
-
-  doc.querySelectorAll("sheetData > row").forEach(rowEl => {
-    const cells = [];
-    let lastColumn = -1;
-
-    rowEl.querySelectorAll("c").forEach(cell => {
-      const ref = cell.getAttribute("r") || "";
-      const letters = (ref.match(/[A-Z]+/i) || ["A"])[0].toUpperCase();
-
-      let column = 0;
-      for (const ch of letters) {
-        column = column * 26 + (ch.charCodeAt(0) - 64);
-      }
-      column -= 1;
-
-      while (lastColumn + 1 < column) {
-        cells.push("");
-        lastColumn++;
-      }
-
-      const type = cell.getAttribute("t");
-      let value = "";
-
-      if (type === "inlineStr") {
-        value = [...cell.querySelectorAll("is t")].map(t => t.textContent || "").join("");
-      } else {
-        value = cell.querySelector("v")?.textContent || "";
-      }
-
-      cells.push(value);
-      lastColumn = column;
-    });
-
-    rows.push(cells);
-  });
-
-  return rows;
-}
-
-function rowsToImportCsv(rows) {
-  return rows.map(row =>
-    row.map(value => {
-      const s = String(value ?? "");
-      return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
-    }).join(",")
-  ).join("\n");
-}
-
-async function parsePreviousElectionXlsx(arrayBuffer) {
-  const entries = await extractZipEntries(arrayBuffer);
-
-  // Files exported by this simulator place "Import Results" first,
-  // therefore it is xl/worksheets/sheet1.xml.
-  const sheetBytes = entries["xl/worksheets/sheet1.xml"];
-
-  if (!sheetBytes) {
-    throw new Error("Could not find the Import Results worksheet.");
-  }
-
-  const xml = new TextDecoder().decode(sheetBytes);
-  const rows = worksheetRowsFromXml(xml);
-
-  if (!rows.length) {
-    throw new Error("The Import Results worksheet is empty.");
-  }
-
-  const csv = rowsToImportCsv(rows);
-  return parsePreviousElectionText(csv);
-}
-
 function downloadPreviousElectionTemplate() {
   const rows = [
-    ["Duchy", ...partyCodes]
+    ["Duchy", ...partyCodes],
+    ...Object.keys(duchyPrevious).sort().map(duchy => [
+      duchy,
+      ...partyCodes.map(p => Number(duchyPrevious[duchy][p]).toFixed(1))
+    ])
   ];
 
   const csv = rows.map(row =>
@@ -1569,7 +1434,7 @@ function downloadPreviousElectionTemplate() {
   ).join("\n");
 
   const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
-  downloadBlob(blob, "veridia_previous_election_import_template.csv");
+  downloadBlob(blob, "veridia_previous_election_template.csv");
 }
 
 function buildInputs() {
@@ -2084,7 +1949,7 @@ function interactionEffectForSeat(c, party) {
     c.income === "high" &&
     tags.has("agricultural")
   ) {
-    add({ IMP:.30, TPP:.08, SDA:-.08, ENV:-.10, VRK:-.12, SKV:-.03 });
+    add({ IMP:.30, TPP:.08, SDV:-.08, ENV:-.10, VRK:-.12, SKV:-.03 });
   }
 
   if (
@@ -2092,12 +1957,12 @@ function interactionEffectForSeat(c, party) {
     c.urban === "rural" &&
     c.housing === "owned"
   ) {
-    add({ IMP:.13, TPP:.09, SDA:-.05, ENV:-.08, VRK:-.06, SKV:.03 });
+    add({ IMP:.13, TPP:.09, SDV:-.05, ENV:-.08, VRK:-.06, SKV:.03 });
   }
 
   /*
     PROFESSIONAL / FINANCE MODERATES
-    SDA now has a small but real professional-finance route, while IMP
+    SDV now has a small but real professional-finance route, while IMP
     remains the strongest party in this profile.
   */
   if (
@@ -2105,7 +1970,7 @@ function interactionEffectForSeat(c, party) {
     c.education === "high" &&
     tags.has("financial")
   ) {
-    add({ IMP:.16, SDA:.08, ENV:.03, TPP:.03, VRK:-.14, SKV:-.10 });
+    add({ IMP:.16, SDV:.08, ENV:.03, TPP:.03, VRK:-.14, SKV:-.10 });
   }
 
   if (
@@ -2113,12 +1978,12 @@ function interactionEffectForSeat(c, party) {
     tags.has("financial") &&
     tags.has("commuter")
   ) {
-    add({ IMP:.11, SDA:.05, TPP:.03, VRK:-.08, SKV:-.05 });
+    add({ IMP:.11, SDV:.05, TPP:.03, VRK:-.08, SKV:-.05 });
   }
 
   /*
     MAINSTREAM CENTRE-LEFT / DEPRIVED COMMUNITY EFFECTS
-    Low income and deprivation now reinforce SDA more strongly than VRK.
+    Low income and deprivation now reinforce SDV more strongly than VRK.
     VRK still benefits, but only modestly: it is a fringe party rather
     than the automatic vehicle for economically deprived constituencies.
   */
@@ -2126,40 +1991,40 @@ function interactionEffectForSeat(c, party) {
     c.income === "low" &&
     c.deprivation === "high"
   ) {
-    add({ SDA:.18, VRK:.03, SKV:.05, IMP:-.12, TPP:-.05, ENV:-.02 });
+    add({ SDV:.18, VRK:.03, SKV:.05, IMP:-.12, TPP:-.05, ENV:-.02 });
   }
 
   if (
     c.deprivation === "high" &&
     tags.has("post-industrial")
   ) {
-    add({ SDA:.12, SKV:.07, VRK:.03, IMP:-.08, ENV:-.03 });
+    add({ SDV:.12, SKV:.07, VRK:.03, IMP:-.08, ENV:-.03 });
   }
 
   if (
     c.deprivation === "high" &&
     tags.has("public-sector")
   ) {
-    add({ SDA:.11, VRK:.02, IMP:-.06 });
+    add({ SDV:.11, VRK:.02, IMP:-.06 });
   }
 
   if (
     c.income === "low" &&
     tags.has("industrial")
   ) {
-    add({ SDA:.08, VRK:.03, SKV:.03, IMP:-.05 });
+    add({ SDV:.08, VRK:.03, SKV:.03, IMP:-.05 });
   }
 
   /*
     YOUNG / GRADUATE / UNIVERSITY PROFILE
-    ENV remains strongest here, but SDA also gains.
+    ENV remains strongest here, but SDV also gains.
   */
   if (
     c.age === "young" &&
     c.education === "high" &&
     tags.has("university")
   ) {
-    add({ ENV:.16, SDA:.12, IMP:.03, TPP:-.08, VRK:.01, SKV:-.14 });
+    add({ ENV:.16, SDV:.12, IMP:.03, TPP:-.08, VRK:.01, SKV:-.14 });
   }
 
   /*
@@ -2172,7 +2037,7 @@ function interactionEffectForSeat(c, party) {
     c.education === "low" &&
     tags.has("declining")
   ) {
-    add({ SKV:.16, SDA:.03, VRK:.01, IMP:-.04, ENV:-.10 });
+    add({ SKV:.16, SDV:.03, VRK:.01, IMP:-.04, ENV:-.10 });
   }
 
   /*
@@ -2184,7 +2049,7 @@ function interactionEffectForSeat(c, party) {
     c.income === "high" &&
     c.urban === "suburban"
   ) {
-    add({ IMP:.08, TPP:.04, SDA:.02, ENV:-.03, VRK:-.07 });
+    add({ IMP:.08, TPP:.04, SDV:.02, ENV:-.03, VRK:-.07 });
   }
 
   return s;
@@ -2731,44 +2596,6 @@ function resultsByCode(results) {
   return Object.fromEntries(results.map(r => [r.code, r]));
 }
 
-function buildImportResultsRows() {
-  const grouped = {};
-
-  latestResults.forEach(r => {
-    const duchy = r.duchy;
-
-    if (!grouped[duchy]) {
-      grouped[duchy] = {
-        count: 0,
-        shares: Object.fromEntries(partyCodes.map(p => [p, 0]))
-      };
-    }
-
-    grouped[duchy].count++;
-
-    partyCodes.forEach(p => {
-      grouped[duchy].shares[p] += Number(r.shares[p]) || 0;
-    });
-  });
-
-  const rows = [
-    ["Duchy", ...partyCodes]
-  ];
-
-  Object.keys(grouped).sort().forEach(duchy => {
-    const g = grouped[duchy];
-
-    rows.push([
-      duchy,
-      ...partyCodes.map(p =>
-        Number((g.shares[p] / Math.max(1, g.count)).toFixed(3))
-      )
-    ]);
-  });
-
-  return rows;
-}
-
 function buildConstituencyExportRows(includeComparison) {
   const previousResults = includeComparison ? modelPreviousConstituencyResults() : [];
   const previousByCode = resultsByCode(previousResults);
@@ -3071,9 +2898,6 @@ function zipStore(files) {
 
 function buildResultsXlsxBlob(includeComparison) {
   const sheets = [
-    // Deliberately first and deliberately simple: this sheet can be fed
-    // straight back into the simulator as a future previous-election file.
-    {name:"Import Results", rows:buildImportResultsRows()},
     {name:"Constituencies", rows:buildConstituencyExportRows(includeComparison)},
     {name:"Kantons", rows:buildKantonExportRows(includeComparison)},
     {name:"National", rows:buildNationalExportRows(includeComparison)}
@@ -3165,7 +2989,7 @@ function downloadBlob(blob, filename) {
 }
 
 function exportResultsWorkbook() {
-  const includeComparison = Object.keys(comparisonHistory).length > 0;
+  const includeComparison = document.getElementById("comparePreviousToggle").checked;
   const blob = buildResultsXlsxBlob(includeComparison);
 
   const now = new Date();
@@ -3357,44 +3181,39 @@ document.getElementById("coalitionClear").addEventListener("click", () => {
 document.getElementById("exportResultsButton").addEventListener("click", exportResultsWorkbook);
 document.getElementById("downloadPreviousTemplateButton").addEventListener("click", downloadPreviousElectionTemplate);
 
+document.getElementById("comparePreviousToggle").addEventListener("change", renderPreviousComparison);
+
 document.getElementById("loadPreviousPasteButton").addEventListener("click", () => {
   const pasted = document.getElementById("previousElectionPaste").value;
   loadPreviousElectionText(pasted, "Pasted previous-election results");
 });
 
 document.getElementById("resetPreviousComparisonButton").addEventListener("click", () => {
-  comparisonHistory = {};
-  comparisonSourceName = "No previous election imported";
+  comparisonHistory = cloneHistory(duchyPrevious);
+  comparisonSourceName = "Built-in Duchy previous-election results";
   document.getElementById("previousElectionPaste").value = "";
   document.getElementById("previousElectionFile").value = "";
   document.getElementById("previousImportMessage").textContent = "";
   renderPreviousComparison();
 });
 
-document.getElementById("previousElectionFile").addEventListener("change", async event => {
+document.getElementById("previousElectionFile").addEventListener("change", event => {
   const file = event.target.files && event.target.files[0];
   if (!file) return;
 
-  const message = document.getElementById("previousImportMessage");
+  const reader = new FileReader();
 
-  try {
-    let parsed;
+  reader.onload = () => {
+    loadPreviousElectionText(String(reader.result || ""), file.name);
+  };
 
-    if (file.name.toLowerCase().endsWith(".xlsx")) {
-      const buffer = await file.arrayBuffer();
-      parsed = await parsePreviousElectionXlsx(buffer);
-    } else {
-      const raw = await file.text();
-      parsed = parsePreviousElectionText(raw);
-    }
-
-    setComparisonHistory(parsed, file.name);
-    message.className = "previous-import-message ok";
-    message.textContent = `Loaded ${Object.keys(parsed).length} Duchy result rows from ${file.name}.`;
-  } catch (error) {
+  reader.onerror = () => {
+    const message = document.getElementById("previousImportMessage");
     message.className = "previous-import-message warning";
-    message.textContent = error.message || "Could not read that previous-election file.";
-  }
+    message.textContent = "Could not read that file.";
+  };
+
+  reader.readAsText(file);
 });
 
 buildInputs();
