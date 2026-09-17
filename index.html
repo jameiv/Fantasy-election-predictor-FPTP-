@@ -1355,6 +1355,79 @@ h6 {
   h4 { font-size: 1rem !important; }
 }
 
+
+/* =========================================================
+   COMPACT COALITION CHART + FIXED CONSTITUENCY DETAILS PANEL
+   ========================================================= */
+
+.coalition-card {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.coalition-head {
+  margin-bottom: 6px;
+}
+
+.coalition-layout {
+  gap: 12px;
+  align-items: center;
+}
+
+.coalition-party-buttons {
+  margin-bottom: 6px;
+}
+
+.coalition-status {
+  margin-top: 5px;
+}
+
+#coalitionParliament {
+  width: 520px;
+  max-width: 100%;
+  aspect-ratio: 560 / 190;
+  height: auto;
+  display: block;
+}
+
+.bench-caption {
+  font-size: 9px;
+  letter-spacing: .04em;
+}
+
+.commons-bench-label {
+  font-size: 7.5px;
+}
+
+.dispatch-line {
+  stroke-dasharray: 3.5 4.5;
+}
+
+.fixed-constituency-details {
+  margin: 0 0 12px;
+  padding: 12px 13px;
+  background: #f7f8fa;
+  display: block;
+}
+
+#seatTable tr.selected-row td {
+  background: #f4f7fb;
+}
+
+html[data-theme="dark"] .fixed-constituency-details {
+  background: #202722;
+}
+
+html[data-theme="dark"] #seatTable tr.selected-row td {
+  background: #222a25;
+}
+
+@media (max-width: 950px) {
+  #coalitionParliament {
+    width: 100%;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1410,7 +1483,7 @@ h6 {
         <div class="small">
           Loaded test chamber: <b><span id="totalSeatCount">—</span> seats</b><br>
           Constituencies loaded: <b id="loadedCount"></b><br>
-          The chamber size is taken directly from the constituency dataset. Current test regions include Pamialukia, Veraelia, Rubinvente and Ebonvud.
+          The chamber size is taken directly from the constituency dataset. Current test regions include Pamialukia, Veraelia, Rubinvente, Ebonvud and Hochfelden.
         </div>
 
         <div class="status-tools">
@@ -1458,7 +1531,7 @@ h6 {
       <div class="card">
         <h2>Model baseline — Duchy results</h2>
         <div class="small" style="margin-bottom:8px">
-          These are the Duchy-level historical results currently used by the prediction model. RBN1–RBN6 now have constituency rows. Ebonvud constituency data now extends through EBN14; no Ebonvud previous-election Duchy baseline has been supplied yet.
+          These are the Duchy-level historical results currently used by the prediction model. RBN1–RBN6 now have constituency rows. Ebonvud constituency data extends through EBN14 and Hochfelden through HOC12; no Ebonvud or Hochfelden previous-election Duchy baseline has been supplied yet.
         </div>
         <div style="overflow:auto">
           <table>
@@ -1536,7 +1609,7 @@ h6 {
           <div class="parliament-wrap">
             <svg
               id="coalitionParliament"
-              viewBox="0 0 560 315"
+              viewBox="0 0 560 190"
               role="img"
               aria-label="Westminster-style projected parliament chart"
             ></svg>
@@ -1644,6 +1717,11 @@ h6 {
             <button type="button" class="secondary" onclick="clearConstituencyFilters()">Clear filters</button>
           </div>
         </details>
+
+        <div id="selectedConstituencyDetails" class="details fixed-constituency-details">
+          <h3 style="margin-top:0">Constituency details</h3>
+          <div class="small">Click a constituency in the map or in the list to view its projected result and local profile here.</div>
+        </div>
 
         <div class="table-wrap">
           <table>
@@ -1937,7 +2015,60 @@ const constituencies = [
   {code:"EBN13-3", age:"old", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"low", tags:["agricultural","stable","remote"]},
   {code:"EBN14-1", age:"old", urban:"rural", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"low", tags:["agricultural","declining","remote"]},
   {code:"EBN14-2", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
-  {code:"EBN14-3", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["stable","tourist","high-growth"]}
+  {code:"EBN14-3", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["stable","tourist","high-growth"]},
+
+  /* =========================
+     HOCHFELDEN
+     ========================= */
+
+  {code:"HOC1-1", age:"medium", urban:"suburban", income:"low", education:"low", housing:"mixed", deprivation:"high", family:"medium", tags:["industrial","declining","commuter"]},
+  {code:"HOC1-2", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"high", tags:["public-sector","stable","commuter"]},
+  {code:"HOC1-3", age:"medium", urban:"suburban", income:"medium", education:"low", housing:"mixed", deprivation:"high", family:"medium", tags:["industrial","stable","commuter"]},
+  {code:"HOC1-4", age:"young", urban:"urban", income:"medium", education:"high", housing:"rent", deprivation:"medium", family:"low", tags:["university","stable","post-industrial"]},
+  {code:"HOC1-5", age:"old", urban:"rural", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"low", tags:["agricultural","declining","remote"]},
+  {code:"HOC2-1", age:"medium", urban:"suburban", income:"low", education:"medium", housing:"owned", deprivation:"medium", family:"high", tags:["remote","stable","commuter"]},
+  {code:"HOC2-2", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
+  {code:"HOC2-3", age:"medium", urban:"suburban", income:"low", education:"low", housing:"mixed", deprivation:"high", family:"medium", tags:["industrial","declining","commuter"]},
+  {code:"HOC2-4", age:"medium", urban:"rural", income:"low", education:"medium", housing:"owned", deprivation:"medium", family:"high", tags:["remote","stable","commuter"]},
+  {code:"HOC2-5", age:"old", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["remote","stable","agricultural"]},
+  {code:"HOC3-1", age:"old", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["remote","stable","agricultural"]},
+  {code:"HOC3-2", age:"medium", urban:"suburban", income:"high", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["tourist","commuter","high-growth"]},
+  {code:"HOC3-3", age:"old", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["remote","stable","agricultural"]},
+  {code:"HOC3-4", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
+  {code:"HOC4-1", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["industrial","stable","commuter"]},
+  {code:"HOC4-2", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"low", family:"medium", tags:["industrial","stable","financial"]},
+  {code:"HOC4-3", age:"old", urban:"rural", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"low", tags:["agricultural","declining","remote"]},
+  {code:"HOC5-1", age:"medium", urban:"urban", income:"low", education:"low", housing:"mixed", deprivation:"high", family:"medium", tags:["industrial","stable","commuter"]},
+  {code:"HOC5-2", age:"old", urban:"rural", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"low", tags:["agricultural","declining","remote"]},
+  {code:"HOC6-1", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"high", tags:["public-sector","stable","commuter"]},
+  {code:"HOC6-2", age:"old", urban:"rural", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"low", tags:["agricultural","declining","remote"]},
+  {code:"HOC6-3", age:"medium", urban:"urban", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"medium", tags:["post-industrial","declining","port"]},
+  {code:"HOC6-4", age:"medium", urban:"urban", income:"low", education:"low", housing:"mixed", deprivation:"high", family:"medium", tags:["industrial","declining","port"]},
+  {code:"HOC6-5", age:"medium", urban:"rural", income:"low", education:"low", housing:"mixed", deprivation:"high", family:"medium", tags:["industrial","declining","remote"]},
+  {code:"HOC6-6", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["public-sector","stable","industrial"]},
+  {code:"HOC7-1", age:"medium", urban:"suburban", income:"low", education:"medium", housing:"owned", deprivation:"medium", family:"medium", tags:["public-sector","declining","commuter"]},
+  {code:"HOC7-2", age:"medium", urban:"rural", income:"low", education:"low", housing:"mixed", deprivation:"high", family:"medium", tags:["industrial","declining","remote"]},
+  {code:"HOC7-3", age:"old", urban:"rural", income:"low", education:"low", housing:"owned", deprivation:"medium", family:"low", tags:["agricultural","stable","remote"]},
+  {code:"HOC7-4", age:"old", urban:"rural", income:"low", education:"low", housing:"owned", deprivation:"medium", family:"low", tags:["agricultural","declining","remote"]},
+  {code:"HOC7-8", age:"medium", urban:"rural", income:"low", education:"low", housing:"mixed", deprivation:"high", family:"medium", tags:["industrial","declining","remote"]},
+  {code:"HOC7-9", age:"medium", urban:"suburban", income:"low", education:"low", housing:"mixed", deprivation:"high", family:"medium", tags:["post-industrial","declining","commuter"]},
+  {code:"HOC7-10", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"high", tags:["remote","stable","commuter"]},
+  {code:"HOC8-1", age:"old", urban:"rural", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"low", tags:["agricultural","declining","remote"]},
+  {code:"HOC8-2", age:"old", urban:"rural", income:"medium", education:"low", housing:"mixed", deprivation:"medium", family:"low", tags:["agricultural","declining","remote"]},
+  {code:"HOC9-1", age:"medium", urban:"rural", income:"medium", education:"low", housing:"mixed", deprivation:"medium", family:"medium", tags:["agricultural","declining","remote"]},
+  {code:"HOC9-2", age:"medium", urban:"suburban", income:"low", education:"low", housing:"mixed", deprivation:"high", family:"medium", tags:["post-industrial","declining","remote"]},
+  {code:"HOC9-3", age:"medium", urban:"urban", income:"low", education:"medium", housing:"mixed", deprivation:"high", family:"medium", tags:["industrial","stable","port"]},
+  {code:"HOC9-4", age:"medium", urban:"suburban", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"medium", tags:["commuter","stable","remote"]},
+  {code:"HOC10-1", age:"old", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"low", tags:["commuter","stable","financial"]},
+  {code:"HOC10-2", age:"medium", urban:"urban", income:"low", education:"low", housing:"mixed", deprivation:"high", family:"medium", tags:["tourist","declining","port"]},
+  {code:"HOC10-3", age:"old", urban:"suburban", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"medium", tags:["commuter","stable","remote"]},
+  {code:"HOC10-4", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
+  {code:"HOC11-1", age:"old", urban:"rural", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"low", tags:["agricultural","declining","remote"]},
+  {code:"HOC11-2", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
+  {code:"HOC11-3", age:"medium", urban:"rural", income:"low", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
+  {code:"HOC12-1", age:"medium", urban:"rural", income:"low", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","post-industrial","remote"]},
+  {code:"HOC12-2", age:"medium", urban:"suburban", income:"medium", education:"low", housing:"mixed", deprivation:"medium", family:"medium", tags:["port","post-industrial","remote"]},
+  {code:"HOC12-3", age:"medium", urban:"rural", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"medium", tags:["agricultural","post-industrial","remote"]}
 ];
 
 const TOTAL_SEATS = constituencies.length;
@@ -1956,6 +2087,7 @@ function regionNameOf(code) {
   if (code.startsWith("VRL")) return "Veraelia";
   if (code.startsWith("RBN")) return "Rubinvente";
   if (code.startsWith("EBN")) return "Ebonvud";
+  if (code.startsWith("HOC")) return "Hochfelden";
   return "Other";
 }
 
@@ -3278,16 +3410,15 @@ function renderWestminsterParliament(counts) {
   const governmentSeats = governmentParties.reduce((sum, p) => sum + (counts[p] || 0), 0);
   const oppositionSeats = oppositionParties.reduce((sum, p) => sum + (counts[p] || 0), 0);
 
-  // The complete chart fits inside a fixed, invisible 560 × 315
-  // coordinate box: exactly 16:9.
+  // Compact fixed chart box.
   const canvasWidth = 560;
-  const canvasHeight = 315;
+  const canvasHeight = 190;
   const centreX = canvasWidth / 2;
 
   if (!coalitionSelection.size) {
     svg.innerHTML = `
-      <text x="${centreX}" y="148" text-anchor="middle" class="bench-caption">NO GOVERNMENT SELECTED</text>
-      <text x="${centreX}" y="169" text-anchor="middle" class="commons-bench-label">Choose one or more parties to form a government</text>
+      <text x="${centreX}" y="82" text-anchor="middle" class="bench-caption">NO GOVERNMENT SELECTED</text>
+      <text x="${centreX}" y="102" text-anchor="middle" class="commons-bench-label">Choose one or more parties to form a government</text>
     `;
     return;
   }
@@ -3303,18 +3434,16 @@ function renderWestminsterParliament(counts) {
   const govSeatList = seatsByParty(governmentParties);
   const oppSeatList = seatsByParty(oppositionParties);
 
-  // Equal-width opposing benches. Their vertical zones are mirrored
-  // around the central dividing line so the whole parliament remains
-  // visually centred inside the 16:9 box.
+  // Equal-width benches packaged into a compact, low-profile chart.
   const fixedBenchWidth = 470;
-  const fixedSeatSize = 6.7;
-  const fixedGapX = 2.2;
-  const fixedGapY = 2.4;
+  const fixedSeatSize = 6.5;
+  const fixedGapX = 2.15;
+  const fixedGapY = 2.2;
   const horizontalPadding = 18;
 
-  const aisleY = canvasHeight / 2; // 157.5
-  const centralGap = 16.75; // 75% smaller than the original 67-unit gap
-  const zoneHeight = 72;
+  const aisleY = canvasHeight / 2;
+  const centralGap = 8.5;
+  const zoneHeight = 34;
   const oppositionZone = {
     top: aisleY - centralGap / 2 - zoneHeight,
     bottom: aisleY - centralGap / 2
@@ -3333,7 +3462,7 @@ function renderWestminsterParliament(counts) {
         gapX: fixedGapX,
         gapY: fixedGapY,
         width: fixedBenchWidth,
-        height: 22
+        height: 18
       };
     }
 
@@ -3343,14 +3472,12 @@ function renderWestminsterParliament(counts) {
       Math.floor((usableWidth + fixedGapX) / (fixedSeatSize + fixedGapX))
     );
 
-    // Seat size and bench width never change. Larger sides simply use
-    // additional rows, preserving consistent icon scale.
     const cols = Math.min(maxCols, seatCount);
     const rows = Math.ceil(seatCount / cols);
 
     const height = Math.max(
-      22,
-      rows * fixedSeatSize + (rows - 1) * fixedGapY + 14
+      18,
+      rows * fixedSeatSize + (rows - 1) * fixedGapY + 10
     );
 
     return {
@@ -3377,11 +3504,11 @@ function renderWestminsterParliament(counts) {
     governmentZone.top +
     (governmentZone.bottom - governmentZone.top - govGeom.height) / 2;
 
-  const lineX1 = benchX;
-  const lineX2 = benchX + fixedBenchWidth;
+  const lineX1 = benchX + 24;
+  const lineX2 = benchX + fixedBenchWidth - 24;
 
   const pieces = [
-    `<text x="${centreX}" y="30" text-anchor="middle" class="bench-caption">OPPOSITION — ${oppositionSeats} SEATS</text>`,
+    `<text x="${centreX}" y="18" text-anchor="middle" class="bench-caption">OPPOSITION — ${oppositionSeats} SEATS</text>`,
 
     `<rect x="${benchX.toFixed(1)}" y="${oppY.toFixed(1)}" width="${fixedBenchWidth}" height="${oppGeom.height.toFixed(1)}" class="bench-frame opposition-frame"/>`,
 
@@ -3389,7 +3516,7 @@ function renderWestminsterParliament(counts) {
 
     `<rect x="${benchX.toFixed(1)}" y="${govY.toFixed(1)}" width="${fixedBenchWidth}" height="${govGeom.height.toFixed(1)}" class="bench-frame government-frame"/>`,
 
-    `<text x="${centreX}" y="292" text-anchor="middle" class="bench-caption">GOVERNMENT — ${governmentSeats} SEATS</text>`
+    `<text x="${centreX}" y="182" text-anchor="middle" class="bench-caption">GOVERNMENT — ${governmentSeats} SEATS</text>`
   ];
 
   function drawBench(seats, geom, x, y, opacity) {
@@ -4302,12 +4429,9 @@ function showDetails(code, sourceRow = null) {
 
   selectMapRegion(code);
 
-  const existing = document.querySelector(".constituency-detail-row");
-  if (existing) {
-    const existingCode = existing.dataset.detailsFor;
-    existing.remove();
-    if (existingCode === code) return;
-  }
+  document.querySelectorAll(".constituency-detail-row").forEach(node => node.remove());
+  document.querySelectorAll("#seatTable tr.selected-row").forEach(node => node.classList.remove("selected-row"));
+  if (sourceRow) sourceRow.classList.add("selected-row");
 
   const ordered = [...partyCodes].sort((a,b)=>r.shares[b]-r.shares[a]);
   const strength = Number(document.getElementById("modelStrength").value);
@@ -4319,61 +4443,49 @@ function showDetails(code, sourceRow = null) {
   }).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1])).slice(0,7);
 
   const detailHtml = `
-    <div class="details inline-constituency-details">
-      <h3 style="margin-top:0">${r.code} — projected ${r.winner} win</h3>
+    <h3 style="margin-top:0">${r.code} — projected ${r.winner} win</h3>
 
-      <div class="details-grid">
-        <div><b>Age</b><br>${r.age}</div>
-        <div><b>Urbanisation</b><br>${r.urban}</div>
-        <div><b>Income</b><br>${r.income}</div>
-        <div><b>Education</b><br>${r.education}</div>
-        <div><b>Housing</b><br>${r.housing}</div>
-        <div><b>Deprivation</b><br>${r.deprivation}</div>
-        <div><b>Family</b><br>${r.family}</div>
-        <div><b>Tags</b><br>${r.tags.map(t=>`<span class="pill">${t}</span>`).join("")}</div>
-      </div>
-
-      <h3>Projected vote</h3>
-      <div class="national-average-key">
-        <span class="national-average-key-line"></span>
-        National projected average
-      </div>
-
-      ${ordered.map(p => {
-        const national = Math.max(0, Math.min(100, nationalAverage[p] || 0));
-        return `
-          <div class="vote-row">
-            <b style="color:${parties[p].colour}">${p}</b>
-            <span>${r.shares[p].toFixed(1)}%</span>
-            <div class="mini-bg">
-              <div class="mini-bar" style="width:${r.shares[p]}%;background:${parties[p].colour}"></div>
-              <span class="national-average-marker"
-                    style="left:${national}%"
-                    title="${p} national projected average: ${national.toFixed(1)}%"></span>
-            </div>
-          </div>`;
-      }).join("")}
-
-      <h3>Raw demographic/tag lean before national calibration</h3>
-      <div class="small">
-        Positive numbers favour the party locally; negative numbers hurt it. These are model coefficients, not percentage points.
-      </div>
-      ${influenceRows.map(([p,s]) => `<span class="pill"><b>${p}</b> ${s >= 0 ? "+" : ""}${s.toFixed(2)}</span>`).join("")}
+    <div class="details-grid">
+      <div><b>Age</b><br>${r.age}</div>
+      <div><b>Urbanisation</b><br>${r.urban}</div>
+      <div><b>Income</b><br>${r.income}</div>
+      <div><b>Education</b><br>${r.education}</div>
+      <div><b>Housing</b><br>${r.housing}</div>
+      <div><b>Deprivation</b><br>${r.deprivation}</div>
+      <div><b>Family</b><br>${r.family}</div>
+      <div><b>Tags</b><br>${r.tags.map(t=>`<span class="pill">${t}</span>`).join("")}</div>
     </div>
+
+    <h3>Projected vote</h3>
+    <div class="national-average-key">
+      <span class="national-average-key-line"></span>
+      National projected average
+    </div>
+
+    ${ordered.map(p => {
+      const national = Math.max(0, Math.min(100, nationalAverage[p] || 0));
+      return `
+        <div class="vote-row">
+          <b style="color:${parties[p].colour}">${p}</b>
+          <span>${r.shares[p].toFixed(1)}%</span>
+          <div class="mini-bg">
+            <div class="mini-bar" style="width:${r.shares[p]}%;background:${parties[p].colour}"></div>
+            <span class="national-average-marker"
+                  style="left:${national}%"
+                  title="${p} national projected average: ${national.toFixed(1)}%"></span>
+          </div>
+        </div>`;
+    }).join("")}
+
+    <h3>Raw demographic/tag lean before national calibration</h3>
+    <div class="small">
+      Positive numbers favour the party locally; negative numbers hurt it. These are model coefficients, not percentage points.
+    </div>
+    ${influenceRows.map(([p,s]) => `<span class="pill"><b>${p}</b> ${s >= 0 ? "+" : ""}${s.toFixed(2)}</span>`).join("")}
   `;
 
-  if (sourceRow && sourceRow.parentNode) {
-    const detailRow = document.createElement("tr");
-    detailRow.className = "constituency-detail-row";
-    detailRow.dataset.detailsFor = code;
-
-    const cell = document.createElement("td");
-    cell.colSpan = sourceRow.children.length || 12;
-    cell.innerHTML = detailHtml;
-
-    detailRow.appendChild(cell);
-    sourceRow.insertAdjacentElement("afterend", detailRow);
-  }
+  const panel = document.getElementById("selectedConstituencyDetails");
+  if (panel) panel.innerHTML = detailHtml;
 }
 
 document.getElementById("mapFile").addEventListener("change", event => {
