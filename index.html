@@ -354,7 +354,7 @@
   }
   .parliament-wrap {
     min-width: 0;
-    min-height: 176px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -363,9 +363,10 @@
   #coalitionParliament {
     width: 560px;
     max-width: 100%;
-    height: 170px;
+    aspect-ratio: 16 / 9;
+    height: auto;
     display: block;
-    overflow: visible;
+    overflow: hidden;
     flex: 0 0 auto;
   }
   .bench-caption {
@@ -411,7 +412,7 @@
       grid-template-columns: 1fr;
     }
     #coalitionParliament {
-      height: 170px;
+      height: auto;
     }
   }
   table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
@@ -539,12 +540,834 @@
     .details-grid { grid-template-columns: repeat(2, 1fr); }
     .map-upload-row { grid-template-columns: 1fr; }
   }
+
+
+
+/* =========================================================
+   RETAINED FEATURES ON ORIGINAL 16:9-OPTIMISED UI
+   ========================================================= */
+
+html,
+body,
+button,
+input,
+select,
+textarea {
+  font-family:
+    "Neue Haas Grotesk Text Pro",
+    "Neue Haas Grotesk",
+    "Helvetica Neue",
+    Helvetica,
+    Arial,
+    sans-serif;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+.header-row > div { min-width: 0; }
+.theme-toggle {
+  width: auto;
+  margin: 0;
+  padding: 8px 10px;
+  white-space: nowrap;
+}
+
+/* Simple flat Numbers/Sliders switch. */
+.input-mode-row {
+  min-height: 34px;
+  margin: -2px 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.input-mode-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #4b5058;
+}
+.input-mode-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+.input-mode-switch input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.input-mode-label {
+  font-size: 12px;
+  font-weight: 650;
+  color: #777c83;
+}
+.input-mode-row[data-mode="number"] .number-option,
+.input-mode-row[data-mode="slider"] .slider-option {
+  color: #1d1f23;
+}
+.input-mode-track {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  background: #e8eaed;
+  flex: 0 0 36px;
+}
+.input-mode-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #25292f;
+  transition: transform .18s ease;
+}
+.input-mode-switch input:checked + .input-mode-track .input-mode-thumb {
+  transform: translateX(16px);
+}
+
+/* Expandable filter/import toggles styled like existing secondary buttons. */
+.filter-menu,
+.import-menu {
+  margin: 0 0 10px;
+}
+.filter-menu > summary,
+.import-menu > summary {
+  list-style: none;
+  width: fit-content;
+  padding: 9px 11px;
+  border-radius: 6px;
+  background: #e8eaed;
+  color: #222;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+  user-select: none;
+}
+.filter-menu > summary::-webkit-details-marker,
+.import-menu > summary::-webkit-details-marker {
+  display: none;
+}
+.filter-menu > summary::after,
+.import-menu > summary::after {
+  content: " ▾";
+  color: #676c73;
+}
+.filter-menu[open] > summary::after,
+.import-menu[open] > summary::after {
+  content: " ▴";
+}
+
+.filter-menu-body {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 8px;
+  padding: 10px;
+  background: #f7f8fa;
+  border-radius: 7px;
+}
+.filter-menu-body > * {
+  min-width: 0;
+  width: 100%;
+  margin: 0;
+}
+.import-menu .previous-import-body { margin-top: 8px; }
+
+/* Cleaner file selector while keeping the original design language. */
+input[type="file"]::file-selector-button {
+  margin-right: 8px;
+  padding: 7px 9px;
+  border: 0;
+  border-radius: 6px;
+  background: #e8eaed;
+  color: #222;
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+/* Solid status boxes, no borders on coloured elements, with fades. */
+:root {
+  --indicator-orange: #ff6d2b;
+  --indicator-red: #d0342C;
+  --indicator-green: #32A431;
+}
+.total-box,
+.previous-import-message,
+.majority-status {
+  transition: background-color .28s ease, color .28s ease, opacity .22s ease;
+}
+@keyframes statusFade {
+  from { opacity: .72; }
+  to { opacity: 1; }
+}
+.total-box.warning,
+.previous-import-message.warning,
+.majority-status.status-warning {
+  background: var(--indicator-orange) !important;
+  color: #21120b !important;
+  border: 0 !important;
+  animation: statusFade .28s ease both;
+}
+.total-box.ok,
+.previous-import-message.ok {
+  background: var(--indicator-green) !important;
+  color: #fff !important;
+  border: 0 !important;
+  animation: statusFade .28s ease both;
+}
+.majority-status.status-error {
+  background: var(--indicator-red) !important;
+  color: #fff !important;
+  border: 0 !important;
+  animation: statusFade .28s ease both;
+}
+.majority-status.status-majority {
+  background: var(--majority-colour) !important;
+  border: 0 !important;
+  animation: statusFade .28s ease both;
+}
+.total-box.warning *,
+.total-box.ok *,
+.previous-import-message.warning *,
+.previous-import-message.ok *,
+.majority-status.status-warning *,
+.majority-status.status-error *,
+.majority-status.status-majority * {
+  color: inherit !important;
+}
+
+/* Margin-only highlight. */
+.margin-chip {
+  display: inline-flex;
+  min-width: 46px;
+  justify-content: center;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.margin-chip.marginal {
+  background: var(--indicator-orange);
+  color: #21120b;
+  border: 0;
+  font-weight: 750;
+}
+
+/* Inline constituency detail. */
+.constituency-detail-row > td {
+  padding: 0 !important;
+  background: #f7f8fa;
+}
+.inline-constituency-details {
+  margin: 0 !important;
+  padding: 13px;
+  display: block !important;
+  border-radius: 0 !important;
+}
+
+/* Subtle national-average marker. */
+.mini-bg {
+  position: relative;
+  overflow: visible;
+}
+.national-average-key {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 3px 0 6px;
+  color: #6b7077;
+  font-size: 10px;
+}
+.national-average-key-line {
+  width: 1px;
+  height: 9px;
+  background: currentColor;
+}
+.national-average-marker {
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  width: 1px;
+  transform: translateX(-.5px);
+  background: #666b72;
+  opacity: .58;
+  z-index: 2;
+}
+
+/* Selected coalition buttons are coloured: no border. */
+.coalition-party.selected { border: 0 !important; }
+
+/* Dark command-centre mode, no sizing/layout changes. */
+html[data-theme="dark"] { color-scheme: dark; }
+html[data-theme="dark"] body {
+  background: #101512;
+  color: #e9eeeb;
+}
+html[data-theme="dark"] header { background: #111713; }
+html[data-theme="dark"] .card {
+  background: #171d19;
+  border-color: #303a34;
+  color: #e9eeeb;
+}
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3 { color: #f0f4f1; }
+html[data-theme="dark"] .small,
+html[data-theme="dark"] .comparison-source { color: #aab4ae; }
+html[data-theme="dark"] input[type="number"],
+html[data-theme="dark"] input[type="text"],
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select,
+html[data-theme="dark"] input[type="file"] {
+  background: #101512;
+  color: #e9eeeb;
+  border-color: #465149;
+}
+html[data-theme="dark"] button.secondary,
+html[data-theme="dark"] .theme-toggle,
+html[data-theme="dark"] .filter-menu > summary,
+html[data-theme="dark"] .import-menu > summary,
+html[data-theme="dark"] input[type="file"]::file-selector-button {
+  background: #29312c;
+  color: #edf2ef;
+}
+html[data-theme="dark"] .filter-menu-body,
+html[data-theme="dark"] .constituency-detail-row > td,
+html[data-theme="dark"] .inline-constituency-details {
+  background: #202722;
+}
+html[data-theme="dark"] .input-mode-title,
+html[data-theme="dark"] .input-mode-row[data-mode="number"] .number-option,
+html[data-theme="dark"] .input-mode-row[data-mode="slider"] .slider-option {
+  color: #eef3f0;
+}
+html[data-theme="dark"] .input-mode-track { background: #29312c; }
+html[data-theme="dark"] .input-mode-thumb { background: #edf2ef; }
+html[data-theme="dark"] table { color: #e9eeeb; }
+html[data-theme="dark"] th { background: #232b26; }
+html[data-theme="dark"] td,
+html[data-theme="dark"] th { border-bottom-color: #303a34; }
+html[data-theme="dark"] .bar-bg,
+html[data-theme="dark"] .mini-bg { background: #29312c; }
+html[data-theme="dark"] .national-average-key { color: #aab4ae; }
+html[data-theme="dark"] .national-average-marker { background: #aab4ae; }
+
+@media (max-width: 950px) {
+  .filter-menu-body {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .header-row { align-items: flex-start; }
+  .filter-menu-body { grid-template-columns: 1fr; }
+}
+
+
+/* =========================================================
+   TYPOGRAPHIC SCALE — 1.2 modular hierarchy
+   Reference equivalent:
+   h1 33.59pt / h2 27.99pt / h3 23.33pt / h4 19.44pt
+   h5 16.2pt / h6 13.5pt / body 11.25pt / small 9.38pt
+   ========================================================= */
+
+html {
+  font-size: 15px; /* 11.25pt base */
+}
+
+body {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.12;
+  letter-spacing: -0.018em;
+}
+
+h1 {
+  font-size: 2.986rem;   /* 33.59pt */
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 2.488rem;   /* 27.99pt */
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 2.074rem;   /* 23.33pt */
+  font-weight: 700;
+}
+
+h4 {
+  font-size: 1.728rem;   /* 19.44pt */
+  font-weight: 700;
+}
+
+h5 {
+  font-size: 1.44rem;    /* 16.2pt */
+  font-weight: 700;
+}
+
+h6 {
+  font-size: 1.2rem;     /* 13.5pt */
+  font-weight: 700;
+}
+
+p {
+  font-size: 1rem;       /* 11.25pt */
+  line-height: 1.5;
+}
+
+small,
+.small {
+  font-size: .833rem;    /* 9.38pt */
+  line-height: 1.45;
+}
+
+/* Tertiary/meta text step from the same scale. */
+.comparison-source,
+.previous-import-message,
+.national-average-key,
+.map-status,
+.slider-value {
+  font-size: .694rem;    /* ~7.82pt */
+}
+
+/* Keep headings usable in the existing compact cards. */
+.card > h2:first-child,
+.coalition-head h2 {
+  margin-bottom: 12px;
+}
+
+@media (max-width: 700px) {
+  html {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 2.488rem;
+  }
+
+  h2 {
+    font-size: 2.074rem;
+  }
+
+  h3 {
+    font-size: 1.728rem;
+  }
+}
+
+
+/* =========================================================
+   TEXT ALIGNMENT NORMALISATION
+   Typography only — does not alter panel positions, widths,
+   outer margins, card margins, or the 16:9 parliament sizing.
+   ========================================================= */
+
+/* Default all interface copy to one left-aligned reading axis. */
+body,
+.card,
+.card p,
+.card .small,
+.card .comparison-source,
+.card .previous-import-message,
+.card .map-status,
+.card .details,
+.card summary,
+.card label,
+.card button,
+.card input,
+.card select,
+.card textarea {
+  text-align: left;
+}
+
+/* Headings share the same alignment and vertical rhythm. */
+h1, h2, h3, h4, h5, h6,
+.card > h2:first-child,
+.coalition-head h2 {
+  text-align: left;
+}
+
+/* Keep numeric/input content predictable while preserving widths. */
+input[type="number"],
+.slider-value,
+.coalition-total {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Party rows: labels and values sit on a consistent baseline. */
+.party-label,
+.party-input,
+.party-slider-control,
+.vote-row,
+.seat-row {
+  align-items: center;
+}
+
+.party-label,
+.vote-row b,
+.seat-row > div:first-child {
+  text-align: left;
+}
+
+.slider-value,
+.vote-row > span,
+.seat-row > b,
+.coalition-total {
+  text-align: right;
+}
+
+/* Buttons: centre action labels consistently without changing geometry. */
+button,
+input[type="file"]::file-selector-button,
+.filter-menu > summary,
+.import-menu > summary {
+  text-align: center;
+}
+
+/* Table alignment: text fields left, numeric result columns right. */
+table th,
+table td {
+  vertical-align: middle;
+}
+
+#seatTable td:nth-child(5),
+#seatTable td:nth-child(7),
+table thead th:nth-child(5),
+table thead th:nth-child(7) {
+  text-align: right;
+}
+
+/* Summary statistics use one consistent text treatment. */
+.summaryline > div {
+  text-align: left;
+}
+
+.summaryline strong {
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Details grid and status copy align uniformly. */
+.details-grid > div,
+.majority-status,
+.majority-status .status-title,
+.majority-status .status-detail,
+.coalition-status-text {
+  text-align: left;
+}
+
+/* Expanded filter/import content uses the same reading axis. */
+.filter-menu-body,
+.previous-import-body {
+  text-align: left;
+}
+
+/* Preserve centered parliament graphic labels only where they are graphical. */
+#coalitionParliament text {
+  text-anchor: middle;
+}
+
+
+/* =========================================================
+   REFINED TITLE SCALE + GENTLE INTERACTION MOTION
+   ========================================================= */
+
+/* Use the former H4 size for H3-level interface titles. */
+h3 {
+  font-size: 1.728rem !important; /* same scale step as H4: 19.44pt */
+}
+
+/* Slow semantic colour transitions by 25%. */
+.total-box,
+.previous-import-message,
+.majority-status {
+  transition:
+    background-color .35s ease,
+    color .35s ease,
+    opacity .275s ease !important;
+}
+
+.total-box.warning,
+.previous-import-message.warning,
+.majority-status.status-warning,
+.total-box.ok,
+.previous-import-message.ok,
+.majority-status.status-error,
+.majority-status.status-majority {
+  animation-duration: .35s !important;
+}
+
+/* Very slight grow on panels — transform only, so positions/margins do not move. */
+.card {
+  transform: scale(1);
+  transform-origin: center center;
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    background-color .35s ease,
+    border-color .35s ease;
+}
+
+.card:hover {
+  transform: scale(1.0025);
+}
+
+/* Matching subtle grow on buttons and button-like expandable toggles. */
+button,
+.filter-menu > summary,
+.import-menu > summary {
+  transform: scale(1);
+  transform-origin: center center;
+  transition:
+    transform .14s ease,
+    background-color .18s ease,
+    color .18s ease,
+    opacity .18s ease;
+}
+
+button:hover:not(:disabled),
+.filter-menu > summary:hover,
+.import-menu > summary:hover {
+  transform: scale(1.008);
+}
+
+button:active:not(:disabled),
+.filter-menu > summary:active,
+.import-menu > summary:active {
+  transform: scale(1.003);
+}
+
+/* Keep the motion accessibility-friendly. */
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  button,
+  .filter-menu > summary,
+  .import-menu > summary {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .total-box,
+  .previous-import-message,
+  .majority-status {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+
+/* =========================================================
+   UNIFORM ONE-STEP-DOWN TITLE SCALE
+   Keeps heading semantics intact, but renders every heading
+   one level smaller in the established modular hierarchy.
+   ========================================================= */
+
+h1 {
+  font-size: 2.488rem !important; /* former H2 size */
+  line-height: 1.10 !important;
+}
+
+h2 {
+  font-size: 2.074rem !important; /* former H3 size */
+  line-height: 1.12 !important;
+}
+
+h3 {
+  font-size: 1.728rem !important; /* former H4 size */
+  line-height: 1.14 !important;
+}
+
+h4 {
+  font-size: 1.44rem !important;  /* former H5 size */
+  line-height: 1.16 !important;
+}
+
+h5 {
+  font-size: 1.2rem !important;   /* former H6 size */
+  line-height: 1.18 !important;
+}
+
+h6 {
+  font-size: 1rem !important;     /* body-scale */
+  line-height: 1.25 !important;
+}
+
+/* Rescale heading spacing to match the smaller type rather than
+   leaving the old larger-title whitespace behind. */
+header h1 {
+  margin: 0 0 4px !important;
+}
+
+.card > h2:first-child,
+.coalition-head h2 {
+  margin-top: 0 !important;
+  margin-bottom: 10px !important;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+h3 {
+  margin-top: 15px !important;
+  margin-bottom: 7px !important;
+}
+
+h4 {
+  margin-top: 13px !important;
+  margin-bottom: 6px !important;
+}
+
+h5 {
+  margin-top: 11px !important;
+  margin-bottom: 5px !important;
+}
+
+h6 {
+  margin-top: 10px !important;
+  margin-bottom: 4px !important;
+}
+
+/* Keep dynamically generated detail headings visually consistent. */
+.inline-constituency-details h3,
+.details h3 {
+  margin-top: 14px !important;
+  margin-bottom: 6px !important;
+}
+
+.inline-constituency-details h3:first-child,
+.details h3:first-child {
+  margin-top: 0 !important;
+}
+
+/* Slightly tighten title-to-content rhythm without moving panels. */
+.card > h2:first-child + *,
+.coalition-head + * {
+  margin-top: 0;
+}
+
+/* Mobile remains one step down as well rather than applying a second,
+   unrelated heading scale. */
+@media (max-width: 700px) {
+  h1 { font-size: 2.074rem !important; }
+  h2 { font-size: 1.728rem !important; }
+  h3 { font-size: 1.44rem !important; }
+  h4 { font-size: 1.2rem !important; }
+}
+
+
+/* =========================================================
+   SECOND UNIFORM TITLE SCALE REDUCTION
+   Move every heading down one more step in the same hierarchy.
+   ========================================================= */
+
+h1 {
+  font-size: 2.074rem !important; /* former H3 size */
+  line-height: 1.12 !important;
+}
+
+h2 {
+  font-size: 1.728rem !important; /* former H4 size */
+  line-height: 1.14 !important;
+}
+
+h3 {
+  font-size: 1.44rem !important;  /* former H5 size */
+  line-height: 1.16 !important;
+}
+
+h4 {
+  font-size: 1.2rem !important;   /* former H6 size */
+  line-height: 1.18 !important;
+}
+
+h5 {
+  font-size: 1rem !important;     /* body-scale */
+  line-height: 1.24 !important;
+}
+
+h6 {
+  font-size: .833rem !important;  /* small-text scale */
+  line-height: 1.3 !important;
+}
+
+/* Tighten spacing proportionally so smaller titles keep balanced rhythm. */
+header h1 {
+  margin: 0 0 3px !important;
+}
+
+.card > h2:first-child,
+.coalition-head h2,
+h2 {
+  margin-top: 0 !important;
+  margin-bottom: 8px !important;
+}
+
+h3 {
+  margin-top: 12px !important;
+  margin-bottom: 6px !important;
+}
+
+h4 {
+  margin-top: 10px !important;
+  margin-bottom: 5px !important;
+}
+
+h5 {
+  margin-top: 9px !important;
+  margin-bottom: 4px !important;
+}
+
+h6 {
+  margin-top: 8px !important;
+  margin-bottom: 3px !important;
+}
+
+/* Keep generated detail headings consistent. */
+.inline-constituency-details h3,
+.details h3 {
+  margin-top: 11px !important;
+  margin-bottom: 5px !important;
+}
+
+.inline-constituency-details h3:first-child,
+.details h3:first-child {
+  margin-top: 0 !important;
+}
+
+/* Mobile follows the same hierarchy rather than a different scale. */
+@media (max-width: 700px) {
+  h1 { font-size: 1.728rem !important; }
+  h2 { font-size: 1.44rem !important; }
+  h3 { font-size: 1.2rem !important; }
+  h4 { font-size: 1rem !important; }
+}
+
 </style>
 </head>
 <body>
 <header>
-  <h1>Veridian Election Simulator — Provisional Testbed</h1>
-  <p>Multi-region test: Duchy historical baseline + constituency demographics/tags + national vote-share inputs</p>
+  <div class="header-row">
+    <div>
+      <h1>Veridian Election Simulator — Provisional Testbed</h1>
+      <p>Multi-region test: Duchy historical baseline + constituency demographics/tags + national vote-share inputs</p>
+    </div>
+    <button id="themeToggleButton" type="button" class="secondary theme-toggle" aria-pressed="false">
+      <span id="themeToggleLabel">Dark mode</span>
+    </button>
+  </div>
 </header>
 
 <div class="wrap">
@@ -553,9 +1376,14 @@
       <div class="card">
         <h2>National vote share</h2>
 
-        <div class="vote-input-toggle" role="group" aria-label="Vote share input style">
-          <button id="numberModeButton" type="button" class="active" aria-pressed="true">Number boxes</button>
-          <button id="sliderModeButton" type="button" aria-pressed="false">Sliders</button>
+        <div class="input-mode-row" data-mode="number">
+          <span class="input-mode-title">Input style</span>
+          <label class="input-mode-switch">
+            <span class="input-mode-label number-option">Numbers</span>
+            <input id="inputModeSwitch" type="checkbox" role="switch" aria-label="Use sliders instead of number boxes">
+            <span class="input-mode-track" aria-hidden="true"><span class="input-mode-thumb"></span></span>
+            <span class="input-mode-label slider-option">Sliders</span>
+          </label>
         </div>
 
         <div id="partyInputs"></div>
@@ -582,56 +1410,61 @@
         <div class="small">
           Loaded test chamber: <b><span id="totalSeatCount">—</span> seats</b><br>
           Constituencies loaded: <b id="loadedCount"></b><br>
-          The chamber size is taken directly from the constituency dataset. Current test regions include Pamialukia, Vreaelia, Rubinvente and Ebonvud. Ebonvud currently has no supplied previous-election Duchy baseline, so its regional historical modifier is neutral.
+          The chamber size is taken directly from the constituency dataset. Current test regions include Pamialukia, Veraelia, Rubinvente and Ebonvud.
         </div>
 
         <div class="status-tools">
           <div class="status-tool-buttons">
             <button id="exportResultsButton" type="button">Export results (.xlsx)</button>
-            <button id="downloadPreviousTemplateButton" type="button" class="secondary">Previous-result template</button>
+            <button id="downloadPreviousTemplateButton" type="button" class="secondary">Blank import template (.csv)</button>
           </div>
 
-          <label class="comparison-toggle">
-            <input id="comparePreviousToggle" type="checkbox">
-            <span>Compare with previous election</span>
-          </label>
-
-          <div id="comparisonSource" class="comparison-source">
-            Comparison source: built-in Duchy previous-election results.
+          <div class="small" style="margin-bottom:8px">
+            The exported workbook now starts with an <b>Import Results</b> sheet containing only:
+            <b>Duchy, SDA, IMP, TPP, ENV, VRK, SKV, PLF</b>. You can import that same workbook here in a future election.
           </div>
 
-          <div id="previousComparisonPanel" class="comparison-panel" hidden></div>
-
-          <details class="previous-import">
-            <summary>Add a different previous election</summary>
+          <details class="previous-import import-menu">
+            <summary>Import previous election results</summary>
             <div class="previous-import-body">
               <div class="small">
-                Paste or load a CSV/TSV with columns:
-                <b>Duchy, SDV, IMP, TPP, ENV, VRK, SKV, PLF</b>.
-                This changes the comparison dataset only; it does not overwrite the simulator's historical baseline.
+                Import a workbook previously exported by this simulator, or a CSV/TSV with columns:
+                <b>Duchy, SDA, IMP, TPP, ENV, VRK, SKV, PLF</b>.
+                The comparison dataset is separate from the simulator's built-in historical model baseline.
               </div>
-              <input id="previousElectionFile" type="file" accept=".csv,.tsv,.txt,text/csv,text/plain">
-              <textarea id="previousElectionPaste" spellcheck="false" placeholder="Duchy,SDV,IMP,TPP,ENV,VRK,SKV,PLF&#10;PAM1,27,16,8,11,11,14,13"></textarea>
+
+              <input id="previousElectionFile" type="file"
+                accept=".xlsx,.csv,.tsv,.txt,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,text/plain">
+
+              <textarea id="previousElectionPaste" spellcheck="false"
+                placeholder="Duchy,SDA,IMP,TPP,ENV,VRK,SKV,PLF&#10;PAM1,27,16,8,11,11,14,13"></textarea>
+
               <div class="previous-import-actions">
                 <button id="loadPreviousPasteButton" type="button">Load pasted results</button>
-                <button id="resetPreviousComparisonButton" type="button" class="secondary">Use built-in results</button>
+                <button id="resetPreviousComparisonButton" type="button" class="secondary">Clear imported result</button>
               </div>
+
+              <div id="comparisonSource" class="comparison-source">
+                No previous election imported.
+              </div>
+
               <div id="previousImportMessage" class="previous-import-message"></div>
+              <div id="previousComparisonPanel" class="comparison-panel" hidden></div>
             </div>
           </details>
         </div>
       </div>
 
       <div class="card">
-        <h2>Previous election — Duchy baselines</h2>
+        <h2>Model baseline — Duchy results</h2>
         <div class="small" style="margin-bottom:8px">
-          These are the Duchy-level previous-election results currently loaded. RBN1–RBN6 now have constituency rows. Ebonvud has constituency data but no supplied previous-election baseline yet.
+          These are the Duchy-level historical results currently used by the prediction model. RBN1–RBN6 now have constituency rows. Ebonvud constituency data now extends through EBN14; no Ebonvud previous-election Duchy baseline has been supplied yet.
         </div>
         <div style="overflow:auto">
           <table>
             <thead>
               <tr>
-                <th>Duchy</th><th>SDV</th><th>IMP</th><th>TPP</th><th>ENV</th><th>VRK</th><th>SKV</th><th>PLF</th>
+                <th>Duchy</th><th>SDA</th><th>IMP</th><th>TPP</th><th>ENV</th><th>VRK</th><th>SKV</th><th>PLF</th>
               </tr>
             </thead>
             <tbody>
@@ -665,7 +1498,7 @@
           1. Your input percentages are the target vote shares across the full loaded test area.<br>
           2. The supplied Duchy previous-election results create the regional political baseline.<br>
           3. Age, urbanisation, income, education, housing, deprivation, family and tags alter each seat locally.<br>
-          4. Multi-category interactions are also applied — for example, old + agricultural + high-income is more favourable to IMP than any of those traits alone, while low-income + high-deprivation is more strongly favourable to mainstream SDV than fringe VRK.<br>
+          4. Multi-category interactions are also applied — for example, old + agricultural + high-income is more favourable to IMP than any of those traits alone, while low-income + high-deprivation is more strongly favourable to mainstream SDA than fringe VRK.<br>
           5. The model then re-balances all constituency estimates so the aggregate vote closely matches your input.<br><br>
           This means stronger demographic effects change <i>where</i> a party wins without simply inflating its national vote.<br><br>          <b>Candidate eligibility:</b> Pamialukia Prata (PLF) only stands in PAM constituencies. Its score is forced to 0 outside Pamialukia, so it cannot win VRL, RBN or EBN seats.<br><br>
           Majority labels are based on the largest party's seat total relative to the majority threshold:
@@ -703,7 +1536,7 @@
           <div class="parliament-wrap">
             <svg
               id="coalitionParliament"
-              viewBox="0 0 560 170"
+              viewBox="0 0 560 315"
               role="img"
               aria-label="Westminster-style projected parliament chart"
             ></svg>
@@ -749,12 +1582,68 @@
 
       <div class="card">
         <h2>Constituencies</h2>
-        <div class="controls">
-          <input id="search" type="text" placeholder="Search PAM1-1, VRL2-4, RBN6-2, EBN4-1, university, rural..." oninput="renderTable()">
-          <select id="winnerFilter" onchange="renderTable()">
-            <option value="">All winners</option>
-          </select>
-        </div>
+        <details class="filter-menu">
+          <summary>Filter constituencies</summary>
+          <div class="filter-menu-body">
+            <input id="search" type="text" placeholder="Search constituency, Duchy, tag..." oninput="renderTable()">
+
+            <select id="winnerFilter" onchange="renderTable()">
+              <option value="">All winners</option>
+            </select>
+
+            <select id="urbanFilter" onchange="renderTable()">
+              <option value="">All urbanisation</option>
+              <option value="urban">Urban</option>
+              <option value="suburban">Suburban</option>
+              <option value="rural">Rural</option>
+            </select>
+
+            <select id="educationFilter" onchange="renderTable()">
+              <option value="">All education</option>
+              <option value="low">Low education</option>
+              <option value="medium">Medium education</option>
+              <option value="high">High education</option>
+            </select>
+
+            <select id="deprivationFilter" onchange="renderTable()">
+              <option value="">All deprivation</option>
+              <option value="low">Low deprivation</option>
+              <option value="medium">Medium deprivation</option>
+              <option value="high">High deprivation</option>
+            </select>
+
+            <select id="ageFilter" onchange="renderTable()">
+              <option value="">All ages</option>
+              <option value="young">Young</option>
+              <option value="medium">Medium</option>
+              <option value="old">Old</option>
+            </select>
+
+            <select id="incomeFilter" onchange="renderTable()">
+              <option value="">All incomes</option>
+              <option value="low">Low income</option>
+              <option value="medium">Medium income</option>
+              <option value="high">High income</option>
+            </select>
+
+            <select id="housingFilter" onchange="renderTable()">
+              <option value="">All housing</option>
+              <option value="rent">Rent</option>
+              <option value="mixed">Mixed</option>
+              <option value="owned">Owned</option>
+            </select>
+
+            <select id="marginFilter" onchange="renderTable()">
+              <option value="">All margins</option>
+              <option value="under5">Under 5%</option>
+              <option value="under10">Under 10%</option>
+              <option value="10to20">10–20%</option>
+              <option value="20plus">20%+</option>
+            </select>
+
+            <button type="button" class="secondary" onclick="clearConstituencyFilters()">Clear filters</button>
+          </div>
+        </details>
 
         <div class="table-wrap">
           <table>
@@ -778,7 +1667,6 @@
           </table>
         </div>
 
-        <div id="details" class="details"></div>
       </div>
     </main>
   </div>
@@ -790,7 +1678,7 @@
    ========================================================= */
 
 const parties = {
-  SDV: { name: "Social Democrat Alliance", colour: "#7D2027" },
+  SDA: { name: "Social Democrat Alliance", colour: "#7D2027" },
   IMP: { name: "Imperial", colour: "#002E5D" },
   TPP: { name: "Traditionalist & Prosperity Party", colour: "#D69A2D" },
   ENV: { name: "Enviro", colour: "#64A70B" },
@@ -805,25 +1693,25 @@ const partyCodes = Object.keys(parties);
    ========================================================= */
 
 const duchyPrevious = {
-  PAM1: { SDV:27, IMP:16, TPP:8,  ENV:11, VRK:11, SKV:14, PLF:13 },
-  PAM2: { SDV:23, IMP:10, TPP:5,  ENV:14, VRK:14, SKV:13, PLF:21 },
-  PAM3: { SDV:24, IMP:14, TPP:6,  ENV:9,  VRK:12, SKV:20, PLF:15 },
-  PAM4: { SDV:23, IMP:10, TPP:5,  ENV:6,  VRK:14, SKV:23, PLF:19 },
-  PAM5: { SDV:23, IMP:14, TPP:9,  ENV:8,  VRK:11, SKV:21, PLF:14 },
-  PAM6: { SDV:25, IMP:19, TPP:13, ENV:9,  VRK:8,  SKV:15, PLF:11 },
+  PAM1: { SDA:27, IMP:16, TPP:8,  ENV:11, VRK:11, SKV:14, PLF:13 },
+  PAM2: { SDA:23, IMP:10, TPP:5,  ENV:14, VRK:14, SKV:13, PLF:21 },
+  PAM3: { SDA:24, IMP:14, TPP:6,  ENV:9,  VRK:12, SKV:20, PLF:15 },
+  PAM4: { SDA:23, IMP:10, TPP:5,  ENV:6,  VRK:14, SKV:23, PLF:19 },
+  PAM5: { SDA:23, IMP:14, TPP:9,  ENV:8,  VRK:11, SKV:21, PLF:14 },
+  PAM6: { SDA:25, IMP:19, TPP:13, ENV:9,  VRK:8,  SKV:15, PLF:11 },
 
-  VRL1: { SDV:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 },
-  VRL2: { SDV:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
-  VRL3: { SDV:25, IMP:30, TPP:24, ENV:7,  VRK:2, SKV:12, PLF:0 },
-  VRL4: { SDV:23, IMP:25, TPP:26, ENV:6,  VRK:4, SKV:16, PLF:0 },
-  VRL5: { SDV:21, IMP:32, TPP:27, ENV:4,  VRK:2, SKV:14, PLF:0 },
+  VRL1: { SDA:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 },
+  VRL2: { SDA:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
+  VRL3: { SDA:25, IMP:30, TPP:24, ENV:7,  VRK:2, SKV:12, PLF:0 },
+  VRL4: { SDA:23, IMP:25, TPP:26, ENV:6,  VRK:4, SKV:16, PLF:0 },
+  VRL5: { SDA:21, IMP:32, TPP:27, ENV:4,  VRK:2, SKV:14, PLF:0 },
 
-  RBN1: { SDV:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
-  RBN2: { SDV:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 },
-  RBN3: { SDV:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
-  RBN4: { SDV:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
-  RBN5: { SDV:22, IMP:26, TPP:26, ENV:6,  VRK:4, SKV:16, PLF:0 },
-  RBN6: { SDV:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 }
+  RBN1: { SDA:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
+  RBN2: { SDA:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 },
+  RBN3: { SDA:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
+  RBN4: { SDA:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
+  RBN5: { SDA:22, IMP:26, TPP:26, ENV:6,  VRK:4, SKV:16, PLF:0 },
+  RBN6: { SDA:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 }
 };
 
 /* =========================================================
@@ -974,21 +1862,19 @@ const constituencies = [
   {code:"RBN3-5", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["remote","agricultural","stable"]},
   {code:"RBN3-6", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["financial","stable","commuter"]},
   {code:"RBN3-7", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["tourist","high-growth","commuter"]},
-  {code:"RBN3-8", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"medium", tags:["stable","agricultural","commuter"]}
-  ,
+  {code:"RBN3-8", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"medium", tags:["stable","agricultural","commuter"]},
+
+  /* UPDATED DATA — rows 121 onward */
+  {code:"RBN4-1", age:"medium", urban:"urban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["public-sector","stable","industrial"]},
   {code:"RBN4-2", age:"medium", urban:"urban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["public-sector","stable","industrial"]},
   {code:"RBN4-3", age:"old", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["remote","stable","agricultural"]},
   {code:"RBN4-4", age:"medium", urban:"urban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["public-sector","stable","industrial"]},
   {code:"RBN4-5", age:"old", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["remote","stable","agricultural"]},
   {code:"RBN4-6", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
-  {code:"RBN4-7", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["stable"], provisional:true},
-  {code:"RBN4-8", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["stable"], provisional:true},
-
   {code:"RBN5-1", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
   {code:"RBN5-2", age:"old", urban:"rural", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"low", tags:["agricultural","declining","remote"]},
   {code:"RBN5-3", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["stable","agricultural","high-growth"]},
   {code:"RBN5-4", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
-
   {code:"RBN6-1", age:"young", urban:"urban", income:"high", education:"high", housing:"rent", deprivation:"low", family:"low", tags:["university","high-growth","financial"]},
   {code:"RBN6-2", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["commuter","high-growth","financial"]},
   {code:"RBN6-3", age:"medium", urban:"urban", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"medium", tags:["stable","post-industrial","port"]},
@@ -996,29 +1882,62 @@ const constituencies = [
   {code:"RBN6-5", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"low", family:"medium", tags:["agricultural","stable","commuter"]},
   {code:"RBN6-6", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"low", tags:["agricultural","stable","remote"]},
   {code:"RBN6-7", age:"old", urban:"rural", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"low", tags:["agricultural","declining","remote"]},
-
   {code:"EBN1-1", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
   {code:"EBN1-2", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
-  {code:"EBN1-3", age:"old", urban:"rural", income:"low", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","commuter"]},
+  {code:"EBN1-3", age:"old", urban:"rural", income:"low", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
   {code:"EBN1-4", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["post-industrial","declining","commuter"]},
   {code:"EBN1-5", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["stable","remote","commuter"]},
   {code:"EBN1-6", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["stable","remote","high-growth"]},
   {code:"EBN1-7", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
-
   {code:"EBN2-1", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
   {code:"EBN2-2", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
-  {code:"EBN2-3", age:"old", urban:"rural", income:"high", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
-
+  {code:"EBN2-3", age:"old", urban:"rural", income:"high", education:"low", housing:"owned", deprivation:"low", family:"medium", tags:["agricultural","stable","remote"]},
   {code:"EBN3-1", age:"old", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"low", tags:["remote","commuter","stable"]},
   {code:"EBN3-2", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"low", tags:["public-sector","commuter","stable"]},
   {code:"EBN3-3", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"low", tags:["public-sector","commuter","stable"]},
-
   {code:"EBN4-1", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["commuter","high-growth","financial"]},
   {code:"EBN4-2", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"low", family:"high", tags:["commuter","high-growth","public-sector"]},
   {code:"EBN4-3", age:"old", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"low", tags:["remote","commuter","stable"]},
-
-  {code:"EBN5-1", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["stable"], provisional:true}
-
+  {code:"EBN5-1", age:"medium", urban:"rural", income:"high", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["agricultural","commuter","remote"]},
+  {code:"EBN5-2", age:"medium", urban:"suburban", income:"low", education:"low", housing:"mixed", deprivation:"high", family:"medium", tags:["industrial","declining","commuter"]},
+  {code:"EBN5-3", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
+  {code:"EBN6-1", age:"medium", urban:"suburban", income:"low", education:"low", housing:"mixed", deprivation:"high", family:"medium", tags:["post-industrial","port","declining"]},
+  {code:"EBN6-2", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"low", tags:["tourist","commuter","stable"]},
+  {code:"EBN7-1", age:"medium", urban:"suburban", income:"medium", education:"low", housing:"mixed", deprivation:"medium", family:"medium", tags:["public-sector","stable","commuter"]},
+  {code:"EBN7-2", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"high", tags:["public-sector","stable","industrial"]},
+  {code:"EBN8-1", age:"medium", urban:"urban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["financial","stable","commuter"]},
+  {code:"EBN8-2", age:"medium", urban:"urban", income:"high", education:"high", housing:"mixed", deprivation:"low", family:"low", tags:["financial","high-growth","university"]},
+  {code:"EBN8-3", age:"young", urban:"urban", income:"medium", education:"high", housing:"rent", deprivation:"medium", family:"low", tags:["public-sector","high-growth","university"]},
+  {code:"EBN8-4", age:"medium", urban:"urban", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"high", tags:["public-sector","stable","commuter"]},
+  {code:"EBN8-5", age:"medium", urban:"urban", income:"low", education:"low", housing:"rent", deprivation:"medium", family:"high", tags:["public-sector","declining","post-industrial"]},
+  {code:"EBN8-6", age:"medium", urban:"urban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["port","stable","industrial"]},
+  {code:"EBN8-7", age:"medium", urban:"urban", income:"low", education:"low", housing:"owned", deprivation:"medium", family:"high", tags:["public-sector","industrial","commuter"]},
+  {code:"EBN8-8", age:"medium", urban:"urban", income:"low", education:"low", housing:"owned", deprivation:"medium", family:"high", tags:["post-industrial","declining","commuter"]},
+  {code:"EBN9-1", age:"medium", urban:"suburban", income:"low", education:"medium", housing:"mixed", deprivation:"high", family:"medium", tags:["public-sector","declining","post-industrial"]},
+  {code:"EBN9-2", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"mixed", deprivation:"medium", family:"medium", tags:["public-sector","stable","industrial"]},
+  {code:"EBN9-3", age:"old", urban:"urban", income:"high", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["tourist","financial","high-growth"]},
+  {code:"EBN9-4", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"high", tags:["public-sector","stable","commuter"]},
+  {code:"EBN9-5", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["commuter","high-growth","financial"]},
+  {code:"EBN9-6", age:"medium", urban:"suburban", income:"low", education:"medium", housing:"owned", deprivation:"medium", family:"high", tags:["industrial","stable","commuter"]},
+  {code:"EBN9-7", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"high", tags:["remote","stable","commuter"]},
+  {code:"EBN9-8", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"high", tags:["remote","stable","commuter"]},
+  {code:"EBN10-1", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"high", tags:["public-sector","stable","commuter"]},
+  {code:"EBN10-2", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"low", family:"medium", tags:["agricultural","stable","remote"]},
+  {code:"EBN10-3", age:"old", urban:"rural", income:"high", education:"low", housing:"owned", deprivation:"low", family:"low", tags:["agricultural","stable","remote"]},
+  {code:"EBN11-1", age:"old", urban:"suburban", income:"high", education:"medium", housing:"owned", deprivation:"low", family:"low", tags:["commuter","stable","remote"]},
+  {code:"EBN11-2", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["commuter","high-growth","financial"]},
+  {code:"EBN11-3", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"high", tags:["public-sector","stable","commuter"]},
+  {code:"EBN12-1", age:"young", urban:"urban", income:"high", education:"high", housing:"rent", deprivation:"low", family:"low", tags:["port","financial","high-growth"]},
+  {code:"EBN12-2", age:"medium", urban:"suburban", income:"high", education:"high", housing:"owned", deprivation:"low", family:"high", tags:["commuter","high-growth","financial"]},
+  {code:"EBN12-3", age:"medium", urban:"urban", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"high", tags:["public-sector","stable","commuter"]},
+  {code:"EBN12-4", age:"medium", urban:"suburban", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"medium", tags:["industrial","public-sector","commuter"]},
+  {code:"EBN12-5", age:"young", urban:"urban", income:"high", education:"high", housing:"rent", deprivation:"low", family:"low", tags:["university","high-growth","financial"]},
+  {code:"EBN13-1", age:"medium", urban:"suburban", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"medium", tags:["industrial","public-sector","commuter"]},
+  {code:"EBN13-2", age:"medium", urban:"suburban", income:"medium", education:"medium", housing:"owned", deprivation:"medium", family:"high", tags:["public-sector","stable","commuter"]},
+  {code:"EBN13-3", age:"old", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"low", tags:["agricultural","stable","remote"]},
+  {code:"EBN14-1", age:"old", urban:"rural", income:"low", education:"low", housing:"mixed", deprivation:"medium", family:"low", tags:["agricultural","declining","remote"]},
+  {code:"EBN14-2", age:"medium", urban:"rural", income:"medium", education:"low", housing:"owned", deprivation:"medium", family:"medium", tags:["agricultural","stable","remote"]},
+  {code:"EBN14-3", age:"medium", urban:"rural", income:"medium", education:"medium", housing:"owned", deprivation:"low", family:"medium", tags:["stable","tourist","high-growth"]}
 ];
 
 const TOTAL_SEATS = constituencies.length;
@@ -1034,7 +1953,7 @@ function partyCanStand(party, duchy) {
 
 function regionNameOf(code) {
   if (code.startsWith("PAM")) return "Pamialukia";
-  if (code.startsWith("VRL")) return "Vreaelia";
+  if (code.startsWith("VRL")) return "Veraelia";
   if (code.startsWith("RBN")) return "Rubinvente";
   if (code.startsWith("EBN")) return "Ebonvud";
   return "Other";
@@ -1053,57 +1972,57 @@ function regionNameOf(code) {
 
 const effects = {
   age: {
-    young:  {SDV:.14, IMP:.03, TPP:-.10, ENV:.24, VRK:.06, SKV:-.16, PLF:-.22},
-    medium: {SDV:.02, IMP:.02, TPP: .00, ENV:.00, VRK:.02, SKV: .00, PLF: .00},
-    old:    {SDV:-.10,IMP:.05, TPP: .16, ENV:-.24,VRK:-.06,SKV: .18, PLF: .28}
+    young:  {SDA:.14, IMP:.03, TPP:-.10, ENV:.24, VRK:.06, SKV:-.16, PLF:-.22},
+    medium: {SDA:.02, IMP:.02, TPP: .00, ENV:.00, VRK:.02, SKV: .00, PLF: .00},
+    old:    {SDA:-.10,IMP:.05, TPP: .16, ENV:-.24,VRK:-.06,SKV: .18, PLF: .28}
   },
   urban: {
-    urban:    {SDV:.12, IMP:.06, TPP:-.10, ENV:.16, VRK:.05, SKV:-.10, PLF:-.14},
-    suburban: {SDV:.00, IMP:.05, TPP: .05, ENV:-.02,VRK:-.03,SKV: .03, PLF: .03},
-    rural:    {SDV:-.09,IMP:.00, TPP: .15, ENV:-.14,VRK:.00, SKV: .12, PLF: .23}
+    urban:    {SDA:.12, IMP:.06, TPP:-.10, ENV:.16, VRK:.05, SKV:-.10, PLF:-.14},
+    suburban: {SDA:.00, IMP:.05, TPP: .05, ENV:-.02,VRK:-.03,SKV: .03, PLF: .03},
+    rural:    {SDA:-.09,IMP:.00, TPP: .15, ENV:-.14,VRK:.00, SKV: .12, PLF: .23}
   },
   income: {
-    low:    {SDV:.14, IMP:-.20,TPP:-.08,ENV:-.03,VRK:.10, SKV:.09, PLF:.10},
-    medium: {SDV:.00, IMP:.00, TPP:.02, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
-    high:   {SDV:.03, IMP:.22, TPP:.08, ENV:.06, VRK:-.18,SKV:-.10,PLF:-.14}
+    low:    {SDA:.14, IMP:-.20,TPP:-.08,ENV:-.03,VRK:.10, SKV:.09, PLF:.10},
+    medium: {SDA:.00, IMP:.00, TPP:.02, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
+    high:   {SDA:.03, IMP:.22, TPP:.08, ENV:.06, VRK:-.18,SKV:-.10,PLF:-.14}
   },
   education: {
-    low:    {SDV:-.01,IMP:-.12,TPP:.08, ENV:-.20,VRK:.05, SKV:.18, PLF:.24},
-    medium: {SDV:.00, IMP:.00, TPP:.02, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
-    high:   {SDV:.11, IMP:.12, TPP:-.08,ENV:.21, VRK:-.04,SKV:-.20,PLF:-.28}
+    low:    {SDA:-.01,IMP:-.12,TPP:.08, ENV:-.20,VRK:.05, SKV:.18, PLF:.24},
+    medium: {SDA:.00, IMP:.00, TPP:.02, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
+    high:   {SDA:.11, IMP:.12, TPP:-.08,ENV:.21, VRK:-.04,SKV:-.20,PLF:-.28}
   },
   housing: {
-    rent:   {SDV:.13, IMP:-.05,TPP:-.11,ENV:.10, VRK:.09, SKV:-.05,PLF:-.07},
-    mixed:  {SDV:.02, IMP:.00, TPP:.00, ENV:.02, VRK:.02, SKV:.00, PLF:.00},
-    owned:  {SDV:-.05,IMP:.08, TPP:.11, ENV:-.08,VRK:-.05,SKV:.06, PLF:.07}
+    rent:   {SDA:.13, IMP:-.05,TPP:-.11,ENV:.10, VRK:.09, SKV:-.05,PLF:-.07},
+    mixed:  {SDA:.02, IMP:.00, TPP:.00, ENV:.02, VRK:.02, SKV:.00, PLF:.00},
+    owned:  {SDA:-.05,IMP:.08, TPP:.11, ENV:-.08,VRK:-.05,SKV:.06, PLF:.07}
   },
   deprivation: {
-    low:    {SDV:.02, IMP:.08, TPP:.04, ENV:.05, VRK:-.06,SKV:-.08,PLF:-.10},
-    medium: {SDV:.00, IMP:.00, TPP:.00, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
-    high:   {SDV:.14, IMP:-.17,TPP:-.04,ENV:-.07,VRK:.08, SKV:.16, PLF:.22}
+    low:    {SDA:.02, IMP:.08, TPP:.04, ENV:.05, VRK:-.06,SKV:-.08,PLF:-.10},
+    medium: {SDA:.00, IMP:.00, TPP:.00, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
+    high:   {SDA:.14, IMP:-.17,TPP:-.04,ENV:-.07,VRK:.08, SKV:.16, PLF:.22}
   },
   family: {
-    low:    {SDV:.02, IMP:.00, TPP:-.04,ENV:.07, VRK:.02, SKV:-.03,PLF:-.03},
-    medium: {SDV:.00, IMP:.00, TPP:.00, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
-    high:   {SDV:.03, IMP:.04, TPP:.09, ENV:-.05,VRK:-.03,SKV:.04, PLF:.07}
+    low:    {SDA:.02, IMP:.00, TPP:-.04,ENV:.07, VRK:.02, SKV:-.03,PLF:-.03},
+    medium: {SDA:.00, IMP:.00, TPP:.00, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
+    high:   {SDA:.03, IMP:.04, TPP:.09, ENV:-.05,VRK:-.03,SKV:.04, PLF:.07}
   }
 };
 
 const tagEffects = {
-  "university":      {SDV:.16, IMP:.07, TPP:-.12,ENV:.27, VRK:.00, SKV:-.20,PLF:-.30},
-  "financial":       {SDV:.05, IMP:.24, TPP:.09, ENV:.04, VRK:-.20,SKV:-.09,PLF:-.11},
-  "industrial":      {SDV:.10, IMP:-.06,TPP:.04, ENV:-.10,VRK:.10, SKV:.07, PLF:.08},
-  "post-industrial": {SDV:.10, IMP:-.14,TPP:-.03,ENV:-.10,VRK:.07, SKV:.17, PLF:.22},
-  "agricultural":    {SDV:-.08,IMP:.00, TPP:.16, ENV:-.11,VRK:-.02,SKV:.10, PLF:.20},
-  "tourist":         {SDV:.00, IMP:.10, TPP:.02, ENV:.09, VRK:-.06,SKV:-.03,PLF:.06},
-  "port":            {SDV:.08, IMP:.00, TPP:.02, ENV:-.02,VRK:.13, SKV:.06, PLF:.10},
-  "commuter":        {SDV:.04, IMP:.14, TPP:.06, ENV:.02, VRK:-.10,SKV:-.04,PLF:-.06},
-  "high-growth":     {SDV:.06, IMP:.13, TPP:-.02,ENV:.10, VRK:-.04,SKV:-.10,PLF:-.11},
-  "stable":          {SDV:.00, IMP:.00, TPP:.00, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
-  "declining":       {SDV:.06, IMP:-.15,TPP:-.03,ENV:-.10,VRK:.08, SKV:.18, PLF:.22},
-  "public-sector":   {SDV:.18, IMP:-.05,TPP:-.11,ENV:.08, VRK:.05, SKV:-.03,PLF:-.05},
-  "remote":          {SDV:-.06,IMP:-.03,TPP:.11, ENV:-.11,VRK:-.02,SKV:.11, PLF:.23},
-  "coastal":         {SDV:.00, IMP:.03, TPP:.02, ENV:.06, VRK:.00, SKV:.03, PLF:.10}
+  "university":      {SDA:.16, IMP:.07, TPP:-.12,ENV:.27, VRK:.00, SKV:-.20,PLF:-.30},
+  "financial":       {SDA:.05, IMP:.24, TPP:.09, ENV:.04, VRK:-.20,SKV:-.09,PLF:-.11},
+  "industrial":      {SDA:.10, IMP:-.06,TPP:.04, ENV:-.10,VRK:.10, SKV:.07, PLF:.08},
+  "post-industrial": {SDA:.10, IMP:-.14,TPP:-.03,ENV:-.10,VRK:.07, SKV:.17, PLF:.22},
+  "agricultural":    {SDA:-.08,IMP:.00, TPP:.16, ENV:-.11,VRK:-.02,SKV:.10, PLF:.20},
+  "tourist":         {SDA:.00, IMP:.10, TPP:.02, ENV:.09, VRK:-.06,SKV:-.03,PLF:.06},
+  "port":            {SDA:.08, IMP:.00, TPP:.02, ENV:-.02,VRK:.13, SKV:.06, PLF:.10},
+  "commuter":        {SDA:.04, IMP:.14, TPP:.06, ENV:.02, VRK:-.10,SKV:-.04,PLF:-.06},
+  "high-growth":     {SDA:.06, IMP:.13, TPP:-.02,ENV:.10, VRK:-.04,SKV:-.10,PLF:-.11},
+  "stable":          {SDA:.00, IMP:.00, TPP:.00, ENV:.00, VRK:.00, SKV:.00, PLF:.00},
+  "declining":       {SDA:.06, IMP:-.15,TPP:-.03,ENV:-.10,VRK:.08, SKV:.18, PLF:.22},
+  "public-sector":   {SDA:.18, IMP:-.05,TPP:-.11,ENV:.08, VRK:.05, SKV:-.03,PLF:-.05},
+  "remote":          {SDA:-.06,IMP:-.03,TPP:.11, ENV:-.11,VRK:-.02,SKV:.11, PLF:.23},
+  "coastal":         {SDA:.00, IMP:.03, TPP:.02, ENV:.06, VRK:.00, SKV:.03, PLF:.10}
 };
 
 /* =========================================================
@@ -1132,10 +2051,8 @@ function previousOverall() {
 
 const prevOverall = previousOverall();
 
-let comparisonHistory = Object.fromEntries(
-  Object.entries(duchyPrevious).map(([duchy, result]) => [duchy, {...result}])
-);
-let comparisonSourceName = "Built-in Duchy previous-election results";
+let comparisonHistory = {};
+let comparisonSourceName = "No previous election imported";
 
 function cloneHistory(history) {
   return Object.fromEntries(
@@ -1262,13 +2179,17 @@ function signedNumber(value, decimals = 1) {
 
 function renderPreviousComparison() {
   const panel = document.getElementById("previousComparisonPanel");
-  const toggle = document.getElementById("comparePreviousToggle");
   const source = document.getElementById("comparisonSource");
 
-  source.textContent = `Comparison source: ${comparisonSourceName}.`;
+  const hasImportedHistory = Object.keys(comparisonHistory).length > 0;
 
-  if (!toggle.checked) {
+  source.textContent = hasImportedHistory
+    ? `Comparison source: ${comparisonSourceName}.`
+    : "No previous election imported.";
+
+  if (!hasImportedHistory) {
     panel.hidden = true;
+    panel.innerHTML = "";
     return;
   }
 
@@ -1286,7 +2207,7 @@ function renderPreviousComparison() {
   panel.innerHTML = `
     <div class="small" style="margin-bottom:7px">
       Comparison coverage: <b>${coverage.seats}/${coverage.total} constituencies</b>.
-      Previous constituency seat figures are <b>modelled</b> from the supplied Duchy results plus the current constituency profile model.
+      Previous constituency seat figures are <b>modelled</b> from the imported Duchy results plus the current constituency profile model.
     </div>
     ${partyCodes.map(p => {
       const swing = currentShares[p] - previousShares[p];
@@ -1362,8 +2283,14 @@ function parsePreviousElectionText(rawText) {
   const partyIndexes = {};
   partyCodes.forEach(p => {
     partyIndexes[p] = headers.indexOf(p);
+
+    // Backwards compatibility with older test exports that used SDV.
+    if (p === "SDA" && partyIndexes[p] < 0) {
+      partyIndexes[p] = headers.indexOf("SDV");
+    }
+
     if (partyIndexes[p] < 0) {
-      throw new Error(`Missing ${p} column.`);
+      throw new Error(`Missing ${p} column. Expected headers: Duchy, ${partyCodes.join(", ")}.`);
     }
   });
 
@@ -1399,7 +2326,6 @@ function parsePreviousElectionText(rawText) {
 function setComparisonHistory(history, sourceName) {
   comparisonHistory = cloneHistory(history);
   comparisonSourceName = sourceName;
-  document.getElementById("comparePreviousToggle").checked = true;
   renderPreviousComparison();
 }
 
@@ -1417,13 +2343,136 @@ function loadPreviousElectionText(textValue, sourceName) {
   }
 }
 
+async function extractZipEntries(arrayBuffer) {
+  const bytes = new Uint8Array(arrayBuffer);
+  const view = new DataView(arrayBuffer);
+  const entries = {};
+  let offset = 0;
+
+  while (offset + 30 <= bytes.length) {
+    const signature = view.getUint32(offset, true);
+
+    if (signature !== 0x04034B50) break;
+
+    const flags = view.getUint16(offset + 6, true);
+    const method = view.getUint16(offset + 8, true);
+    const compressedSize = view.getUint32(offset + 18, true);
+    const uncompressedSize = view.getUint32(offset + 22, true);
+    const nameLength = view.getUint16(offset + 26, true);
+    const extraLength = view.getUint16(offset + 28, true);
+
+    if (flags & 0x0008) {
+      throw new Error("This XLSX uses a ZIP format this lightweight importer cannot read. Re-export it from this simulator, or save the Import Results sheet as CSV.");
+    }
+
+    const nameStart = offset + 30;
+    const dataStart = nameStart + nameLength + extraLength;
+    const name = new TextDecoder().decode(bytes.slice(nameStart, nameStart + nameLength));
+    const compressed = bytes.slice(dataStart, dataStart + compressedSize);
+
+    let data;
+
+    if (method === 0) {
+      data = compressed;
+    } else if (method === 8 && typeof DecompressionStream !== "undefined") {
+      const stream = new Blob([compressed]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+      data = new Uint8Array(await new Response(stream).arrayBuffer());
+    } else {
+      throw new Error("Unsupported XLSX compression. Import a workbook exported by this simulator, or use CSV/TSV.");
+    }
+
+    if (uncompressedSize && data.length !== uncompressedSize) {
+      // Non-fatal: some producers don't provide perfectly matching local metadata.
+    }
+
+    entries[name] = data;
+    offset = dataStart + compressedSize;
+  }
+
+  return entries;
+}
+
+function worksheetRowsFromXml(xmlText) {
+  const doc = new DOMParser().parseFromString(xmlText, "application/xml");
+
+  if (doc.querySelector("parsererror")) {
+    throw new Error("Could not parse the spreadsheet worksheet.");
+  }
+
+  const rows = [];
+
+  doc.querySelectorAll("sheetData > row").forEach(rowEl => {
+    const cells = [];
+    let lastColumn = -1;
+
+    rowEl.querySelectorAll("c").forEach(cell => {
+      const ref = cell.getAttribute("r") || "";
+      const letters = (ref.match(/[A-Z]+/i) || ["A"])[0].toUpperCase();
+
+      let column = 0;
+      for (const ch of letters) {
+        column = column * 26 + (ch.charCodeAt(0) - 64);
+      }
+      column -= 1;
+
+      while (lastColumn + 1 < column) {
+        cells.push("");
+        lastColumn++;
+      }
+
+      const type = cell.getAttribute("t");
+      let value = "";
+
+      if (type === "inlineStr") {
+        value = [...cell.querySelectorAll("is t")].map(t => t.textContent || "").join("");
+      } else {
+        value = cell.querySelector("v")?.textContent || "";
+      }
+
+      cells.push(value);
+      lastColumn = column;
+    });
+
+    rows.push(cells);
+  });
+
+  return rows;
+}
+
+function rowsToImportCsv(rows) {
+  return rows.map(row =>
+    row.map(value => {
+      const s = String(value ?? "");
+      return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    }).join(",")
+  ).join("\n");
+}
+
+async function parsePreviousElectionXlsx(arrayBuffer) {
+  const entries = await extractZipEntries(arrayBuffer);
+
+  // Files exported by this simulator place "Import Results" first,
+  // therefore it is xl/worksheets/sheet1.xml.
+  const sheetBytes = entries["xl/worksheets/sheet1.xml"];
+
+  if (!sheetBytes) {
+    throw new Error("Could not find the Import Results worksheet.");
+  }
+
+  const xml = new TextDecoder().decode(sheetBytes);
+  const rows = worksheetRowsFromXml(xml);
+
+  if (!rows.length) {
+    throw new Error("The Import Results worksheet is empty.");
+  }
+
+  const csv = rowsToImportCsv(rows);
+  return parsePreviousElectionText(csv);
+}
+
 function downloadPreviousElectionTemplate() {
   const rows = [
-    ["Duchy", ...partyCodes],
-    ...Object.keys(duchyPrevious).sort().map(duchy => [
-      duchy,
-      ...partyCodes.map(p => Number(duchyPrevious[duchy][p]).toFixed(1))
-    ])
+    ["Duchy", ...partyCodes]
   ];
 
   const csv = rows.map(row =>
@@ -1434,7 +2483,7 @@ function downloadPreviousElectionTemplate() {
   ).join("\n");
 
   const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
-  downloadBlob(blob, "veridia_previous_election_template.csv");
+  downloadBlob(blob, "veridia_previous_election_import_template.csv");
 }
 
 function buildInputs() {
@@ -1519,8 +2568,11 @@ function buildInputs() {
     document.getElementById("strengthLabel").textContent = `${Number(e.target.value).toFixed(2)}×`;
   });
 
-  document.getElementById("numberModeButton").addEventListener("click", () => setVoteInputMode("number"));
-  document.getElementById("sliderModeButton").addEventListener("click", () => setVoteInputMode("slider"));
+  document.getElementById("inputModeSwitch").addEventListener("change", event => {
+    setVoteInputMode(event.target.checked ? "slider" : "number");
+  });
+
+  setVoteInputMode("number");
 
   updateInputTotal();
 }
@@ -1528,8 +2580,8 @@ function buildInputs() {
 function setVoteInputMode(mode) {
   const sliderMode = mode === "slider";
   const box = document.getElementById("partyInputs");
-  const numberButton = document.getElementById("numberModeButton");
-  const sliderButton = document.getElementById("sliderModeButton");
+  const switchInput = document.getElementById("inputModeSwitch");
+  const modeRow = document.querySelector(".input-mode-row");
 
   if (sliderMode) {
     partyCodes.forEach(syncVoteControls);
@@ -1537,11 +2589,14 @@ function setVoteInputMode(mode) {
 
   box.classList.toggle("slider-mode", sliderMode);
 
-  numberButton.classList.toggle("active", !sliderMode);
-  sliderButton.classList.toggle("active", sliderMode);
+  if (switchInput) {
+    switchInput.checked = sliderMode;
+    switchInput.setAttribute("aria-checked", String(sliderMode));
+  }
 
-  numberButton.setAttribute("aria-pressed", String(!sliderMode));
-  sliderButton.setAttribute("aria-pressed", String(sliderMode));
+  if (modeRow) {
+    modeRow.dataset.mode = sliderMode ? "slider" : "number";
+  }
 }
 
 function syncVoteControls(code) {
@@ -1949,7 +3004,7 @@ function interactionEffectForSeat(c, party) {
     c.income === "high" &&
     tags.has("agricultural")
   ) {
-    add({ IMP:.30, TPP:.08, SDV:-.08, ENV:-.10, VRK:-.12, SKV:-.03 });
+    add({ IMP:.30, TPP:.08, SDA:-.08, ENV:-.10, VRK:-.12, SKV:-.03 });
   }
 
   if (
@@ -1957,12 +3012,12 @@ function interactionEffectForSeat(c, party) {
     c.urban === "rural" &&
     c.housing === "owned"
   ) {
-    add({ IMP:.13, TPP:.09, SDV:-.05, ENV:-.08, VRK:-.06, SKV:.03 });
+    add({ IMP:.13, TPP:.09, SDA:-.05, ENV:-.08, VRK:-.06, SKV:.03 });
   }
 
   /*
     PROFESSIONAL / FINANCE MODERATES
-    SDV now has a small but real professional-finance route, while IMP
+    SDA now has a small but real professional-finance route, while IMP
     remains the strongest party in this profile.
   */
   if (
@@ -1970,7 +3025,7 @@ function interactionEffectForSeat(c, party) {
     c.education === "high" &&
     tags.has("financial")
   ) {
-    add({ IMP:.16, SDV:.08, ENV:.03, TPP:.03, VRK:-.14, SKV:-.10 });
+    add({ IMP:.16, SDA:.08, ENV:.03, TPP:.03, VRK:-.14, SKV:-.10 });
   }
 
   if (
@@ -1978,12 +3033,12 @@ function interactionEffectForSeat(c, party) {
     tags.has("financial") &&
     tags.has("commuter")
   ) {
-    add({ IMP:.11, SDV:.05, TPP:.03, VRK:-.08, SKV:-.05 });
+    add({ IMP:.11, SDA:.05, TPP:.03, VRK:-.08, SKV:-.05 });
   }
 
   /*
     MAINSTREAM CENTRE-LEFT / DEPRIVED COMMUNITY EFFECTS
-    Low income and deprivation now reinforce SDV more strongly than VRK.
+    Low income and deprivation now reinforce SDA more strongly than VRK.
     VRK still benefits, but only modestly: it is a fringe party rather
     than the automatic vehicle for economically deprived constituencies.
   */
@@ -1991,40 +3046,40 @@ function interactionEffectForSeat(c, party) {
     c.income === "low" &&
     c.deprivation === "high"
   ) {
-    add({ SDV:.18, VRK:.03, SKV:.05, IMP:-.12, TPP:-.05, ENV:-.02 });
+    add({ SDA:.18, VRK:.03, SKV:.05, IMP:-.12, TPP:-.05, ENV:-.02 });
   }
 
   if (
     c.deprivation === "high" &&
     tags.has("post-industrial")
   ) {
-    add({ SDV:.12, SKV:.07, VRK:.03, IMP:-.08, ENV:-.03 });
+    add({ SDA:.12, SKV:.07, VRK:.03, IMP:-.08, ENV:-.03 });
   }
 
   if (
     c.deprivation === "high" &&
     tags.has("public-sector")
   ) {
-    add({ SDV:.11, VRK:.02, IMP:-.06 });
+    add({ SDA:.11, VRK:.02, IMP:-.06 });
   }
 
   if (
     c.income === "low" &&
     tags.has("industrial")
   ) {
-    add({ SDV:.08, VRK:.03, SKV:.03, IMP:-.05 });
+    add({ SDA:.08, VRK:.03, SKV:.03, IMP:-.05 });
   }
 
   /*
     YOUNG / GRADUATE / UNIVERSITY PROFILE
-    ENV remains strongest here, but SDV also gains.
+    ENV remains strongest here, but SDA also gains.
   */
   if (
     c.age === "young" &&
     c.education === "high" &&
     tags.has("university")
   ) {
-    add({ ENV:.16, SDV:.12, IMP:.03, TPP:-.08, VRK:.01, SKV:-.14 });
+    add({ ENV:.16, SDA:.12, IMP:.03, TPP:-.08, VRK:.01, SKV:-.14 });
   }
 
   /*
@@ -2037,7 +3092,7 @@ function interactionEffectForSeat(c, party) {
     c.education === "low" &&
     tags.has("declining")
   ) {
-    add({ SKV:.16, SDV:.03, VRK:.01, IMP:-.04, ENV:-.10 });
+    add({ SKV:.16, SDA:.03, VRK:.01, IMP:-.04, ENV:-.10 });
   }
 
   /*
@@ -2049,7 +3104,7 @@ function interactionEffectForSeat(c, party) {
     c.income === "high" &&
     c.urban === "suburban"
   ) {
-    add({ IMP:.08, TPP:.04, SDV:.02, ENV:-.03, VRK:-.07 });
+    add({ IMP:.08, TPP:.04, SDA:.02, ENV:-.03, VRK:-.07 });
   }
 
   return s;
@@ -2159,6 +3214,16 @@ function runModel() {
   });
 
   renderSeatResults(target);
+
+  const coalitionCounts = projectedSeatCounts();
+  const largestCoalitionParty = [...partyCodes]
+    .sort((a,b) => (coalitionCounts[b] || 0) - (coalitionCounts[a] || 0))[0];
+
+  coalitionSelection.clear();
+  if (largestCoalitionParty && (coalitionCounts[largestCoalitionParty] || 0) > 0) {
+    coalitionSelection.add(largestCoalitionParty);
+  }
+
   renderCoalitionBuilder();
   renderTable();
   fillMapFromResults();
@@ -2213,10 +3278,16 @@ function renderWestminsterParliament(counts) {
   const governmentSeats = governmentParties.reduce((sum, p) => sum + (counts[p] || 0), 0);
   const oppositionSeats = oppositionParties.reduce((sum, p) => sum + (counts[p] || 0), 0);
 
+  // The complete chart fits inside a fixed, invisible 560 × 315
+  // coordinate box: exactly 16:9.
+  const canvasWidth = 560;
+  const canvasHeight = 315;
+  const centreX = canvasWidth / 2;
+
   if (!coalitionSelection.size) {
     svg.innerHTML = `
-      <text x="280" y="72" text-anchor="middle" class="bench-caption">NO GOVERNMENT SELECTED</text>
-      <text x="280" y="91" text-anchor="middle" class="commons-bench-label">Choose one or more parties to form a government</text>
+      <text x="${centreX}" y="148" text-anchor="middle" class="bench-caption">NO GOVERNMENT SELECTED</text>
+      <text x="${centreX}" y="169" text-anchor="middle" class="commons-bench-label">Choose one or more parties to form a government</text>
     `;
     return;
   }
@@ -2232,25 +3303,28 @@ function renderWestminsterParliament(counts) {
   const govSeatList = seatsByParty(governmentParties);
   const oppSeatList = seatsByParty(oppositionParties);
 
-  const canvasWidth = 560;
-  const centreX = canvasWidth / 2;
-
-  // Fixed vertical zones prevent labels, frames and seat rows from colliding.
-  const oppositionZone = { top: 26, bottom: 70 };
-  const governmentZone = { top: 100, bottom: 144 };
-  const aisleY = 85;
-
-  // Keep the chart geometry visually stable between coalition choices:
-  // - both benches always have the same fixed width
-  // - seat icons always have the same fixed size
-  // - only the number of rows/columns changes
+  // Equal-width opposing benches. Their vertical zones are mirrored
+  // around the central dividing line so the whole parliament remains
+  // visually centred inside the 16:9 box.
   const fixedBenchWidth = 470;
   const fixedSeatSize = 6.7;
   const fixedGapX = 2.2;
   const fixedGapY = 2.4;
   const horizontalPadding = 18;
 
-  function benchGeometry(seatCount, zone) {
+  const aisleY = canvasHeight / 2; // 157.5
+  const centralGap = 16.75; // 75% smaller than the original 67-unit gap
+  const zoneHeight = 72;
+  const oppositionZone = {
+    top: aisleY - centralGap / 2 - zoneHeight,
+    bottom: aisleY - centralGap / 2
+  };
+  const governmentZone = {
+    top: aisleY + centralGap / 2,
+    bottom: aisleY + centralGap / 2 + zoneHeight
+  };
+
+  function benchGeometry(seatCount) {
     if (seatCount <= 0) {
       return {
         rows: 0,
@@ -2269,8 +3343,8 @@ function renderWestminsterParliament(counts) {
       Math.floor((usableWidth + fixedGapX) / (fixedSeatSize + fixedGapX))
     );
 
-    // Use as many columns as the fixed frame permits, then add rows.
-    // This keeps every seat icon exactly the same size at all times.
+    // Seat size and bench width never change. Larger sides simply use
+    // additional rows, preserving consistent icon scale.
     const cols = Math.min(maxCols, seatCount);
     const rows = Math.ceil(seatCount / cols);
 
@@ -2290,24 +3364,32 @@ function renderWestminsterParliament(counts) {
     };
   }
 
-  const oppGeom = benchGeometry(oppositionSeats, oppositionZone);
-  const govGeom = benchGeometry(governmentSeats, governmentZone);
+  const oppGeom = benchGeometry(oppositionSeats);
+  const govGeom = benchGeometry(governmentSeats);
 
-  const sharedBenchWidth = fixedBenchWidth;
-  const oppX = centreX - fixedBenchWidth / 2;
-  const govX = centreX - fixedBenchWidth / 2;
+  const benchX = centreX - fixedBenchWidth / 2;
 
-  const oppY = oppositionZone.top + (oppositionZone.bottom - oppositionZone.top - oppGeom.height) / 2;
-  const govY = governmentZone.top + (governmentZone.bottom - governmentZone.top - govGeom.height) / 2;
+  const oppY =
+    oppositionZone.top +
+    (oppositionZone.bottom - oppositionZone.top - oppGeom.height) / 2;
+
+  const govY =
+    governmentZone.top +
+    (governmentZone.bottom - governmentZone.top - govGeom.height) / 2;
+
+  const lineX1 = benchX;
+  const lineX2 = benchX + fixedBenchWidth;
 
   const pieces = [
-    `<text x="${centreX}" y="16" text-anchor="middle" class="bench-caption">OPPOSITION — ${oppositionSeats} SEATS</text>`,
-    `<rect x="${oppX.toFixed(1)}" y="${oppY.toFixed(1)}" width="${oppGeom.width.toFixed(1)}" height="${oppGeom.height.toFixed(1)}" class="bench-frame opposition-frame"/>`,
+    `<text x="${centreX}" y="30" text-anchor="middle" class="bench-caption">OPPOSITION — ${oppositionSeats} SEATS</text>`,
 
-    `<line x1="72" y1="${aisleY}" x2="488" y2="${aisleY}" class="dispatch-line"/>`,
+    `<rect x="${benchX.toFixed(1)}" y="${oppY.toFixed(1)}" width="${fixedBenchWidth}" height="${oppGeom.height.toFixed(1)}" class="bench-frame opposition-frame"/>`,
 
-    `<rect x="${govX.toFixed(1)}" y="${govY.toFixed(1)}" width="${govGeom.width.toFixed(1)}" height="${govGeom.height.toFixed(1)}" class="bench-frame government-frame"/>`,
-    `<text x="${centreX}" y="162" text-anchor="middle" class="bench-caption">GOVERNMENT — ${governmentSeats} SEATS</text>`
+    `<line x1="${lineX1.toFixed(1)}" y1="${aisleY}" x2="${lineX2.toFixed(1)}" y2="${aisleY}" class="dispatch-line"/>`,
+
+    `<rect x="${benchX.toFixed(1)}" y="${govY.toFixed(1)}" width="${fixedBenchWidth}" height="${govGeom.height.toFixed(1)}" class="bench-frame government-frame"/>`,
+
+    `<text x="${centreX}" y="292" text-anchor="middle" class="bench-caption">GOVERNMENT — ${governmentSeats} SEATS</text>`
   ];
 
   function drawBench(seats, geom, x, y, opacity) {
@@ -2336,8 +3418,8 @@ function renderWestminsterParliament(counts) {
     });
   }
 
-  drawBench(oppSeatList, oppGeom, oppX, oppY, 0.82);
-  drawBench(govSeatList, govGeom, govX, govY, 1);
+  drawBench(oppSeatList, oppGeom, benchX, oppY, 0.82);
+  drawBench(govSeatList, govGeom, benchX, govY, 1);
 
   svg.innerHTML = pieces.join("");
 }
@@ -2594,6 +3676,44 @@ function previousKantonVoteShares(history = comparisonHistory) {
 
 function resultsByCode(results) {
   return Object.fromEntries(results.map(r => [r.code, r]));
+}
+
+function buildImportResultsRows() {
+  const grouped = {};
+
+  latestResults.forEach(r => {
+    const duchy = r.duchy;
+
+    if (!grouped[duchy]) {
+      grouped[duchy] = {
+        count: 0,
+        shares: Object.fromEntries(partyCodes.map(p => [p, 0]))
+      };
+    }
+
+    grouped[duchy].count++;
+
+    partyCodes.forEach(p => {
+      grouped[duchy].shares[p] += Number(r.shares[p]) || 0;
+    });
+  });
+
+  const rows = [
+    ["Duchy", ...partyCodes]
+  ];
+
+  Object.keys(grouped).sort().forEach(duchy => {
+    const g = grouped[duchy];
+
+    rows.push([
+      duchy,
+      ...partyCodes.map(p =>
+        Number((g.shares[p] / Math.max(1, g.count)).toFixed(3))
+      )
+    ]);
+  });
+
+  return rows;
 }
 
 function buildConstituencyExportRows(includeComparison) {
@@ -2898,6 +4018,9 @@ function zipStore(files) {
 
 function buildResultsXlsxBlob(includeComparison) {
   const sheets = [
+    // Deliberately first and deliberately simple: this sheet can be fed
+    // straight back into the simulator as a future previous-election file.
+    {name:"Import Results", rows:buildImportResultsRows()},
     {name:"Constituencies", rows:buildConstituencyExportRows(includeComparison)},
     {name:"Kantons", rows:buildKantonExportRows(includeComparison)},
     {name:"National", rows:buildNationalExportRows(includeComparison)}
@@ -2989,7 +4112,7 @@ function downloadBlob(blob, filename) {
 }
 
 function exportResultsWorkbook() {
-  const includeComparison = document.getElementById("comparePreviousToggle").checked;
+  const includeComparison = Object.keys(comparisonHistory).length > 0;
   const blob = buildResultsXlsxBlob(includeComparison);
 
   const now = new Date();
@@ -3061,14 +4184,24 @@ function renderSeatResults(target) {
     const abovePct = seatsAbove / MAJORITY_SEATS * 100;
 
     if (abovePct <= 10) {
-      status = "Slim majority";
+      status = `Slim ${parties[largest].name} majority`;
     } else if (abovePct <= 50) {
-      status = "Working majority";
+      status = `Working ${parties[largest].name} majority`;
     } else {
-      status = "Supermajority";
+      status = `${parties[largest].name} supermajority`;
     }
 
     detail = `${parties[largest].name} is ${seatsAbove} seat${seatsAbove === 1 ? "" : "s"} above the majority threshold (${abovePct.toFixed(1)}% above majority).`;
+  }
+
+  if (largestSeats >= MAJORITY_SEATS) {
+    majorityBox.classList.add("status-majority");
+    majorityBox.style.setProperty("--majority-colour", parties[largest].colour);
+    majorityBox.style.color = contrastText(parties[largest].colour);
+  } else if (status === "Hung") {
+    majorityBox.classList.add("status-error");
+  } else {
+    majorityBox.classList.add("status-warning");
   }
 
   majorityBox.innerHTML = `
@@ -3084,24 +4217,67 @@ function renderSeatResults(target) {
   box.appendChild(note);
 }
 
+function marginMatchesFilter(margin, filter) {
+  if (!filter) return true;
+  if (filter === "under5") return margin < 5;
+  if (filter === "under10") return margin < 10;
+  if (filter === "10to20") return margin >= 10 && margin < 20;
+  if (filter === "20plus") return margin >= 20;
+  return true;
+}
+
+function clearConstituencyFilters() {
+  [
+    "search", "winnerFilter", "urbanFilter", "educationFilter",
+    "deprivationFilter", "ageFilter", "incomeFilter",
+    "housingFilter", "marginFilter"
+  ].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = "";
+  });
+  renderTable();
+}
+
 function renderTable() {
   const q = (document.getElementById("search").value || "").toLowerCase();
-  const filter = document.getElementById("winnerFilter").value;
+  const winner = document.getElementById("winnerFilter").value;
+  const urban = document.getElementById("urbanFilter").value;
+  const education = document.getElementById("educationFilter").value;
+  const deprivation = document.getElementById("deprivationFilter").value;
+  const age = document.getElementById("ageFilter").value;
+  const income = document.getElementById("incomeFilter").value;
+  const housing = document.getElementById("housingFilter").value;
+  const marginFilter = document.getElementById("marginFilter").value;
 
   const rows = latestResults.filter(r => {
     const haystack = [
       r.code, regionNameOf(r.code), r.duchy, r.age, r.urban, r.income, r.education,
       r.housing, r.deprivation, r.family, ...r.tags
     ].join(" ").toLowerCase();
-    return (!q || haystack.includes(q)) && (!filter || r.winner === filter);
+
+    return (
+      (!q || haystack.includes(q)) &&
+      (!winner || r.winner === winner) &&
+      (!urban || r.urban === urban) &&
+      (!education || r.education === education) &&
+      (!deprivation || r.deprivation === deprivation) &&
+      (!age || r.age === age) &&
+      (!income || r.income === income) &&
+      (!housing || r.housing === housing) &&
+      marginMatchesFilter(Number(r.margin), marginFilter)
+    );
   });
 
   const tbody = document.getElementById("seatTable");
   tbody.innerHTML = "";
+
   rows.forEach(r => {
     const tr = document.createElement("tr");
+    const marginal = Number.isFinite(Number(r.margin)) && Number(r.margin) < 10;
+
     tr.style.cursor = "pointer";
-    tr.onclick = () => showDetails(r.code);
+    tr.onclick = () => showDetails(r.code, tr);
+
     tr.innerHTML = `
       <td><b>${r.code}</b></td>
       <td>${regionNameOf(r.code)}</td>
@@ -3109,7 +4285,7 @@ function renderTable() {
       <td class="winner" style="color:${parties[r.winner].colour}">${r.winner}</td>
       <td>${r.winnerShare.toFixed(1)}%</td>
       <td>${r.second}</td>
-      <td>${r.margin.toFixed(1)}%</td>
+      <td><span class="margin-chip${marginal ? " marginal" : ""}">${r.margin.toFixed(1)}%</span></td>
       <td>${r.age}</td>
       <td>${r.urban}</td>
       <td>${r.education}</td>
@@ -3120,50 +4296,84 @@ function renderTable() {
   });
 }
 
-function showDetails(code) {
+function showDetails(code, sourceRow = null) {
   const r = latestResults.find(x => x.code === code);
   if (!r) return;
 
   selectMapRegion(code);
-  const box = document.getElementById("details");
-  box.style.display = "block";
+
+  const existing = document.querySelector(".constituency-detail-row");
+  if (existing) {
+    const existingCode = existing.dataset.detailsFor;
+    existing.remove();
+    if (existingCode === code) return;
+  }
 
   const ordered = [...partyCodes].sort((a,b)=>r.shares[b]-r.shares[a]);
   const strength = Number(document.getElementById("modelStrength").value);
+  const nationalAverage = averageShares(latestResults);
 
   const influenceRows = partyCodes.map(p => {
     const score = effectSumForSeat(r, p) * strength;
     return [p, score];
   }).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1])).slice(0,7);
 
-  box.innerHTML = `
-    <h3 style="margin-top:0">${r.code} — projected ${r.winner} win</h3>
+  const detailHtml = `
+    <div class="details inline-constituency-details">
+      <h3 style="margin-top:0">${r.code} — projected ${r.winner} win</h3>
 
-    <div class="details-grid">
-      <div><b>Age</b><br>${r.age}</div>
-      <div><b>Urbanisation</b><br>${r.urban}</div>
-      <div><b>Income</b><br>${r.income}</div>
-      <div><b>Education</b><br>${r.education}</div>
-      <div><b>Housing</b><br>${r.housing}</div>
-      <div><b>Deprivation</b><br>${r.deprivation}</div>
-      <div><b>Family</b><br>${r.family}</div>
-      <div><b>Tags</b><br>${r.tags.map(t=>`<span class="pill">${t}</span>`).join("")}</div>
+      <div class="details-grid">
+        <div><b>Age</b><br>${r.age}</div>
+        <div><b>Urbanisation</b><br>${r.urban}</div>
+        <div><b>Income</b><br>${r.income}</div>
+        <div><b>Education</b><br>${r.education}</div>
+        <div><b>Housing</b><br>${r.housing}</div>
+        <div><b>Deprivation</b><br>${r.deprivation}</div>
+        <div><b>Family</b><br>${r.family}</div>
+        <div><b>Tags</b><br>${r.tags.map(t=>`<span class="pill">${t}</span>`).join("")}</div>
+      </div>
+
+      <h3>Projected vote</h3>
+      <div class="national-average-key">
+        <span class="national-average-key-line"></span>
+        National projected average
+      </div>
+
+      ${ordered.map(p => {
+        const national = Math.max(0, Math.min(100, nationalAverage[p] || 0));
+        return `
+          <div class="vote-row">
+            <b style="color:${parties[p].colour}">${p}</b>
+            <span>${r.shares[p].toFixed(1)}%</span>
+            <div class="mini-bg">
+              <div class="mini-bar" style="width:${r.shares[p]}%;background:${parties[p].colour}"></div>
+              <span class="national-average-marker"
+                    style="left:${national}%"
+                    title="${p} national projected average: ${national.toFixed(1)}%"></span>
+            </div>
+          </div>`;
+      }).join("")}
+
+      <h3>Raw demographic/tag lean before national calibration</h3>
+      <div class="small">
+        Positive numbers favour the party locally; negative numbers hurt it. These are model coefficients, not percentage points.
+      </div>
+      ${influenceRows.map(([p,s]) => `<span class="pill"><b>${p}</b> ${s >= 0 ? "+" : ""}${s.toFixed(2)}</span>`).join("")}
     </div>
-
-    <h3>Projected vote</h3>
-    ${ordered.map(p => `
-      <div class="vote-row">
-        <b style="color:${parties[p].colour}">${p}</b>
-        <span>${r.shares[p].toFixed(1)}%</span>
-        <div class="mini-bg"><div class="mini-bar" style="width:${r.shares[p]}%;background:${parties[p].colour}"></div></div>
-      </div>`).join("")}
-
-    <h3>Raw demographic/tag lean before national calibration</h3>
-    <div class="small">
-      Positive numbers favour the party locally; negative numbers hurt it. These are model coefficients, not percentage points.
-    </div>
-    ${influenceRows.map(([p,s]) => `<span class="pill"><b>${p}</b> ${s >= 0 ? "+" : ""}${s.toFixed(2)}</span>`).join("")}
   `;
+
+  if (sourceRow && sourceRow.parentNode) {
+    const detailRow = document.createElement("tr");
+    detailRow.className = "constituency-detail-row";
+    detailRow.dataset.detailsFor = code;
+
+    const cell = document.createElement("td");
+    cell.colSpan = sourceRow.children.length || 12;
+    cell.innerHTML = detailHtml;
+
+    detailRow.appendChild(cell);
+    sourceRow.insertAdjacentElement("afterend", detailRow);
+  }
 }
 
 document.getElementById("mapFile").addEventListener("change", event => {
@@ -3181,43 +4391,80 @@ document.getElementById("coalitionClear").addEventListener("click", () => {
 document.getElementById("exportResultsButton").addEventListener("click", exportResultsWorkbook);
 document.getElementById("downloadPreviousTemplateButton").addEventListener("click", downloadPreviousElectionTemplate);
 
-document.getElementById("comparePreviousToggle").addEventListener("change", renderPreviousComparison);
-
 document.getElementById("loadPreviousPasteButton").addEventListener("click", () => {
   const pasted = document.getElementById("previousElectionPaste").value;
   loadPreviousElectionText(pasted, "Pasted previous-election results");
 });
 
 document.getElementById("resetPreviousComparisonButton").addEventListener("click", () => {
-  comparisonHistory = cloneHistory(duchyPrevious);
-  comparisonSourceName = "Built-in Duchy previous-election results";
+  comparisonHistory = {};
+  comparisonSourceName = "No previous election imported";
   document.getElementById("previousElectionPaste").value = "";
   document.getElementById("previousElectionFile").value = "";
   document.getElementById("previousImportMessage").textContent = "";
   renderPreviousComparison();
 });
 
-document.getElementById("previousElectionFile").addEventListener("change", event => {
+document.getElementById("previousElectionFile").addEventListener("change", async event => {
   const file = event.target.files && event.target.files[0];
   if (!file) return;
 
-  const reader = new FileReader();
+  const message = document.getElementById("previousImportMessage");
 
-  reader.onload = () => {
-    loadPreviousElectionText(String(reader.result || ""), file.name);
-  };
+  try {
+    let parsed;
 
-  reader.onerror = () => {
-    const message = document.getElementById("previousImportMessage");
+    if (file.name.toLowerCase().endsWith(".xlsx")) {
+      const buffer = await file.arrayBuffer();
+      parsed = await parsePreviousElectionXlsx(buffer);
+    } else {
+      const raw = await file.text();
+      parsed = parsePreviousElectionText(raw);
+    }
+
+    setComparisonHistory(parsed, file.name);
+    message.className = "previous-import-message ok";
+    message.textContent = `Loaded ${Object.keys(parsed).length} Duchy result rows from ${file.name}.`;
+  } catch (error) {
     message.className = "previous-import-message warning";
-    message.textContent = "Could not read that file.";
-  };
-
-  reader.readAsText(file);
+    message.textContent = error.message || "Could not read that previous-election file.";
+  }
 });
 
 buildInputs();
 runModel();
+
+function applyInterfaceTheme(theme, persist = true) {
+  const safeTheme = theme === "dark" ? "dark" : "light";
+  document.documentElement.dataset.theme = safeTheme;
+
+  const button = document.getElementById("themeToggleButton");
+  const label = document.getElementById("themeToggleLabel");
+
+  if (button) button.setAttribute("aria-pressed", String(safeTheme === "dark"));
+  if (label) label.textContent = safeTheme === "dark" ? "Light mode" : "Dark mode";
+
+  if (persist) {
+    try { localStorage.setItem("veridia-interface-theme", safeTheme); } catch (_) {}
+  }
+}
+
+(function initialiseInterfaceTheme() {
+  let stored = null;
+  try { stored = localStorage.getItem("veridia-interface-theme"); } catch (_) {}
+
+  const initialTheme = stored === "dark" || stored === "light"
+    ? stored
+    : ((window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light");
+
+  applyInterfaceTheme(initialTheme, false);
+})();
+
+document.getElementById("themeToggleButton").addEventListener("click", () => {
+  const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  applyInterfaceTheme(next);
+});
+
 </script>
 </body>
 </html>
