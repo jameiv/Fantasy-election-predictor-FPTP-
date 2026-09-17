@@ -1531,7 +1531,7 @@ html[data-theme="dark"] #seatTable tr.selected-row td {
       <div class="card">
         <h2>Model baseline — Duchy results</h2>
         <div class="small" style="margin-bottom:8px">
-          These are the Duchy-level historical results currently used by the prediction model. RBN1–RBN6 now have constituency rows. Ebonvud constituency data extends through EBN14 and Hochfelden through HOC12; no Ebonvud or Hochfelden previous-election Duchy baseline has been supplied yet.
+          These are the Duchy-level historical results currently used by the prediction model. Baselines are supplied for PAM1–PAM6, VRL1–VRL5, RBN1–RBN6, EBN1–EBN12 and HOC1–HOC12. Ebonvud constituencies in EBN13–EBN14 currently remain on the model's neutral historical modifier because no Duchy baseline was supplied for those two Duchies.
         </div>
         <div style="overflow:auto">
           <table>
@@ -1540,7 +1540,7 @@ html[data-theme="dark"] #seatTable tr.selected-row td {
                 <th>Duchy</th><th>SDA</th><th>IMP</th><th>TPP</th><th>ENV</th><th>VRK</th><th>SKV</th><th>PLF</th>
               </tr>
             </thead>
-            <tbody>
+                        <tbody>
               <tr><td><b>PAM1</b></td><td>27</td><td>16</td><td>8</td><td>11</td><td>11</td><td>14</td><td>13</td></tr>
               <tr><td><b>PAM2</b></td><td>23</td><td>10</td><td>5</td><td>14</td><td>14</td><td>13</td><td>21</td></tr>
               <tr><td><b>PAM3</b></td><td>24</td><td>14</td><td>6</td><td>9</td><td>12</td><td>20</td><td>15</td></tr>
@@ -1554,13 +1554,39 @@ html[data-theme="dark"] #seatTable tr.selected-row td {
               <tr><td><b>VRL4</b></td><td>23</td><td>25</td><td>26</td><td>6</td><td>4</td><td>16</td><td>0</td></tr>
               <tr><td><b>VRL5</b></td><td>21</td><td>32</td><td>27</td><td>4</td><td>2</td><td>14</td><td>0</td></tr>
 
-              <tr><td><b>RBN1</b></td><td>25</td><td>27</td><td>25</td><td>6</td><td>4</td><td>13</td><td>0</td></tr>
-              <tr><td><b>RBN2</b></td><td>31</td><td>26</td><td>16</td><td>11</td><td>5</td><td>11</td><td>0</td></tr>
+              <tr><td><b>RBN1</b></td><td>37</td><td>26</td><td>10</td><td>11</td><td>5</td><td>11</td><td>0</td></tr>
+              <tr><td><b>RBN2</b></td><td>25</td><td>27</td><td>25</td><td>6</td><td>4</td><td>13</td><td>0</td></tr>
               <tr><td><b>RBN3</b></td><td>25</td><td>27</td><td>25</td><td>6</td><td>4</td><td>13</td><td>0</td></tr>
               <tr><td><b>RBN4</b></td><td>25</td><td>27</td><td>25</td><td>6</td><td>4</td><td>13</td><td>0</td></tr>
               <tr><td><b>RBN5</b></td><td>22</td><td>26</td><td>26</td><td>6</td><td>4</td><td>16</td><td>0</td></tr>
               <tr><td><b>RBN6</b></td><td>31</td><td>26</td><td>16</td><td>11</td><td>5</td><td>11</td><td>0</td></tr>
-</tbody>
+
+              <tr><td><b>EBN1</b></td><td>21</td><td>26</td><td>25</td><td>7</td><td>4</td><td>17</td><td>0</td></tr>
+              <tr><td><b>EBN2</b></td><td>25</td><td>28</td><td>30</td><td>4</td><td>2</td><td>11</td><td>0</td></tr>
+              <tr><td><b>EBN3</b></td><td>25</td><td>28</td><td>30</td><td>4</td><td>2</td><td>11</td><td>0</td></tr>
+              <tr><td><b>EBN4</b></td><td>34</td><td>22</td><td>15</td><td>9</td><td>8</td><td>12</td><td>0</td></tr>
+              <tr><td><b>EBN5</b></td><td>26</td><td>26</td><td>25</td><td>5</td><td>3</td><td>15</td><td>0</td></tr>
+              <tr><td><b>EBN6</b></td><td>20</td><td>24</td><td>27</td><td>3</td><td>5</td><td>21</td><td>0</td></tr>
+              <tr><td><b>EBN7</b></td><td>34</td><td>22</td><td>15</td><td>9</td><td>8</td><td>12</td><td>0</td></tr>
+              <tr><td><b>EBN8</b></td><td>36</td><td>14</td><td>8</td><td>14</td><td>13</td><td>15</td><td>0</td></tr>
+              <tr><td><b>EBN9</b></td><td>26</td><td>25</td><td>16</td><td>6</td><td>11</td><td>16</td><td>0</td></tr>
+              <tr><td><b>EBN10</b></td><td>26</td><td>26</td><td>22</td><td>6</td><td>9</td><td>11</td><td>0</td></tr>
+              <tr><td><b>EBN11</b></td><td>29</td><td>33</td><td>21</td><td>5</td><td>4</td><td>8</td><td>0</td></tr>
+              <tr><td><b>EBN12</b></td><td>36</td><td>33</td><td>12</td><td>9</td><td>4</td><td>6</td><td>0</td></tr>
+
+              <tr><td><b>HOC1</b></td><td>27</td><td>21</td><td>17</td><td>10</td><td>7</td><td>18</td><td>0</td></tr>
+              <tr><td><b>HOC2</b></td><td>27</td><td>28</td><td>21</td><td>5</td><td>2</td><td>17</td><td>0</td></tr>
+              <tr><td><b>HOC3</b></td><td>28</td><td>35</td><td>16</td><td>8</td><td>2</td><td>11</td><td>0</td></tr>
+              <tr><td><b>HOC4</b></td><td>27</td><td>29</td><td>21</td><td>5</td><td>6</td><td>12</td><td>0</td></tr>
+              <tr><td><b>HOC5</b></td><td>18</td><td>24</td><td>27</td><td>2</td><td>5</td><td>24</td><td>0</td></tr>
+              <tr><td><b>HOC6</b></td><td>29</td><td>13</td><td>14</td><td>4</td><td>14</td><td>26</td><td>0</td></tr>
+              <tr><td><b>HOC7</b></td><td>25</td><td>20</td><td>15</td><td>3</td><td>13</td><td>24</td><td>0</td></tr>
+              <tr><td><b>HOC8</b></td><td>18</td><td>24</td><td>27</td><td>2</td><td>5</td><td>24</td><td>0</td></tr>
+              <tr><td><b>HOC9</b></td><td>27</td><td>21</td><td>16</td><td>5</td><td>7</td><td>24</td><td>0</td></tr>
+              <tr><td><b>HOC10</b></td><td>27</td><td>30</td><td>14</td><td>6</td><td>5</td><td>18</td><td>0</td></tr>
+              <tr><td><b>HOC11</b></td><td>18</td><td>26</td><td>24</td><td>3</td><td>5</td><td>24</td><td>0</td></tr>
+              <tr><td><b>HOC12</b></td><td>23</td><td>17</td><td>22</td><td>3</td><td>14</td><td>21</td><td>0</td></tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -1767,29 +1793,51 @@ const parties = {
 const partyCodes = Object.keys(parties);
 
 /* =========================================================
-   PREVIOUS DUCHY RESULTS — USER'S PROVISIONAL TEST DATA
+   PREVIOUS DUCHY RESULTS — USER-SUPPLIED DUCHY BASELINES
    ========================================================= */
 
 const duchyPrevious = {
-  PAM1: { SDA:27, IMP:16, TPP:8,  ENV:11, VRK:11, SKV:14, PLF:13 },
-  PAM2: { SDA:23, IMP:10, TPP:5,  ENV:14, VRK:14, SKV:13, PLF:21 },
-  PAM3: { SDA:24, IMP:14, TPP:6,  ENV:9,  VRK:12, SKV:20, PLF:15 },
-  PAM4: { SDA:23, IMP:10, TPP:5,  ENV:6,  VRK:14, SKV:23, PLF:19 },
-  PAM5: { SDA:23, IMP:14, TPP:9,  ENV:8,  VRK:11, SKV:21, PLF:14 },
-  PAM6: { SDA:25, IMP:19, TPP:13, ENV:9,  VRK:8,  SKV:15, PLF:11 },
-
+  PAM1: { SDA:27, IMP:16, TPP:8, ENV:11, VRK:11, SKV:14, PLF:13 },
+  PAM2: { SDA:23, IMP:10, TPP:5, ENV:14, VRK:14, SKV:13, PLF:21 },
+  PAM3: { SDA:24, IMP:14, TPP:6, ENV:9, VRK:12, SKV:20, PLF:15 },
+  PAM4: { SDA:23, IMP:10, TPP:5, ENV:6, VRK:14, SKV:23, PLF:19 },
+  PAM5: { SDA:23, IMP:14, TPP:9, ENV:8, VRK:11, SKV:21, PLF:14 },
+  PAM6: { SDA:25, IMP:19, TPP:13, ENV:9, VRK:8, SKV:15, PLF:11 },
   VRL1: { SDA:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 },
-  VRL2: { SDA:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
-  VRL3: { SDA:25, IMP:30, TPP:24, ENV:7,  VRK:2, SKV:12, PLF:0 },
-  VRL4: { SDA:23, IMP:25, TPP:26, ENV:6,  VRK:4, SKV:16, PLF:0 },
-  VRL5: { SDA:21, IMP:32, TPP:27, ENV:4,  VRK:2, SKV:14, PLF:0 },
-
-  RBN1: { SDA:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
-  RBN2: { SDA:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 },
-  RBN3: { SDA:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
-  RBN4: { SDA:25, IMP:27, TPP:25, ENV:6,  VRK:4, SKV:13, PLF:0 },
-  RBN5: { SDA:22, IMP:26, TPP:26, ENV:6,  VRK:4, SKV:16, PLF:0 },
-  RBN6: { SDA:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 }
+  VRL2: { SDA:25, IMP:27, TPP:25, ENV:6, VRK:4, SKV:13, PLF:0 },
+  VRL3: { SDA:25, IMP:30, TPP:24, ENV:7, VRK:2, SKV:12, PLF:0 },
+  VRL4: { SDA:23, IMP:25, TPP:26, ENV:6, VRK:4, SKV:16, PLF:0 },
+  VRL5: { SDA:21, IMP:32, TPP:27, ENV:4, VRK:2, SKV:14, PLF:0 },
+  RBN1: { SDA:37, IMP:26, TPP:10, ENV:11, VRK:5, SKV:11, PLF:0 },
+  RBN2: { SDA:25, IMP:27, TPP:25, ENV:6, VRK:4, SKV:13, PLF:0 },
+  RBN3: { SDA:25, IMP:27, TPP:25, ENV:6, VRK:4, SKV:13, PLF:0 },
+  RBN4: { SDA:25, IMP:27, TPP:25, ENV:6, VRK:4, SKV:13, PLF:0 },
+  RBN5: { SDA:22, IMP:26, TPP:26, ENV:6, VRK:4, SKV:16, PLF:0 },
+  RBN6: { SDA:31, IMP:26, TPP:16, ENV:11, VRK:5, SKV:11, PLF:0 },
+  EBN1: { SDA:21, IMP:26, TPP:25, ENV:7, VRK:4, SKV:17, PLF:0 },
+  EBN2: { SDA:25, IMP:28, TPP:30, ENV:4, VRK:2, SKV:11, PLF:0 },
+  EBN3: { SDA:25, IMP:28, TPP:30, ENV:4, VRK:2, SKV:11, PLF:0 },
+  EBN4: { SDA:34, IMP:22, TPP:15, ENV:9, VRK:8, SKV:12, PLF:0 },
+  EBN5: { SDA:26, IMP:26, TPP:25, ENV:5, VRK:3, SKV:15, PLF:0 },
+  EBN6: { SDA:20, IMP:24, TPP:27, ENV:3, VRK:5, SKV:21, PLF:0 },
+  EBN7: { SDA:34, IMP:22, TPP:15, ENV:9, VRK:8, SKV:12, PLF:0 },
+  EBN8: { SDA:36, IMP:14, TPP:8, ENV:14, VRK:13, SKV:15, PLF:0 },
+  EBN9: { SDA:26, IMP:25, TPP:16, ENV:6, VRK:11, SKV:16, PLF:0 },
+  EBN10: { SDA:26, IMP:26, TPP:22, ENV:6, VRK:9, SKV:11, PLF:0 },
+  EBN11: { SDA:29, IMP:33, TPP:21, ENV:5, VRK:4, SKV:8, PLF:0 },
+  EBN12: { SDA:36, IMP:33, TPP:12, ENV:9, VRK:4, SKV:6, PLF:0 },
+  HOC1: { SDA:27, IMP:21, TPP:17, ENV:10, VRK:7, SKV:18, PLF:0 },
+  HOC2: { SDA:27, IMP:28, TPP:21, ENV:5, VRK:2, SKV:17, PLF:0 },
+  HOC3: { SDA:28, IMP:35, TPP:16, ENV:8, VRK:2, SKV:11, PLF:0 },
+  HOC4: { SDA:27, IMP:29, TPP:21, ENV:5, VRK:6, SKV:12, PLF:0 },
+  HOC5: { SDA:18, IMP:24, TPP:27, ENV:2, VRK:5, SKV:24, PLF:0 },
+  HOC6: { SDA:29, IMP:13, TPP:14, ENV:4, VRK:14, SKV:26, PLF:0 },
+  HOC7: { SDA:25, IMP:20, TPP:15, ENV:3, VRK:13, SKV:24, PLF:0 },
+  HOC8: { SDA:18, IMP:24, TPP:27, ENV:2, VRK:5, SKV:24, PLF:0 },
+  HOC9: { SDA:27, IMP:21, TPP:16, ENV:5, VRK:7, SKV:24, PLF:0 },
+  HOC10: { SDA:27, IMP:30, TPP:14, ENV:6, VRK:5, SKV:18, PLF:0 },
+  HOC11: { SDA:18, IMP:26, TPP:24, ENV:3, VRK:5, SKV:24, PLF:0 },
+  HOC12: { SDA:23, IMP:17, TPP:22, ENV:3, VRK:14, SKV:21, PLF:0 }
 };
 
 /* =========================================================
